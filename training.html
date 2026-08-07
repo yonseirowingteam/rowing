@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>훈련 스케줄 - 연세대학교 조정부</title>
 
-    <!-- 💡 파비콘 (브라우저 탭 아이콘) 설정 -->
+    <!-- 파비콘 및 OG 태그 설정 -->
     <link rel="icon" href="yrt_logo.png" type="image/png">
     <link rel="apple-touch-icon" href="yrt_logo.png">
-
-    <!-- 💡 카카오톡 등 링크 공유 시 미리보기(Open Graph) 설정 -->
     <meta property="og:title" content="훈련 스케줄 - 연세대학교 조정부">
     <meta property="og:description" content="Yonsei Rowing Team 2주 훈련 스케줄입니다.">
     <meta property="og:type" content="website">
@@ -19,93 +17,63 @@
     <style>
         /* 기본 디자인 설정 (PC 환경) */
         body { font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; padding: 40px; max-width: 1200px; margin: 0 auto; background-color: #ffffff; }
-        h2 { color: #003876; border-bottom: 2px solid #003876; padding-bottom: 10px; font-weight: bold; }
-        .week-title { margin-top: 30px; font-size: 1.2rem; font-weight: bold; color: #555555; }
+        h2 { color: #003876; border-bottom: 2px solid #003876; padding-bottom: 10px; font-weight: bold; margin-bottom: 15px;}
+        
+        /* 💡 추가된 안내 문구 디자인 */
+        .info-message {
+            background-color: #f0f6fc; /* 연한 파란색 배경 */
+            color: #003876;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .week-title { margin-top: 20px; font-size: 1.2rem; font-weight: bold; color: #555555; }
         .calendar-2week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 15px; margin-top: 15px; }
         
-        /* 달력 칸 기본 디자인 */
         .training-day { 
             border: 2px solid #f0f0f0; border-top: 4px solid #003876; border-radius: 8px; 
             min-height: 120px; padding: 15px; background-color: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
             transition: transform 0.2s, box-shadow 0.2s;
         }
-
-        /* 💡 세부 일정이 있어서 '클릭 가능한(clickable)' 칸에만 마우스 효과 적용 */
-        .training-day.clickable {
-            cursor: pointer; 
-        }
-        .training-day.clickable:hover {
-            transform: translateY(-3px); 
-            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
-        }
+        .training-day.clickable { cursor: pointer; }
+        .training-day.clickable:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.08); }
 
         .date-info { font-weight: bold; color: #003876; margin-bottom: 10px; display: block; }
         .content { font-size: 0.9rem; line-height: 1.5; color: #333333; }
         #loading { text-align: center; color: #666; margin-top: 50px; font-size: 1.1rem; }
 
-        /* 홈으로 돌아가기 버튼 디자인 */
         .back-btn-container { text-align: center; margin-top: 50px; }
-        .back-btn { 
-            display: inline-block; padding: 14px 32px; background-color: #ffffff; 
-            color: #003876; border: 2px solid #003876; border-radius: 8px; 
-            text-decoration: none; font-size: 1.05rem; font-weight: bold; 
-            transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
-        }
+        .back-btn { display: inline-block; padding: 14px 32px; background-color: #ffffff; color: #003876; border: 2px solid #003876; border-radius: 8px; text-decoration: none; font-size: 1.05rem; font-weight: bold; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .back-btn:hover { background-color: #003876; color: #ffffff; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0, 56, 118, 0.15); }
 
         /* 팝업(모달) 창 디자인 설정 */
-        .modal-overlay {
-            display: none; 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.4); 
-            z-index: 999;
-            align-items: center; justify-content: center;
-        }
-        .modal-content {
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 12px;
-            width: 85%;
-            max-width: 400px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            position: relative;
-            text-align: left;
-        }
-        .modal-title {
-            color: #003876; font-size: 1.3rem; font-weight: bold;
-            margin-top: 0; margin-bottom: 15px;
-            padding-bottom: 10px; border-bottom: 2px solid #f0f0f0;
-        }
-        .modal-body {
-            font-size: 1rem; line-height: 1.6; color: #333;
-            white-space: pre-wrap; 
-        }
-        .modal-close-btn {
-            position: absolute; top: 20px; right: 20px;
-            background: none; border: none; font-size: 1.5rem;
-            color: #999; cursor: pointer; transition: color 0.2s;
-        }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); z-index: 999; align-items: center; justify-content: center; }
+        .modal-content { background: #ffffff; padding: 30px; border-radius: 12px; width: 85%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); position: relative; text-align: left; }
+        .modal-title { color: #003876; font-size: 1.3rem; font-weight: bold; margin-top: 0; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; }
+        .modal-body { font-size: 1rem; line-height: 1.6; color: #333; white-space: pre-wrap; }
+        .modal-close-btn { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.5rem; color: #999; cursor: pointer; transition: color 0.2s; }
         .modal-close-btn:hover { color: #333; }
 
-        /* ========================================= */
-        /* 반응형 모바일 디자인 (화면 폭 768px 이하일 때 적용) */
-        /* ========================================= */
+        /* 모바일 반응형 디자인 */
         @media (max-width: 768px) {
             body { padding: 15px; }
             h2 { font-size: 1.3rem; }
-            .week-title { font-size: 1.05rem; margin-top: 20px; }
             
+            /* 모바일 안내 문구 크기 조정 */
+            .info-message { font-size: 0.85rem; padding: 10px 12px; margin-bottom: 5px; width: 100%; box-sizing: border-box; }
+
+            .week-title { font-size: 1.05rem; margin-top: 15px; }
             .calendar-2week { gap: 4px; margin-top: 10px; }
-            .training-day { 
-                min-height: 85px; padding: 6px 3px; 
-                border-width: 1px; border-top-width: 3px; border-radius: 5px;
-            }
+            .training-day { min-height: 85px; padding: 6px 3px; border-width: 1px; border-top-width: 3px; border-radius: 5px; }
             .date-info { font-size: 0.75rem; margin-bottom: 5px; text-align: center; letter-spacing: -0.05em; }
             .content { font-size: 0.7rem; line-height: 1.25; word-break: break-all; text-align: center; letter-spacing: -0.05em; }
-            
             .back-btn-container { margin-top: 40px; }
             .back-btn { padding: 12px 28px; font-size: 1rem; }
-            
             .modal-content { padding: 25px; width: 80%; }
         }
     </style>
@@ -113,6 +81,11 @@
 <body>
     <h2>2주 훈련 스케줄 (Training Schedule)</h2>
     
+    <!-- 💡 새롭게 추가된 클릭 유도 안내 문구 -->
+    <div class="info-message">
+        👆 <strong>안내:</strong> 훈련 일정을 클릭하시면 상세 내용을 확인할 수 있습니다.
+    </div>
+
     <div id="loading">데이터를 불러오는 중입니다...</div>
 
     <div id="schedule-content" style="display: none;">
@@ -138,16 +111,12 @@
     </div>
 
     <script>
-        // ==========================================
-        // 💡 [여기에 링크 붙여넣기]
-        // ==========================================
         const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUhGdKNZnFTv4jIh0Yz1yAtN30iy5UVJem7nF3Zf2RIFb8k6LEKDBVMwjhY8btgthjqUrNPbeVUV7O/pub?output=tsv";
 
         fetch(sheetUrl)
             .then(response => response.text())
             .then(data => {
                 const rows = data.split('\n');
-                
                 if (rows.length > 0) {
                     const headers = rows[0].split('\t');
                     if (headers.length >= 3) {
@@ -161,14 +130,10 @@
 
                 for (let i = 1; i < rows.length; i++) {
                     if (rows[i].trim() === "") continue;
-                    
                     const columns = rows[i].split('\t');
-                    
                     if (columns.length >= 3) {
-                        // 💡 D열, E열에 값이 있으면 가져오고, 없으면 null(빈 값) 처리
                         const week1Details = columns.length >= 4 && columns[3].trim() !== "" ? columns[3].replace(/<br>/g, '\n') : null;
                         const week2Details = columns.length >= 5 && columns[4].trim() !== "" ? columns[4].replace(/<br>/g, '\n') : null;
-
                         week1Data.push({ day: columns[0], text: columns[1], details: week1Details });
                         week2Data.push({ day: columns[0], text: columns[2], details: week2Details });
                     }
@@ -183,7 +148,7 @@
             })
             .catch(error => {
                 console.error("데이터 로드 오류:", error);
-                document.getElementById('loading').innerText = "데이터를 불러오지 못했습니다. 코드 안의 구글 시트 링크(sheetUrl)를 다시 확인해 주세요.";
+                document.getElementById('loading').innerText = "데이터를 불러오지 못했습니다.";
             });
 
         function renderSchedule(data, containerId) {
@@ -194,7 +159,6 @@
                 const dayDiv = document.createElement('div');
                 dayDiv.className = 'training-day';
                 
-                // 💡 세부 내용(details)이 존재하는 경우에만 클릭 이벤트 및 호버 클래스 추가
                 if (data[i].details) {
                     dayDiv.classList.add('clickable');
                     dayDiv.addEventListener('click', () => {
@@ -202,16 +166,11 @@
                     });
                 }
 
-                dayDiv.innerHTML = `
-                    <span class="date-info">${data[i].day}</span>
-                    <div class="content">${data[i].text}</div>
-                `;
-                
+                dayDiv.innerHTML = `<span class="date-info">${data[i].day}</span><div class="content">${data[i].text}</div>`;
                 container.appendChild(dayDiv);
             }
         }
 
-        // 팝업(모달) 관련 자바스크립트 기능
         const modalOverlay = document.getElementById('modal-overlay');
         const modalContent = document.getElementById('modal-content');
 
@@ -220,18 +179,9 @@
             document.getElementById('modal-body').innerHTML = details;
             modalOverlay.style.display = 'flex'; 
         }
-
-        function closeModal() {
-            modalOverlay.style.display = 'none'; 
-        }
-
-        modalOverlay.addEventListener('click', function() {
-            closeModal();
-        });
-
-        modalContent.addEventListener('click', function(event) {
-            event.stopPropagation();
-        });
+        function closeModal() { modalOverlay.style.display = 'none'; }
+        modalOverlay.addEventListener('click', closeModal);
+        modalContent.addEventListener('click', e => e.stopPropagation());
     </script>
 </body>
 </html>
