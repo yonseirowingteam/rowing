@@ -6,7 +6,7 @@
     <title>월간 일정표 - 연세대학교 조정부</title>
     <style>
         /* 기본 디자인 설정 (PC 환경) */
-        body { font-family: 'Pretendard', sans-serif; padding: 40px; max-width: 1200px; margin: 0 auto; background-color: #ffffff; }
+        body { font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; padding: 40px; max-width: 1200px; margin: 0 auto; background-color: #ffffff; }
         h2 { color: #003876; border-bottom: 2px solid #003876; padding-bottom: 10px; font-weight: bold; display: flex; justify-content: space-between; align-items: baseline; }
         .month-title { font-size: 1.8rem; color: #333; }
         
@@ -52,29 +52,30 @@
         /* 반응형 모바일 디자인 (화면 폭 768px 이하일 때 적용) */
         /* ========================================= */
         @media (max-width: 768px) {
-            body { padding: 10px; } /* 전체 화면 여백 축소 */
+            body { padding: 10px; }
             h2 { flex-direction: column; align-items: flex-start; gap: 5px; font-size: 1.3rem; }
             .month-title { font-size: 1.4rem; }
             .calendar-wrapper { margin-top: 15px; }
             
             .day-header { padding: 6px 0; font-size: 0.85rem; }
-            .calendar-cell { min-height: 80px; padding: 5px 0; } /* 달력 칸 높이 축소 */
+            .calendar-cell { min-height: 90px; padding: 5px 0; }
             .date-num { font-size: 0.85rem; padding: 0 5px; margin-bottom: 4px; }
             
-            /* 모바일 환경 일정 텍스트 박스 */
+            /* 모바일 환경 일정 텍스트 박스: 줄바꿈 허용 및 여백 최소화 */
             .event-box { 
-                padding: 4px; 
-                font-size: 0.7rem; /* 글자 크기 대폭 축소 */
-                white-space: nowrap; /* 줄바꿈 방지하여 달력 칸 안 깨지게 함 */
-                overflow: hidden; 
-                text-overflow: ellipsis; /* 글자가 칸보다 길면 '...'으로 표시 */
+                padding: 3px 2px; 
+                font-size: 0.7rem; 
+                line-height: 1.2; 
+                white-space: normal; /* 말줄임표 제거하고 줄바꿈 허용 */
+                word-break: break-all; /* 좁은 칸에 맞춰 글자가 잘리지 않고 다음 줄로 넘어가도록 설정 */
+                letter-spacing: -0.05em;
             }
             
             /* 모바일 블록 연결 간격 미세 조정 */
             .event-box.single { margin: 0 2px 2px 2px; border-left-width: 3px; }
             .event-box.start { margin: 0 -1px 2px 2px; border-left-width: 3px; }
-            .event-box.middle { margin: 0 -1px 2px -1px; padding-left: 5px; }
-            .event-box.end { margin: 0 2px 2px -1px; padding-left: 5px; }
+            .event-box.middle { margin: 0 -1px 2px -1px; padding-left: 4px; }
+            .event-box.end { margin: 0 2px 2px -1px; padding-left: 4px; }
         }
     </style>
 </head>
@@ -101,10 +102,6 @@
     </div>
 
     <script>
-        // ==========================================
-        // 💡 [여기에 링크 붙여넣기]
-        // 월간 일정표용 구글 스프레드시트 링크를 넣으세요.
-        // ==========================================
         const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSimq_zZsoAOxpi2OR7o7dqveJ4q4ZNnxF03ofwiE1hjBeX5zaAmQMWG_5wu9XN8vUC31TXgpGtV0_b/pub?output=tsv";
 
         fetch(sheetUrl)
