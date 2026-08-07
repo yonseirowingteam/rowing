@@ -36,29 +36,31 @@
             line-height: 1.4; 
             margin-bottom: 4px; 
             word-break: keep-all; 
-            z-index: 1; 
+            z-index: 2; 
             position: relative; 
         }
         
-        /* 블록 연속성 처리를 위한 형태별 스타일 */
+        /* 블록 연속성 처리를 위한 디테일 스타일 (음수 마진으로 칸 사이의 틈새를 덮음) */
         .event-box.single { 
             margin: 0 10px 4px 10px; 
             border-radius: 4px; 
             border-left: 4px solid #003876; 
         }
         .event-box.start { 
-            margin: 0 -1px 4px 10px; /* 우측 여백을 없애서 다음 칸과 시각적으로 결합 */
+            margin: 0 -2px 4px 10px; 
             border-radius: 4px 0 0 4px; 
             border-left: 4px solid #003876; 
         }
         .event-box.middle { 
-            margin: 0 -1px 4px 0; /* 양쪽 여백을 없애서 다리 역할을 함 */
+            margin: 0 -2px 4px -2px; 
             border-radius: 0; 
+            border-left: none; 
             padding-left: 14px; 
         }
         .event-box.end { 
-            margin: 0 10px 4px 0; /* 좌측 여백을 없애서 이전 칸과 시각적으로 결합 */
+            margin: 0 10px 4px -2px; 
             border-radius: 0 4px 4px 0; 
+            border-left: none; 
             padding-left: 14px; 
         }
         
@@ -90,7 +92,7 @@
     <script>
         // ==========================================
         // 💡 [여기에 링크 붙여넣기]
-        // 월간 일정표용 구글 스프레드시트 링크를 넣으세요. (반드시 pub?output=tsv 로 끝나야 함)
+        // 월간 일정표용 구글 스프레드시트 링크를 넣으세요.
         // ==========================================
         const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSimq_zZsoAOxpi2OR7o7dqveJ4q4ZNnxF03ofwiE1hjBeX5zaAmQMWG_5wu9XN8vUC31TXgpGtV0_b/pubhtml";
 
@@ -99,7 +101,7 @@
             .then(data => {
                 const rows = data.split('\n');
                 
-                // 1. 기준 연월 파싱 (B1 셀)
+                // 1. 기준 연월 파싱
                 let targetYear = new Date().getFullYear();
                 let targetMonth = new Date().getMonth() + 1;
 
@@ -132,6 +134,9 @@
                     }
                 }
 
+                // 강력한 띄어쓰기 무시 필터: 모든 공백 및 숨김 문자 제거 후 비교
+                const normalize = str => str.replace(/[\s"'\r\n]/g, '').toLowerCase();
+
                 // 3. 블록 연속성 계산 알고리즘
                 const eventMap = {};
                 const lastDate = new Date(targetYear, targetMonth, 0).getDate();
@@ -143,15 +148,16 @@
                     const dayOfWeek = new Date(targetYear, targetMonth - 1, day).getDay();
 
                     rawEvents[day].forEach(text => {
-                        // 앞뒤 날짜에 완전히 동일한 이름의 일정이 있는지 확인
-                        let prevDayHas = (day > 1) && rawEvents[day - 1] && rawEvents[day - 1].includes(text);
-                        let nextDayHas = (day < lastDate) && rawEvents[day + 1] && rawEvents[day + 1].includes(text);
+                        const normText = normalize(text);
+                        
+                        // 앞뒤 날짜의 일정 중 '띄어쓰기를 무시했을 때' 완전히 똑같은 일정이 있는지 검사
+                        let prevDayHas = (day > 1) && rawEvents[day - 1] && rawEvents[day - 1].some(t => normalize(t) === normText);
+                        let nextDayHas = (day < lastDate) && rawEvents[day + 1] && rawEvents[day + 1].some(t => normalize(t) === normText);
 
-                        // 토요일에서 일요일로 넘어갈 때는 시각적 연결을 끊음 (줄바꿈 발생)
+                        // 토요일에서 일요일로 넘어갈 때는 달력 줄이 바뀌므로 시각적 연결을 끊음
                         if (dayOfWeek === 0) prevDayHas = false; 
                         if (dayOfWeek === 6) nextDayHas = false; 
 
-                        // 형태 결정: 중간, 시작, 끝, 단독
                         let type = 'single';
                         if (prevDayHas && nextDayHas) type = 'middle';
                         else if (!prevDayHas && nextDayHas) type = 'start';
