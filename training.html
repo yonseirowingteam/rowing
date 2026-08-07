@@ -10,43 +10,77 @@
         h2 { color: #003876; border-bottom: 2px solid #003876; padding-bottom: 10px; font-weight: bold; }
         .week-title { margin-top: 30px; font-size: 1.2rem; font-weight: bold; color: #555555; }
         .calendar-2week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 15px; margin-top: 15px; }
-        .training-day { border: 2px solid #f0f0f0; border-top: 4px solid #003876; border-radius: 8px; min-height: 120px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .training-day { border: 2px solid #f0f0f0; border-top: 4px solid #003876; border-radius: 8px; min-height: 120px; padding: 15px; background-color: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         .date-info { font-weight: bold; color: #003876; margin-bottom: 10px; display: block; }
-        .content { font-size: 0.9rem; line-height: 1.5; }
+        .content { font-size: 0.9rem; line-height: 1.5; color: #333333; }
         #loading { text-align: center; color: #666; margin-top: 50px; font-size: 1.1rem; }
 
+        /* 홈으로 돌아가기 버튼 디자인 */
+        .back-btn-container { text-align: center; margin-top: 50px; }
+        .back-btn { 
+            display: inline-block; 
+            padding: 14px 32px; 
+            background-color: #ffffff; 
+            color: #003876; 
+            border: 2px solid #003876; 
+            border-radius: 8px; 
+            text-decoration: none; 
+            font-size: 1.05rem; 
+            font-weight: bold; 
+            transition: all 0.3s ease; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+        }
+        .back-btn:hover { 
+            background-color: #003876; 
+            color: #ffffff; 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 12px rgba(0, 56, 118, 0.15); 
+        }
+
         /* ========================================= */
-        /* 반응형 모바일 디자인 (화면 폭 768px 이하일 때 적용) */
+        /* 반응형 모바일 디자인 (화면 폭 768px 이하일 때 자동 적용) */
         /* ========================================= */
         @media (max-width: 768px) {
-            body { padding: 15px; }
-            h2 { font-size: 1.3rem; }
-            .week-title { font-size: 1.05rem; margin-top: 20px; }
+            body { padding: 20px; }
+            h2 { font-size: 1.4rem; }
+            .week-title { font-size: 1.1rem; margin-top: 20px; color: #333; }
             
+            /* 가로 7칸 배열을 1열 세로 리스트형으로 변경 */
             .calendar-2week { 
-                gap: 4px; /* 모바일에서 칸 사이 간격 최소화 */
-                margin-top: 10px;
+                grid-template-columns: 1fr; 
+                gap: 10px; 
+                margin-top: 15px; 
             }
+            
+            /* 모바일 리스트 디자인 (좌측 요일, 우측 내용) */
             .training-day { 
-                min-height: 85px; 
-                padding: 6px 3px; /* 내부 여백 최소화 */
-                border-width: 1px;
-                border-top-width: 3px;
-                border-radius: 5px;
+                min-height: auto; 
+                display: flex; 
+                align-items: center; 
+                padding: 15px 20px; 
+                border-top: 2px solid #f0f0f0; 
+                border-left: 4px solid #003876; 
+                border-radius: 8px;
             }
+            
             .date-info { 
-                font-size: 0.75rem; 
-                margin-bottom: 5px; 
+                font-size: 1rem; 
+                margin-bottom: 0; 
+                margin-right: 20px; 
+                width: 50px; 
                 text-align: center;
-                letter-spacing: -0.05em; /* 자간을 줄여 좁은 칸에 맞춤 */
+                flex-shrink: 0;
             }
+            
             .content { 
-                font-size: 0.7rem; 
-                line-height: 1.25; 
-                word-break: break-all; /* 좁은 칸에서 글자가 영역을 벗어나지 않게 줄바꿈 */
-                text-align: center;
-                letter-spacing: -0.05em;
+                font-size: 0.95rem; 
+                line-height: 1.4; 
+                word-break: keep-all; 
             }
+
+            /* 모바일 홈 버튼 여백 및 크기 조정 */
+            .back-btn-container { margin-top: 40px; }
+            .back-btn { padding: 12px 28px; font-size: 1rem; }
         }
     </style>
 </head>
@@ -56,7 +90,6 @@
     <div id="loading">데이터를 불러오는 중입니다...</div>
 
     <div id="schedule-content" style="display: none;">
-        <!-- 제목 부분에 id를 추가하여 자바스크립트가 글자를 바꿀 수 있게 설정 -->
         <div class="week-title" id="week1-title">이번 주</div>
         <div id="week1-container" class="calendar-2week"></div>
 
@@ -64,10 +97,14 @@
         <div id="week2-container" class="calendar-2week"></div>
     </div>
 
+    <!-- 💡 새롭게 추가된 홈으로 돌아가기 버튼 -->
+    <div class="back-btn-container">
+        <a href="index.html" class="back-btn">← 홈으로 돌아가기</a>
+    </div>
+
     <script>
         // ==========================================
         // 💡 [여기에 링크 붙여넣기]
-        // 링크 끝부분이 반드시 pub?output=tsv 로 끝나야 정상 작동합니다.
         // ==========================================
         const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUhGdKNZnFTv4jIh0Yz1yAtN30iy5UVJem7nF3Zf2RIFb8k6LEKDBVMwjhY8btgthjqUrNPbeVUV7O/pub?output=tsv";
 
@@ -76,7 +113,6 @@
             .then(data => {
                 const rows = data.split('\n');
                 
-                // 1. 스프레드시트 1행(제목)을 읽어와서 화면의 제목을 변경하는 기능 추가
                 if (rows.length > 0) {
                     const headers = rows[0].split('\t');
                     if (headers.length >= 3) {
@@ -85,7 +121,6 @@
                     }
                 }
 
-                // 2. 2행부터 마지막 행까지의 일정 데이터 처리
                 const week1Data = [];
                 const week2Data = [];
 
