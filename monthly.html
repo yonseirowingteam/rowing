@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>월간 일정표 - 연세대학교 조정부</title>
     <style>
-        /* 기본 디자인 설정 */
+        /* 기본 디자인 설정 (PC 환경) */
         body { font-family: 'Pretendard', sans-serif; padding: 40px; max-width: 1200px; margin: 0 auto; background-color: #ffffff; }
         h2 { color: #003876; border-bottom: 2px solid #003876; padding-bottom: 10px; font-weight: bold; display: flex; justify-content: space-between; align-items: baseline; }
         .month-title { font-size: 1.8rem; color: #333; }
@@ -20,7 +20,7 @@
         .day-header.sat { color: #0275d8; }
         
         /* 날짜 칸 */
-        .calendar-cell { background-color: #ffffff; min-height: 140px; padding: 10px 0; display: flex; flex-direction: column; }
+        .calendar-cell { background-color: #ffffff; min-height: 140px; padding: 10px 0; display: flex; flex-direction: column; overflow: hidden; }
         .calendar-cell.empty { background-color: #fdfdfd; }
         
         .date-num { font-weight: bold; font-size: 1.1rem; margin-bottom: 8px; color: #555; padding: 0 10px; }
@@ -40,31 +40,42 @@
             position: relative; 
         }
         
-        /* 블록 연속성 처리를 위한 디테일 스타일 (음수 마진으로 칸 사이의 틈새를 덮음) */
-        .event-box.single { 
-            margin: 0 10px 4px 10px; 
-            border-radius: 4px; 
-            border-left: 4px solid #003876; 
-        }
-        .event-box.start { 
-            margin: 0 -2px 4px 10px; 
-            border-radius: 4px 0 0 4px; 
-            border-left: 4px solid #003876; 
-        }
-        .event-box.middle { 
-            margin: 0 -2px 4px -2px; 
-            border-radius: 0; 
-            border-left: none; 
-            padding-left: 14px; 
-        }
-        .event-box.end { 
-            margin: 0 10px 4px -2px; 
-            border-radius: 0 4px 4px 0; 
-            border-left: none; 
-            padding-left: 14px; 
-        }
+        /* 블록 연속성 처리를 위한 디테일 스타일 (PC) */
+        .event-box.single { margin: 0 10px 4px 10px; border-radius: 4px; border-left: 4px solid #003876; }
+        .event-box.start { margin: 0 -2px 4px 10px; border-radius: 4px 0 0 4px; border-left: 4px solid #003876; }
+        .event-box.middle { margin: 0 -2px 4px -2px; border-radius: 0; border-left: none; padding-left: 14px; }
+        .event-box.end { margin: 0 10px 4px -2px; border-radius: 0 4px 4px 0; border-left: none; padding-left: 14px; }
         
         #loading { text-align: center; color: #666; margin-top: 50px; font-size: 1.1rem; }
+
+        /* ========================================= */
+        /* 반응형 모바일 디자인 (화면 폭 768px 이하일 때 적용) */
+        /* ========================================= */
+        @media (max-width: 768px) {
+            body { padding: 10px; } /* 전체 화면 여백 축소 */
+            h2 { flex-direction: column; align-items: flex-start; gap: 5px; font-size: 1.3rem; }
+            .month-title { font-size: 1.4rem; }
+            .calendar-wrapper { margin-top: 15px; }
+            
+            .day-header { padding: 6px 0; font-size: 0.85rem; }
+            .calendar-cell { min-height: 80px; padding: 5px 0; } /* 달력 칸 높이 축소 */
+            .date-num { font-size: 0.85rem; padding: 0 5px; margin-bottom: 4px; }
+            
+            /* 모바일 환경 일정 텍스트 박스 */
+            .event-box { 
+                padding: 4px; 
+                font-size: 0.7rem; /* 글자 크기 대폭 축소 */
+                white-space: nowrap; /* 줄바꿈 방지하여 달력 칸 안 깨지게 함 */
+                overflow: hidden; 
+                text-overflow: ellipsis; /* 글자가 칸보다 길면 '...'으로 표시 */
+            }
+            
+            /* 모바일 블록 연결 간격 미세 조정 */
+            .event-box.single { margin: 0 2px 2px 2px; border-left-width: 3px; }
+            .event-box.start { margin: 0 -1px 2px 2px; border-left-width: 3px; }
+            .event-box.middle { margin: 0 -1px 2px -1px; padding-left: 5px; }
+            .event-box.end { margin: 0 2px 2px -1px; padding-left: 5px; }
+        }
     </style>
 </head>
 <body>
@@ -92,16 +103,15 @@
     <script>
         // ==========================================
         // 💡 [여기에 링크 붙여넣기]
-        // 끝부분이 반드시 pub?output=tsv 로 끝나도록 수정되었습니다.
+        // 월간 일정표용 구글 스프레드시트 링크를 넣으세요.
         // ==========================================
-        const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSimq_zZsoAOxpi2OR7o7dqveJ4q4ZNnxF03ofwiE1hjBeX5zaAmQMWG_5wu9XN8vUC31TXgpGtV0_b/pub?output=tsv";
+        const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSimq_zZsoAOxpi2OR7o7dqveJ4q4ZNnxF03ofwiE1hjBeX5zaAmQMWG_5wu9XN8vUC31TXgpGtV0_b/pubhtml";
 
         fetch(sheetUrl)
             .then(response => response.text())
             .then(data => {
                 const rows = data.split('\n');
                 
-                // 1. 기준 연월 파싱
                 let targetYear = new Date().getFullYear();
                 let targetMonth = new Date().getMonth() + 1;
 
@@ -119,7 +129,6 @@
 
                 document.getElementById('display-month').innerText = `${targetYear}년 ${targetMonth}월`;
 
-                // 2. 날짜별 일정 배열 생성
                 const rawEvents = {};
                 for (let i = 2; i < rows.length; i++) {
                     if (rows[i].trim() === "") continue;
@@ -134,10 +143,8 @@
                     }
                 }
 
-                // 강력한 띄어쓰기 무시 필터: 모든 공백 및 숨김 문자 제거 후 비교
                 const normalize = str => str.replace(/[\s"'\r\n]/g, '').toLowerCase();
 
-                // 3. 블록 연속성 계산 알고리즘
                 const eventMap = {};
                 const lastDate = new Date(targetYear, targetMonth, 0).getDate();
 
@@ -150,11 +157,9 @@
                     rawEvents[day].forEach(text => {
                         const normText = normalize(text);
                         
-                        // 앞뒤 날짜의 일정 중 '띄어쓰기를 무시했을 때' 완전히 똑같은 일정이 있는지 검사
                         let prevDayHas = (day > 1) && rawEvents[day - 1] && rawEvents[day - 1].some(t => normalize(t) === normText);
                         let nextDayHas = (day < lastDate) && rawEvents[day + 1] && rawEvents[day + 1].some(t => normalize(t) === normText);
 
-                        // 토요일에서 일요일로 넘어갈 때는 달력 줄이 바뀌므로 시각적 연결을 끊음
                         if (dayOfWeek === 0) prevDayHas = false; 
                         if (dayOfWeek === 6) nextDayHas = false; 
 
@@ -197,7 +202,6 @@
                 let eventHtml = "";
                 if (events[day]) {
                     events[day].forEach(evt => {
-                        // 이어지는 뒷 블록들의 글자는 투명하게 숨겨서 하나의 긴 막대처럼 보이게 처리
                         const textStyle = (evt.type === 'middle' || evt.type === 'end') ? 'color: transparent; user-select: none;' : '';
                         eventHtml += `<div class="event-box ${evt.type}">
                                           <span style="${textStyle}">${evt.text}</span>
