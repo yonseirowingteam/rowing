@@ -7,14 +7,14 @@
 
     <!-- 💡 파비콘 (브라우저 탭 아이콘) 설정 -->
     <link rel="icon" href="yrt_logo.png" type="image/png">
-    <link rel="apple-touch-icon" href="yrt_logo.png"> <!-- 아이폰 홈 화면 추가용 아이콘 -->
+    <link rel="apple-touch-icon" href="yrt_logo.png">
 
     <!-- 💡 카카오톡 등 링크 공유 시 미리보기(Open Graph) 설정 -->
     <meta property="og:title" content="월간 일정표 - 연세대학교 조정부">
     <meta property="og:description" content="Yonsei Rowing Team 월간 훈련 및 행사 일정표입니다.">
     <meta property="og:type" content="website">
     
-    <!-- 🚨 실제 웹사이트 주소 (monthly.html로 바로 연결되도록 설정) -->
+    <!-- 🚨 실제 웹사이트 주소 -->
     <meta property="og:url" content="https://yonseirowingteam.github.io/rowing/monthly.html">
     <meta property="og:image" content="https://yonseirowingteam.github.io/rowing/yrt_logo.png">
 
@@ -52,6 +52,17 @@
             word-break: keep-all; 
             z-index: 2; 
             position: relative; 
+            transition: transform 0.2s, box-shadow 0.2s; /* 호버 애니메이션 준비 */
+        }
+
+        /* 💡 세부 일정이 있어 클릭 가능한 블록의 마우스 오버 효과 */
+        .event-box.clickable {
+            cursor: pointer;
+        }
+        .event-box.clickable:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            z-index: 10; /* 떠오를 때 다른 블록에 가려지지 않게 최상단 배치 */
         }
         
         /* 블록 연속성 처리를 위한 디테일 스타일 (PC) */
@@ -62,27 +73,35 @@
         
         #loading { text-align: center; color: #666; margin-top: 50px; font-size: 1.1rem; }
 
-        /* 💡 홈으로 돌아가기 버튼 디자인 */
+        /* 홈으로 돌아가기 버튼 디자인 */
         .back-btn-container { text-align: center; margin-top: 50px; }
         .back-btn { 
-            display: inline-block; 
-            padding: 14px 32px; 
-            background-color: #ffffff; 
-            color: #003876; 
-            border: 2px solid #003876; 
-            border-radius: 8px; 
-            text-decoration: none; 
-            font-size: 1.05rem; 
-            font-weight: bold; 
-            transition: all 0.3s ease; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+            display: inline-block; padding: 14px 32px; background-color: #ffffff; 
+            color: #003876; border: 2px solid #003876; border-radius: 8px; 
+            text-decoration: none; font-size: 1.05rem; font-weight: bold; 
+            transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
         }
-        .back-btn:hover { 
-            background-color: #003876; 
-            color: #ffffff; 
-            transform: translateY(-2px); 
-            box-shadow: 0 6px 12px rgba(0, 56, 118, 0.15); 
+        .back-btn:hover { background-color: #003876; color: #ffffff; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0, 56, 118, 0.15); }
+
+        /* 💡 팝업(모달) 창 디자인 설정 */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4); z-index: 999; align-items: center; justify-content: center;
         }
+        .modal-content {
+            background: #ffffff; padding: 30px; border-radius: 12px; width: 85%; max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); position: relative; text-align: left;
+        }
+        .modal-title {
+            color: #003876; font-size: 1.3rem; font-weight: bold;
+            margin-top: 0; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0;
+        }
+        .modal-body { font-size: 1rem; line-height: 1.6; color: #333; white-space: pre-wrap; }
+        .modal-close-btn {
+            position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.5rem;
+            color: #999; cursor: pointer; transition: color 0.2s;
+        }
+        .modal-close-btn:hover { color: #333; }
 
         /* ========================================= */
         /* 반응형 모바일 디자인 (화면 폭 768px 이하일 때 적용) */
@@ -97,25 +116,21 @@
             .calendar-cell { min-height: 90px; padding: 5px 0; }
             .date-num { font-size: 0.85rem; padding: 0 5px; margin-bottom: 4px; }
             
-            /* 모바일 환경 일정 텍스트 박스: 줄바꿈 허용 및 여백 최소화 */
             .event-box { 
-                padding: 3px 2px; 
-                font-size: 0.7rem; 
-                line-height: 1.2; 
-                white-space: normal; /* 말줄임표 제거하고 줄바꿈 허용 */
-                word-break: break-all; /* 좁은 칸에 맞춰 글자가 잘리지 않고 다음 줄로 넘어가도록 설정 */
-                letter-spacing: -0.05em;
+                padding: 3px 2px; font-size: 0.7rem; line-height: 1.2; 
+                white-space: normal; word-break: break-all; letter-spacing: -0.05em;
             }
             
-            /* 모바일 블록 연결 간격 미세 조정 */
             .event-box.single { margin: 0 2px 2px 2px; border-left-width: 3px; }
             .event-box.start { margin: 0 -1px 2px 2px; border-left-width: 3px; }
             .event-box.middle { margin: 0 -1px 2px -1px; padding-left: 4px; }
             .event-box.end { margin: 0 2px 2px -1px; padding-left: 4px; }
 
-            /* 💡 모바일 홈 버튼 여백 및 크기 조정 */
             .back-btn-container { margin-top: 40px; }
             .back-btn { padding: 12px 28px; font-size: 1rem; }
+            
+            /* 모바일 팝업창 크기 조정 */
+            .modal-content { padding: 25px; width: 80%; }
         }
     </style>
 </head>
@@ -141,13 +156,25 @@
         </div>
     </div>
 
-    <!-- 💡 하단에 추가된 홈으로 돌아가기 버튼 -->
+    <!-- 하단에 추가된 홈으로 돌아가기 버튼 -->
     <div class="back-btn-container" id="back-button-container" style="display: none;">
         <a href="index.html" class="back-btn">← 홈으로 돌아가기</a>
     </div>
 
+    <!-- 💡 클릭 시 나타날 세부 일정 팝업(모달) 창 -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-content" id="modal-content">
+            <button class="modal-close-btn" onclick="closeModal()">×</button>
+            <h3 class="modal-title" id="modal-title">상세 일정</h3>
+            <div class="modal-body" id="modal-body">내용이 들어갑니다.</div>
+        </div>
+    </div>
+
     <script>
         const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSimq_zZsoAOxpi2OR7o7dqveJ4q4ZNnxF03ofwiE1hjBeX5zaAmQMWG_5wu9XN8vUC31TXgpGtV0_b/pub?output=tsv";
+
+        // 💡 팝업창에 띄울 세부 데이터를 전역으로 저장하는 객체
+        window.calendarModalData = {};
 
         fetch(sheetUrl)
             .then(response => response.text())
@@ -178,9 +205,12 @@
                     if (columns.length >= 2) {
                         const dayNum = parseInt(columns[0].trim());
                         const eventText = columns[1].trim();
+                        // 💡 C열(2번 인덱스)에 세부 정보가 작성되어 있으면 가져옴
+                        const eventDetails = columns.length >= 3 && columns[2].trim() !== "" ? columns[2].replace(/<br>/g, '\n') : null;
+
                         if (!isNaN(dayNum) && eventText) {
                             if (!rawEvents[dayNum]) rawEvents[dayNum] = [];
-                            rawEvents[dayNum].push(eventText);
+                            rawEvents[dayNum].push({ text: eventText, details: eventDetails });
                         }
                     }
                 }
@@ -196,11 +226,13 @@
 
                     const dayOfWeek = new Date(targetYear, targetMonth - 1, day).getDay();
 
-                    rawEvents[day].forEach(text => {
+                    rawEvents[day].forEach(eventObj => {
+                        const text = eventObj.text;
+                        const details = eventObj.details;
                         const normText = normalize(text);
                         
-                        let prevDayHas = (day > 1) && rawEvents[day - 1] && rawEvents[day - 1].some(t => normalize(t) === normText);
-                        let nextDayHas = (day < lastDate) && rawEvents[day + 1] && rawEvents[day + 1].some(t => normalize(t) === normText);
+                        let prevDayHas = (day > 1) && rawEvents[day - 1] && rawEvents[day - 1].some(t => normalize(t.text) === normText);
+                        let nextDayHas = (day < lastDate) && rawEvents[day + 1] && rawEvents[day + 1].some(t => normalize(t.text) === normText);
 
                         if (dayOfWeek === 0) prevDayHas = false; 
                         if (dayOfWeek === 6) nextDayHas = false; 
@@ -210,13 +242,13 @@
                         else if (!prevDayHas && nextDayHas) type = 'start';
                         else if (prevDayHas && !nextDayHas) type = 'end';
 
-                        eventMap[day].push({ text, type });
+                        // 디테일(세부 정보) 정보도 같이 eventMap에 저장
+                        eventMap[day].push({ text, type, details });
                     });
                 }
 
                 renderCalendar(targetYear, targetMonth, eventMap);
 
-                // 💡 로딩이 완료되면 내용과 함께 버튼도 표시되도록 설정
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('calendar-container').style.display = 'block';
                 document.getElementById('back-button-container').style.display = 'block';
@@ -245,9 +277,21 @@
 
                 let eventHtml = "";
                 if (events[day]) {
-                    events[day].forEach(evt => {
+                    events[day].forEach((evt, idx) => {
                         const textStyle = (evt.type === 'middle' || evt.type === 'end') ? 'color: transparent; user-select: none;' : '';
-                        eventHtml += `<div class="event-box ${evt.type}">
+                        
+                        let clickableClass = '';
+                        let clickAction = '';
+
+                        // 💡 C열에 세부 내용이 있는 경우에만 클릭 이벤트 및 데이터 할당
+                        if (evt.details) {
+                            const eventId = `evt_${day}_${idx}`;
+                            window.calendarModalData[eventId] = { title: evt.text, details: evt.details };
+                            clickableClass = 'clickable';
+                            clickAction = `onclick="openMonthlyModal('${eventId}')"`;
+                        }
+
+                        eventHtml += `<div class="event-box ${evt.type} ${clickableClass}" ${clickAction}>
                                           <span style="${textStyle}">${evt.text}</span>
                                       </div>`;
                     });
@@ -267,6 +311,31 @@
 
             grid.innerHTML += html;
         }
+
+        // 💡 모달(팝업) 관련 자바스크립트 함수
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalContent = document.getElementById('modal-content');
+
+        function openMonthlyModal(eventId) {
+            const data = window.calendarModalData[eventId];
+            if (!data) return;
+            
+            document.getElementById('modal-title').innerText = data.title;
+            document.getElementById('modal-body').innerHTML = data.details;
+            modalOverlay.style.display = 'flex';
+        }
+
+        function closeModal() {
+            modalOverlay.style.display = 'none';
+        }
+
+        modalOverlay.addEventListener('click', function() {
+            closeModal();
+        });
+
+        modalContent.addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
     </script>
 </body>
 </html>
