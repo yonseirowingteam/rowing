@@ -5,71 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>월간 일정표 - 연세대학교 조정부</title>
 
-    <!-- 💡 파비콘 (브라우저 탭 아이콘) 설정 -->
+    <!-- 파비콘 및 OG 태그 설정 -->
     <link rel="icon" href="yrt_logo.png" type="image/png">
     <link rel="apple-touch-icon" href="yrt_logo.png">
-
-    <!-- 💡 카카오톡 등 링크 공유 시 미리보기(Open Graph) 설정 -->
     <meta property="og:title" content="월간 일정표 - 연세대학교 조정부">
     <meta property="og:description" content="Yonsei Rowing Team 월간 훈련 및 행사 일정표입니다.">
     <meta property="og:type" content="website">
-    
-    <!-- 🚨 실제 웹사이트 주소 -->
     <meta property="og:url" content="https://yonseirowingteam.github.io/rowing/monthly.html">
     <meta property="og:image" content="https://yonseirowingteam.github.io/rowing/yrt_logo.png">
 
     <style>
-        /* 기본 디자인 설정 (PC 환경) */
+        /* 기본 디자인 설정 */
         body { font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; padding: 40px; max-width: 1200px; margin: 0 auto; background-color: #ffffff; }
-        h2 { color: #003876; border-bottom: 2px solid #003876; padding-bottom: 10px; font-weight: bold; display: flex; justify-content: space-between; align-items: baseline; }
+        h2 { color: #003876; border-bottom: 2px solid #003876; padding-bottom: 10px; font-weight: bold; display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 15px; }
         .month-title { font-size: 1.8rem; color: #333; }
         
+        /* 💡 추가된 안내 문구 디자인 */
+        .info-message {
+            background-color: #f0f6fc; /* 연한 파란색 배경 */
+            color: #003876;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         /* 달력 그리드 디자인 */
-        .calendar-wrapper { margin-top: 30px; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
+        .calendar-wrapper { border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); background-color: #ddd; gap: 1px; }
-        
-        /* 요일 헤더 */
         .day-header { padding: 12px 0; text-align: center; font-weight: bold; background-color: #f8f9fa; font-size: 1.1rem; }
         .day-header.sun { color: #d9534f; }
         .day-header.sat { color: #0275d8; }
-        
-        /* 날짜 칸 */
         .calendar-cell { background-color: #ffffff; min-height: 140px; padding: 10px 0; display: flex; flex-direction: column; overflow: hidden; }
         .calendar-cell.empty { background-color: #fdfdfd; }
-        
         .date-num { font-weight: bold; font-size: 1.1rem; margin-bottom: 8px; color: #555; padding: 0 10px; }
         .calendar-cell.sun .date-num { color: #d9534f; }
         .calendar-cell.sat .date-num { color: #0275d8; }
         
-        /* 일정 텍스트 박스 공통 */
+        /* 일정 텍스트 박스 */
         .event-box { 
-            background-color: #e6f0fa; 
-            color: #003876; 
-            padding: 8px 10px; 
-            font-size: 0.9rem; 
-            line-height: 1.4; 
-            margin-bottom: 4px; 
-            word-break: keep-all; 
-            z-index: 2; 
-            position: relative; 
-            transition: transform 0.2s, box-shadow 0.2s; /* 호버 애니메이션 준비 */
+            background-color: #e6f0fa; color: #003876; padding: 8px 10px; 
+            font-size: 0.9rem; line-height: 1.4; margin-bottom: 4px; 
+            word-break: keep-all; z-index: 2; position: relative; 
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-
-        /* 💡 세부 일정이 있어 클릭 가능한 블록의 마우스 오버 효과 */
-        .event-box.clickable {
-            cursor: pointer;
-        }
-        .event-box.clickable:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-            z-index: 10; /* 떠오를 때 다른 블록에 가려지지 않게 최상단 배치 */
-        }
-        
-        /* 블록 연속성 처리를 위한 디테일 스타일 (PC) */
+        .event-box.clickable { cursor: pointer; }
+        .event-box.clickable:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); z-index: 10; }
         .event-box.single { margin: 0 10px 4px 10px; border-radius: 4px; border-left: 4px solid #003876; }
         .event-box.start { margin: 0 -2px 4px 10px; border-radius: 4px 0 0 4px; border-left: 4px solid #003876; }
-        .event-box.middle { margin: 0 -2px 4px -2px; border-radius: 0; border-left: none; padding-left: 14px; }
-        .event-box.end { margin: 0 10px 4px -2px; border-radius: 0 4px 4px 0; border-left: none; padding-left: 14px; }
+        .event-box.middle { margin: 0 -2px 4px -2px; border-radius: 0; padding-left: 14px; }
+        .event-box.end { margin: 0 10px 4px -2px; border-radius: 0 4px 4px 0; padding-left: 14px; }
         
         #loading { text-align: center; color: #666; margin-top: 50px; font-size: 1.1rem; }
 
@@ -83,7 +71,7 @@
         }
         .back-btn:hover { background-color: #003876; color: #ffffff; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0, 56, 118, 0.15); }
 
-        /* 💡 팝업(모달) 창 디자인 설정 */
+        /* 팝업(모달) 창 디자인 */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.4); z-index: 999; align-items: center; justify-content: center;
@@ -92,44 +80,30 @@
             background: #ffffff; padding: 30px; border-radius: 12px; width: 85%; max-width: 400px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2); position: relative; text-align: left;
         }
-        .modal-title {
-            color: #003876; font-size: 1.3rem; font-weight: bold;
-            margin-top: 0; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0;
-        }
+        .modal-title { color: #003876; font-size: 1.3rem; font-weight: bold; margin-top: 0; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; }
         .modal-body { font-size: 1rem; line-height: 1.6; color: #333; white-space: pre-wrap; }
-        .modal-close-btn {
-            position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.5rem;
-            color: #999; cursor: pointer; transition: color 0.2s;
-        }
+        .modal-close-btn { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.5rem; color: #999; cursor: pointer; transition: color 0.2s; }
         .modal-close-btn:hover { color: #333; }
 
-        /* ========================================= */
-        /* 반응형 모바일 디자인 (화면 폭 768px 이하일 때 적용) */
-        /* ========================================= */
+        /* 모바일 반응형 디자인 */
         @media (max-width: 768px) {
-            body { padding: 10px; }
+            body { padding: 15px; }
             h2 { flex-direction: column; align-items: flex-start; gap: 5px; font-size: 1.3rem; }
             .month-title { font-size: 1.4rem; }
-            .calendar-wrapper { margin-top: 15px; }
             
+            /* 모바일 안내 문구 크기 조정 */
+            .info-message { font-size: 0.85rem; padding: 10px 12px; margin-bottom: 15px; width: 100%; box-sizing: border-box; }
+
             .day-header { padding: 6px 0; font-size: 0.85rem; }
             .calendar-cell { min-height: 90px; padding: 5px 0; }
             .date-num { font-size: 0.85rem; padding: 0 5px; margin-bottom: 4px; }
-            
-            .event-box { 
-                padding: 3px 2px; font-size: 0.7rem; line-height: 1.2; 
-                white-space: normal; word-break: break-all; letter-spacing: -0.05em;
-            }
-            
+            .event-box { padding: 3px 2px; font-size: 0.7rem; line-height: 1.2; white-space: normal; word-break: break-all; letter-spacing: -0.05em; }
             .event-box.single { margin: 0 2px 2px 2px; border-left-width: 3px; }
             .event-box.start { margin: 0 -1px 2px 2px; border-left-width: 3px; }
             .event-box.middle { margin: 0 -1px 2px -1px; padding-left: 4px; }
             .event-box.end { margin: 0 2px 2px -1px; padding-left: 4px; }
-
             .back-btn-container { margin-top: 40px; }
             .back-btn { padding: 12px 28px; font-size: 1rem; }
-            
-            /* 모바일 팝업창 크기 조정 */
             .modal-content { padding: 25px; width: 80%; }
         }
     </style>
@@ -141,18 +115,16 @@
         <span id="display-month" class="month-title"></span>
     </h2>
     
+    <!-- 💡 새롭게 추가된 클릭 유도 안내 문구 -->
+    <div class="info-message">
+        👆 <strong>안내:</strong> 색칠된 일정을 클릭하시면 상세 시간과 장소를 확인할 수 있습니다.
+    </div>
+
     <div id="loading">데이터를 불러오는 중입니다...</div>
 
     <div id="calendar-container" class="calendar-wrapper" style="display: none;">
         <div class="calendar-grid" id="calendar-grid">
-            <!-- 요일 헤더 -->
-            <div class="day-header sun">일</div>
-            <div class="day-header">월</div>
-            <div class="day-header">화</div>
-            <div class="day-header">수</div>
-            <div class="day-header">목</div>
-            <div class="day-header">금</div>
-            <div class="day-header sat">토</div>
+            <div class="day-header sun">일</div><div class="day-header">월</div><div class="day-header">화</div><div class="day-header">수</div><div class="day-header">목</div><div class="day-header">금</div><div class="day-header sat">토</div>
         </div>
     </div>
 
@@ -161,7 +133,7 @@
         <a href="index.html" class="back-btn">← 홈으로 돌아가기</a>
     </div>
 
-    <!-- 💡 클릭 시 나타날 세부 일정 팝업(모달) 창 -->
+    <!-- 클릭 시 나타날 세부 일정 팝업(모달) 창 -->
     <div class="modal-overlay" id="modal-overlay">
         <div class="modal-content" id="modal-content">
             <button class="modal-close-btn" onclick="closeModal()">×</button>
@@ -172,15 +144,12 @@
 
     <script>
         const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSimq_zZsoAOxpi2OR7o7dqveJ4q4ZNnxF03ofwiE1hjBeX5zaAmQMWG_5wu9XN8vUC31TXgpGtV0_b/pub?output=tsv";
-
-        // 💡 팝업창에 띄울 세부 데이터를 전역으로 저장하는 객체
         window.calendarModalData = {};
 
         fetch(sheetUrl)
             .then(response => response.text())
             .then(data => {
                 const rows = data.split('\n');
-                
                 let targetYear = new Date().getFullYear();
                 let targetMonth = new Date().getMonth() + 1;
 
@@ -205,7 +174,6 @@
                     if (columns.length >= 2) {
                         const dayNum = parseInt(columns[0].trim());
                         const eventText = columns[1].trim();
-                        // 💡 C열(2번 인덱스)에 세부 정보가 작성되어 있으면 가져옴
                         const eventDetails = columns.length >= 3 && columns[2].trim() !== "" ? columns[2].replace(/<br>/g, '\n') : null;
 
                         if (!isNaN(dayNum) && eventText) {
@@ -216,14 +184,12 @@
                 }
 
                 const normalize = str => str.replace(/[\s"'\r\n]/g, '').toLowerCase();
-
                 const eventMap = {};
                 const lastDate = new Date(targetYear, targetMonth, 0).getDate();
 
                 for (let day = 1; day <= lastDate; day++) {
                     if (!rawEvents[day]) continue;
                     if (!eventMap[day]) eventMap[day] = [];
-
                     const dayOfWeek = new Date(targetYear, targetMonth - 1, day).getDay();
 
                     rawEvents[day].forEach(eventObj => {
@@ -242,32 +208,27 @@
                         else if (!prevDayHas && nextDayHas) type = 'start';
                         else if (prevDayHas && !nextDayHas) type = 'end';
 
-                        // 디테일(세부 정보) 정보도 같이 eventMap에 저장
                         eventMap[day].push({ text, type, details });
                     });
                 }
 
                 renderCalendar(targetYear, targetMonth, eventMap);
-
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('calendar-container').style.display = 'block';
                 document.getElementById('back-button-container').style.display = 'block';
             })
             .catch(error => {
                 console.error("데이터 로드 오류:", error);
-                document.getElementById('loading').innerText = "데이터를 불러오지 못했습니다. 스프레드시트 링크를 확인해 주세요.";
+                document.getElementById('loading').innerText = "데이터를 불러오지 못했습니다.";
             });
 
         function renderCalendar(year, month, events) {
             const grid = document.getElementById('calendar-grid');
             const firstDay = new Date(year, month - 1, 1).getDay();
             const lastDate = new Date(year, month, 0).getDate();
-            
             let html = "";
 
-            for (let i = 0; i < firstDay; i++) {
-                html += `<div class="calendar-cell empty"></div>`;
-            }
+            for (let i = 0; i < firstDay; i++) { html += `<div class="calendar-cell empty"></div>`; }
 
             for (let day = 1; day <= lastDate; day++) {
                 const currentDayOfWeek = new Date(year, month - 1, day).getDay();
@@ -279,11 +240,9 @@
                 if (events[day]) {
                     events[day].forEach((evt, idx) => {
                         const textStyle = (evt.type === 'middle' || evt.type === 'end') ? 'color: transparent; user-select: none;' : '';
-                        
                         let clickableClass = '';
                         let clickAction = '';
 
-                        // 💡 C열에 세부 내용이 있는 경우에만 클릭 이벤트 및 데이터 할당
                         if (evt.details) {
                             const eventId = `evt_${day}_${idx}`;
                             window.calendarModalData[eventId] = { title: evt.text, details: evt.details };
@@ -297,45 +256,27 @@
                     });
                 }
 
-                html += `<div class="${dayClass}">
-                            <div class="date-num">${day}</div>
-                            ${eventHtml}
-                         </div>`;
+                html += `<div class="${dayClass}"><div class="date-num">${day}</div>${eventHtml}</div>`;
             }
 
             const totalCells = firstDay + lastDate;
             const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
-            for (let i = 0; i < remainingCells; i++) {
-                html += `<div class="calendar-cell empty"></div>`;
-            }
-
+            for (let i = 0; i < remainingCells; i++) { html += `<div class="calendar-cell empty"></div>`; }
             grid.innerHTML += html;
         }
 
-        // 💡 모달(팝업) 관련 자바스크립트 함수
         const modalOverlay = document.getElementById('modal-overlay');
         const modalContent = document.getElementById('modal-content');
-
         function openMonthlyModal(eventId) {
             const data = window.calendarModalData[eventId];
             if (!data) return;
-            
             document.getElementById('modal-title').innerText = data.title;
             document.getElementById('modal-body').innerHTML = data.details;
             modalOverlay.style.display = 'flex';
         }
-
-        function closeModal() {
-            modalOverlay.style.display = 'none';
-        }
-
-        modalOverlay.addEventListener('click', function() {
-            closeModal();
-        });
-
-        modalContent.addEventListener('click', function(event) {
-            event.stopPropagation();
-        });
+        function closeModal() { modalOverlay.style.display = 'none'; }
+        modalOverlay.addEventListener('click', closeModal);
+        modalContent.addEventListener('click', e => e.stopPropagation());
     </script>
 </body>
 </html>
