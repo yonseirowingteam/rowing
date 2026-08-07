@@ -48,6 +48,28 @@
         
         #loading { text-align: center; color: #666; margin-top: 50px; font-size: 1.1rem; }
 
+        /* 💡 홈으로 돌아가기 버튼 디자인 */
+        .back-btn-container { text-align: center; margin-top: 50px; }
+        .back-btn { 
+            display: inline-block; 
+            padding: 14px 32px; 
+            background-color: #ffffff; 
+            color: #003876; 
+            border: 2px solid #003876; 
+            border-radius: 8px; 
+            text-decoration: none; 
+            font-size: 1.05rem; 
+            font-weight: bold; 
+            transition: all 0.3s ease; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+        }
+        .back-btn:hover { 
+            background-color: #003876; 
+            color: #ffffff; 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 12px rgba(0, 56, 118, 0.15); 
+        }
+
         /* ========================================= */
         /* 반응형 모바일 디자인 (화면 폭 768px 이하일 때 적용) */
         /* ========================================= */
@@ -76,6 +98,10 @@
             .event-box.start { margin: 0 -1px 2px 2px; border-left-width: 3px; }
             .event-box.middle { margin: 0 -1px 2px -1px; padding-left: 4px; }
             .event-box.end { margin: 0 2px 2px -1px; padding-left: 4px; }
+
+            /* 💡 모바일 홈 버튼 여백 및 크기 조정 */
+            .back-btn-container { margin-top: 40px; }
+            .back-btn { padding: 12px 28px; font-size: 1rem; }
         }
     </style>
 </head>
@@ -99,6 +125,11 @@
             <div class="day-header">금</div>
             <div class="day-header sat">토</div>
         </div>
+    </div>
+
+    <!-- 💡 하단에 추가된 홈으로 돌아가기 버튼 -->
+    <div class="back-btn-container" id="back-button-container" style="display: none;">
+        <a href="index.html" class="back-btn">← 홈으로 돌아가기</a>
     </div>
 
     <script>
@@ -171,8 +202,10 @@
 
                 renderCalendar(targetYear, targetMonth, eventMap);
 
+                // 💡 로딩이 완료되면 내용과 함께 버튼도 표시되도록 설정
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('calendar-container').style.display = 'block';
+                document.getElementById('back-button-container').style.display = 'block';
             })
             .catch(error => {
                 console.error("데이터 로드 오류:", error);
