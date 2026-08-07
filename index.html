@@ -7,14 +7,14 @@
 
     <!-- 💡 파비콘 (브라우저 탭 아이콘) 설정 -->
     <link rel="icon" href="yrt_logo.png" type="image/png">
-    <link rel="apple-touch-icon" href="yrt_logo.png"> <!-- 아이폰 홈 화면 추가용 아이콘 -->
+    <link rel="apple-touch-icon" href="yrt_logo.png">
 
     <!-- 💡 카카오톡 등 링크 공유 시 미리보기(Open Graph) 설정 -->
     <meta property="og:title" content="연세대학교 조정부 (Yonsei Rowing Team)">
     <meta property="og:description" content="Yonsei Rowing Team 일정 관리 및 훈련 스케줄">
     <meta property="og:type" content="website">
     
-    <!-- 🚨 아래 두 줄의 주소를 본인의 실제 웹사이트 주소로 반드시 변경하세요 -->
+    <!-- 🚨 실제 웹사이트 주소 -->
     <meta property="og:url" content="https://yonseirowingteam.github.io/rowing">
     <meta property="og:image" content="https://yonseirowingteam.github.io/rowing/yrt_logo.png">
 
@@ -22,7 +22,7 @@
         /* 기본 스타일 설정 */
         body {
             font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
-            background-color: #ffffff; /* 깔끔한 흰색 배경 */
+            background-color: #ffffff;
             margin: 0;
             display: flex;
             flex-direction: column;
@@ -30,12 +30,20 @@
             justify-content: center;
             min-height: 100vh;
         }
+
+        /* 💡 메인 로고 디자인 */
+        .main-logo {
+            width: 150px; /* 로고 크기 */
+            height: auto;
+            margin-bottom: 20px; /* 로고와 제목 사이의 간격 */
+        }
         
         /* 대표 문자열 (연세 블루 포인트) */
         h1 {
-            color: #003876; /* 연세 블루 */
+            color: #003876;
             font-size: 2.5rem;
             margin-bottom: 10px;
+            margin-top: 0; /* 로고와의 여백 조화를 위해 상단 마진 제거 */
             letter-spacing: -0.05em;
         }
         
@@ -76,43 +84,51 @@
         /* 반응형 모바일 디자인 (화면 폭 768px 이하일 때 적용) */
         /* ========================================= */
         @media (max-width: 768px) {
+            /* 💡 모바일 환경에서 로고 크기 축소 */
+            .main-logo {
+                width: 120px;
+                margin-bottom: 15px;
+            }
+
             h1 {
-                font-size: 2rem; /* 제목 크기 축소 */
+                font-size: 2rem;
                 text-align: center;
             }
             
             p {
-                font-size: 1rem; /* 설명 텍스트 크기 축소 */
+                font-size: 1rem;
                 margin-bottom: 40px;
                 text-align: center;
                 padding: 0 20px;
-                word-break: keep-all; /* 단어 단위로 줄바꿈되어 깔끔하게 보이도록 설정 */
+                word-break: keep-all;
             }
 
             .btn-container {
-                flex-direction: column; /* 모바일에서는 버튼을 세로로 배치 */
+                flex-direction: column;
                 gap: 15px;
-                width: 80%; /* 화면 너비에 맞게 조정 */
-                max-width: 320px; /* 버튼이 너무 넓어지지 않도록 최대 너비 제한 */
+                width: 80%;
+                max-width: 320px;
             }
 
             .btn {
-                width: 100%; /* 버튼이 컨테이너 너비를 꽉 채우도록 설정 */
+                width: 100%;
                 box-sizing: border-box;
                 padding: 16px 20px;
                 font-size: 1.1rem;
-                text-align: center; /* 버튼 안의 글자 중앙 정렬 */
+                text-align: center;
             }
         }
     </style>
 </head>
 <body>
 
+    <!-- 💡 텍스트 위 중앙에 삽입된 로고 -->
+    <img src="yrt_logo.png" alt="연세대학교 조정부 로고" class="main-logo">
+    
     <h1>연세대학교 조정부</h1>
     <p>Yonsei Rowing Team 일정 관리 및 훈련 스케줄</p>
 
     <div class="btn-container">
-        <!-- target="_blank" 속성으로 새 창에서 열리도록 설정 -->
         <a href="monthly.html" target="_blank" class="btn">월간 일정표 확인</a>
         <a href="training.html" target="_blank" class="btn">2주 훈련 스케줄 확인</a>
     </div>
