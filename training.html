@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>훈련 스케줄 - 연세대학교 조정부</title>
     <style>
-        body { font-family: 'Pretendard', sans-serif; padding: 40px; max-width: 1200px; margin: 0 auto; background-color: #ffffff; }
+        /* 기본 디자인 설정 (PC 환경) */
+        body { font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; padding: 40px; max-width: 1200px; margin: 0 auto; background-color: #ffffff; }
         h2 { color: #003876; border-bottom: 2px solid #003876; padding-bottom: 10px; font-weight: bold; }
         .week-title { margin-top: 30px; font-size: 1.2rem; font-weight: bold; color: #555555; }
         .calendar-2week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 15px; margin-top: 15px; }
@@ -13,6 +14,40 @@
         .date-info { font-weight: bold; color: #003876; margin-bottom: 10px; display: block; }
         .content { font-size: 0.9rem; line-height: 1.5; }
         #loading { text-align: center; color: #666; margin-top: 50px; font-size: 1.1rem; }
+
+        /* ========================================= */
+        /* 반응형 모바일 디자인 (화면 폭 768px 이하일 때 적용) */
+        /* ========================================= */
+        @media (max-width: 768px) {
+            body { padding: 15px; }
+            h2 { font-size: 1.3rem; }
+            .week-title { font-size: 1.05rem; margin-top: 20px; }
+            
+            .calendar-2week { 
+                gap: 4px; /* 모바일에서 칸 사이 간격 최소화 */
+                margin-top: 10px;
+            }
+            .training-day { 
+                min-height: 85px; 
+                padding: 6px 3px; /* 내부 여백 최소화 */
+                border-width: 1px;
+                border-top-width: 3px;
+                border-radius: 5px;
+            }
+            .date-info { 
+                font-size: 0.75rem; 
+                margin-bottom: 5px; 
+                text-align: center;
+                letter-spacing: -0.05em; /* 자간을 줄여 좁은 칸에 맞춤 */
+            }
+            .content { 
+                font-size: 0.7rem; 
+                line-height: 1.25; 
+                word-break: break-all; /* 좁은 칸에서 글자가 영역을 벗어나지 않게 줄바꿈 */
+                text-align: center;
+                letter-spacing: -0.05em;
+            }
+        }
     </style>
 </head>
 <body>
