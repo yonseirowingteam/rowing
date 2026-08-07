@@ -57,6 +57,39 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 12px rgba(0, 56, 118, 0.2);
         }
+
+        /* ========================================= */
+        /* 반응형 모바일 디자인 (화면 폭 768px 이하일 때 적용) */
+        /* ========================================= */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem; /* 제목 크기 축소 */
+                text-align: center;
+            }
+            
+            p {
+                font-size: 1rem; /* 설명 텍스트 크기 축소 */
+                margin-bottom: 40px;
+                text-align: center;
+                padding: 0 20px;
+                word-break: keep-all; /* 단어 단위로 줄바꿈되어 깔끔하게 보이도록 설정 */
+            }
+
+            .btn-container {
+                flex-direction: column; /* 모바일에서는 버튼을 세로로 배치 */
+                gap: 15px;
+                width: 80%; /* 화면 너비에 맞게 조정 */
+                max-width: 320px; /* 버튼이 너무 넓어지지 않도록 최대 너비 제한 */
+            }
+
+            .btn {
+                width: 100%; /* 버튼이 컨테이너 너비를 꽉 채우도록 설정 */
+                box-sizing: border-box;
+                padding: 16px 20px;
+                font-size: 1.1rem;
+                text-align: center; /* 버튼 안의 글자 중앙 정렬 */
+            }
+        }
     </style>
 </head>
 <body>
