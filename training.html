@@ -5,56 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>훈련 스케줄 - 연세대학교 조정부</title>
     <style>
-        /* 디자인 영역 (건드리지 않아도 됩니다) */
-        body { font-family: 'Pretendard', sans-serif; padding: 40px; max-width: 1200px; margin: 0 auto; }
-        h2 { color: #003876; border-bottom: 2px solid #003876; padding-bottom: 10px; }
-        .week-title { margin-top: 30px; font-size: 1.2rem; font-weight: 600; color: #555555; }
+        body { font-family: 'Pretendard', sans-serif; padding: 40px; max-width: 1200px; margin: 0 auto; background-color: #ffffff; }
+        h2 { color: #003876; border-bottom: 2px solid #003876; padding-bottom: 10px; font-weight: bold; }
+        .week-title { margin-top: 30px; font-size: 1.2rem; font-weight: bold; color: #555555; }
         .calendar-2week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 15px; margin-top: 15px; }
         .training-day { border: 2px solid #f0f0f0; border-top: 4px solid #003876; border-radius: 8px; min-height: 120px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         .date-info { font-weight: bold; color: #003876; margin-bottom: 10px; display: block; }
         .content { font-size: 0.9rem; line-height: 1.5; }
+        #loading { text-align: center; color: #666; margin-top: 50px; font-size: 1.1rem; }
     </style>
 </head>
 <body>
-
     <h2>2주 훈련 스케줄 (Training Schedule)</h2>
     
-    <div class="week-title">이번 주 (Week 1)</div>
-    <div id="week1-container" class="calendar-2week"></div>
+    <div id="loading">데이터를 불러오는 중입니다... (구글 시트 링크가 연결되면 여기에 일정이 표시됩니다.)</div>
 
-    <div class="week-title">다음 주 (Week 2)</div>
-    <div id="week2-container" class="calendar-2week"></div>
+    <div id="schedule-content" style="display: none;">
+        <div class="week-title">이번 주 (Week 1)</div>
+        <div id="week1-container" class="calendar-2week"></div>
+
+        <div class="week-title">다음 주 (Week 2)</div>
+        <div id="week2-container" class="calendar-2week"></div>
+    </div>
 
     <script>
         // ==========================================
-        // 💡 [수정 구역] 여기서부터 일정 내용만 수정하세요!
-        // 쉼표(,)나 따옴표("")를 지우지 않도록 주의하세요.
-        // 줄바꿈이 필요하면 <br> 을 입력하세요.
+        // 💡 [여기에 링크 붙여넣기]
+        // 구글 스프레드시트에서 복사한 링크를 아래 따옴표 안에 넣으세요.
         // ==========================================
-        
-        const scheduleWeek1 = [
-            { day: "월요일", text: "에르고 10km<br>코어 트레이닝" },
-            { day: "화요일", text: "수상 훈련" },
-            { day: "수요일", text: "휴식" },
-            { day: "목요일", text: "웨이트 트레이닝" },
-            { day: "금요일", text: "수상 훈련" },
-            { day: "토요일", text: "새벽 수상 훈련" },
-            { day: "일요일", text: "개인 정비" }
-        ];
+        const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUhGdKNZnFTv4jIh0Yz1yAtN30iy5UVJem7nF3Zf2RIFb8k6LEKDBVMwjhY8btgthjqUrNPbeVUV7O/pub?output=tsv";
 
-        const scheduleWeek2 = [
-            { day: "월요일", text: "에르고 2000m 측정" },
-            { day: "화요일", text: "수상 훈련" },
-            { day: "수요일", text: "" }, // 일정이 없으면 따옴표 안을 비워두세요.
-            { day: "목요일", text: "웨이트 트레이닝" },
-            { day: "금요일", text: "합숙 훈련 출발" },
-            { day: "토요일", text: "합숙 훈련 (오전/오후)" },
-            { day: "일요일", text: "합숙 훈련 복귀" }
-        ];
+        fetch(sheetUrl)
+            .then(response => response.text())
+            .then(data => {
+                const rows = data.split('\n');
+                const week1Data = [];
+                const week2Data = [];
 
-        // ==========================================
-        // 🛑 여기서부터는 코드를 수정하지 마세요!
-        // ==========================================
+                for (let i = 1; i < rows.length; i++) {
+                    if (rows[i].trim() === "") continue;
+                    
+                    const columns = rows[i].split('\t');
+                    
+                    if (columns.length >= 3) {
+                        week1Data.push({ day: columns[0], text: columns[1] });
+                        week2Data.push({ day: columns[0], text: columns[2] });
+                    }
+                }
+
+                renderSchedule(week1Data, "week1-container");
+                renderSchedule(week2Data, "week2-container");
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('schedule-content').style.display = 'block';
+            })
+            .catch(error => {
+                console.error("데이터 로드 오류:", error);
+                document.getElementById('loading').innerText = "데이터를 불러오지 못했습니다. 코드 안의 구글 시트 링크(sheetUrl)를 다시 확인해 주세요.";
+            });
 
         function renderSchedule(data, containerId) {
             const container = document.getElementById(containerId);
@@ -67,9 +75,6 @@
             }
             container.innerHTML = html;
         }
-
-        renderSchedule(scheduleWeek1, "week1-container");
-        renderSchedule(scheduleWeek2, "week2-container");
     </script>
 </body>
 </html>
