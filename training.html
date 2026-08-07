@@ -1,131 +1,50 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>훈련 스케줄 - 연세대학교 조정부</title>
-    <style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>훈련 스케줄 - 연세대학교 조정부</title>
+<style>
+        body { font-family: 'Pretendard', sans-serif; padding: 40px; max-width: 1200px; margin: 0 auto; background-color: #ffffff; }
         /* 기본 디자인 설정 (PC 환경) */
         body { font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; padding: 40px; max-width: 1200px; margin: 0 auto; background-color: #ffffff; }
-        h2 { color: #003876; border-bottom: 2px solid #003876; padding-bottom: 10px; font-weight: bold; }
-        .week-title { margin-top: 30px; font-size: 1.2rem; font-weight: bold; color: #555555; }
-        .calendar-2week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 15px; margin-top: 15px; }
-        .training-day { border: 2px solid #f0f0f0; border-top: 4px solid #003876; border-radius: 8px; min-height: 120px; padding: 15px; background-color: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .date-info { font-weight: bold; color: #003876; margin-bottom: 10px; display: block; }
-        .content { font-size: 0.9rem; line-height: 1.5; color: #333333; }
-        #loading { text-align: center; color: #666; margin-top: 50px; font-size: 1.1rem; }
+h2 { color: #003876; border-bottom: 2px solid #003876; padding-bottom: 10px; font-weight: bold; }
+.week-title { margin-top: 30px; font-size: 1.2rem; font-weight: bold; color: #555555; }
+.calendar-2week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 15px; margin-top: 15px; }
+.training-day { border: 2px solid #f0f0f0; border-top: 4px solid #003876; border-radius: 8px; min-height: 120px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+.date-info { font-weight: bold; color: #003876; margin-bottom: 10px; display: block; }
+.content { font-size: 0.9rem; line-height: 1.5; }
+#loading { text-align: center; color: #666; margin-top: 50px; font-size: 1.1rem; }
 
         /* ========================================= */
-        /* 반응형 모바일 디자인 (화면 폭 768px 이하일 때 자동 적용) */
+        /* 반응형 모바일 디자인 (화면 폭 768px 이하일 때 적용) */
         /* ========================================= */
         @media (max-width: 768px) {
-            body { padding: 20px; }
-            h2 { font-size: 1.4rem; }
-            .week-title { font-size: 1.1rem; margin-top: 20px; color: #333; }
+            body { padding: 15px; }
+            h2 { font-size: 1.3rem; }
+            .week-title { font-size: 1.05rem; margin-top: 20px; }
             
-            /* 가로 7칸 배열을 1열 세로 리스트형으로 변경 */
             .calendar-2week { 
-                grid-template-columns: 1fr; 
-                gap: 10px; 
-                margin-top: 15px; 
+                gap: 4px; /* 모바일에서 칸 사이 간격 최소화 */
+                margin-top: 10px;
             }
-            
-            /* 모바일 리스트 디자인 (좌측 요일, 우측 내용) */
             .training-day { 
-                min-height: auto; 
-                display: flex; /* 가로 정렬 모드 켜기 */
-                align-items: center; 
-                padding: 15px 20px; 
-                border-top: 2px solid #f0f0f0; 
-                border-left: 4px solid #003876; /* 포인트 띠를 위에서 왼쪽으로 이동 */
-                border-radius: 8px;
+                min-height: 85px; 
+                padding: 6px 3px; /* 내부 여백 최소화 */
+                border-width: 1px;
+                border-top-width: 3px;
+                border-radius: 5px;
             }
-            
             .date-info { 
-                font-size: 1rem; 
-                margin-bottom: 0; 
-                margin-right: 20px; 
-                width: 50px; /* 요일이 차지하는 너비를 고정하여 줄맞춤 */
+                font-size: 0.75rem; 
+                margin-bottom: 5px; 
                 text-align: center;
-                flex-shrink: 0;
+                letter-spacing: -0.05em; /* 자간을 줄여 좁은 칸에 맞춤 */
             }
-            
             .content { 
-                font-size: 0.95rem; 
-                line-height: 1.4; 
-                word-break: keep-all; /* 단어 단위로 자연스럽게 줄바꿈 */
+                font-size: 0.7rem; 
+                line-height: 1.25; 
+                word-break: break-all; /* 좁은 칸에서 글자가 영역을 벗어나지 않게 줄바꿈 */
+                text-align: center;
+                letter-spacing: -0.05em;
             }
         }
-    </style>
+</style>
 </head>
 <body>
-    <h2>2주 훈련 스케줄 (Training Schedule)</h2>
-    
-    <div id="loading">데이터를 불러오는 중입니다...</div>
-
-    <div id="schedule-content" style="display: none;">
-        <!-- 제목 부분에 id를 추가하여 자바스크립트가 글자를 바꿀 수 있게 설정 -->
-        <div class="week-title" id="week1-title">이번 주</div>
-        <div id="week1-container" class="calendar-2week"></div>
-
-        <div class="week-title" id="week2-title">다음 주</div>
-        <div id="week2-container" class="calendar-2week"></div>
-    </div>
-
-    <script>
-        const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUhGdKNZnFTv4jIh0Yz1yAtN30iy5UVJem7nF3Zf2RIFb8k6LEKDBVMwjhY8btgthjqUrNPbeVUV7O/pub?output=tsv";
-
-        fetch(sheetUrl)
-            .then(response => response.text())
-            .then(data => {
-                const rows = data.split('\n');
-                
-                // 1. 스프레드시트 1행(제목)을 읽어와서 화면의 제목을 변경하는 기능 추가
-                if (rows.length > 0) {
-                    const headers = rows[0].split('\t');
-                    if (headers.length >= 3) {
-                        document.getElementById('week1-title').innerText = headers[1];
-                        document.getElementById('week2-title').innerText = headers[2];
-                    }
-                }
-
-                // 2. 2행부터 마지막 행까지의 일정 데이터 처리
-                const week1Data = [];
-                const week2Data = [];
-
-                for (let i = 1; i < rows.length; i++) {
-                    if (rows[i].trim() === "") continue;
-                    
-                    const columns = rows[i].split('\t');
-                    
-                    if (columns.length >= 3) {
-                        week1Data.push({ day: columns[0], text: columns[1] });
-                        week2Data.push({ day: columns[0], text: columns[2] });
-                    }
-                }
-
-                renderSchedule(week1Data, "week1-container");
-                renderSchedule(week2Data, "week2-container");
-
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('schedule-content').style.display = 'block';
-            })
-            .catch(error => {
-                console.error("데이터 로드 오류:", error);
-                document.getElementById('loading').innerText = "데이터를 불러오지 못했습니다. 코드 안의 구글 시트 링크(sheetUrl)를 다시 확인해 주세요.";
-            });
-
-        function renderSchedule(data, containerId) {
-            const container = document.getElementById(containerId);
-            let html = "";
-            for (let i = 0; i < data.length; i++) {
-                html += `<div class="training-day">
-                            <span class="date-info">${data[i].day}</span>
-                            <div class="content">${data[i].text}</div>
-                         </div>`;
-            }
-            container.innerHTML = html;
-        }
-    </script>
-</body>
-</html>
