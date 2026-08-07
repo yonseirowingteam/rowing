@@ -32,9 +32,9 @@
     <script>
         // ==========================================
         // 💡 [여기에 링크 붙여넣기]
-        // 구글 스프레드시트에서 복사한 링크를 아래 따옴표 안에 넣으세요.
+        // 링크 끝부분이 반드시 pub?output=tsv 로 끝나야 정상 작동합니다.
         // ==========================================
-        const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUhGdKNZnFTv4jIh0Yz1yAtN30iy5UVJem7nF3Zf2RIFb8k6LEKDBVMwjhY8btgthjqUrNPbeVUV7O/pubhtml";
+        const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRUhGdKNZnFTv4jIh0Yz1yAtN30iy5UVJem7nF3Zf2RIFb8k6LEKDBVMwjhY8btgthjqUrNPbeVUV7O/pub?output=tsv";
 
         fetch(sheetUrl)
             .then(response => response.text())
