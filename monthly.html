@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>월간 일정표 - 연세대학교 조정부</title>
+    <style>
+        /* 기본 디자인 설정 */
+        body { font-family: 'Pretendard', sans-serif; padding: 40px; max-width: 1200px; margin: 0 auto; background-color: #ffffff; }
+        h2 { color: #003876; border-bottom: 2px solid #003876; padding-bottom: 10px; font-weight: bold; display: flex; justify-content: space-between; align-items: baseline; }
+        .month-title { font-size: 1.8rem; color: #333; }
+        
+        /* 달력 그리드 디자인 */
+        .calendar-wrapper { margin-top: 30px; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); background-color: #ddd; gap: 1px; }
+        
+        /* 요일 헤더 */
+        .day-header { padding: 12px 0; text-align: center; font-weight: bold; background-color: #f8f9fa; font-size: 1.1rem; }
+        .day-header.sun { color: #d9534f; } /* 일요일 빨간색 */
+        .day-header.sat { color: #0275d8; } /* 토요일 파란색 */
+        
+        /* 날짜 칸 */
+        .calendar-cell { background-color: #ffffff; min-height: 140px; padding: 10px; display: flex; flex-direction: column; }
+        .calendar-cell.empty { background-color: #fdfdfd; } /* 빈 칸 배경색 */
+        
+        .date-num { font-weight: bold; font-size: 1.1rem; margin-bottom: 8px; color: #555; }
+        .calendar-cell.sun .date-num { color: #d9534f; }
+        .calendar-cell.sat .date-num { color: #0275d8; }
+        
+        /* 일정 텍스트 박스 */
+        .event-box { background-color: #e6f0fa; color: #003876; padding: 8px; border-radius: 4px; border-left: 4px solid #003876; font-size: 0.9rem; line-height: 1.4; margin-bottom: 4px; word-break: keep-all; }
+        
+        #loading { text-align: center; color: #666; margin-top: 50px; font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+
+    <h2>
+        <span>월간 일정표 (Monthly Schedule)</span>
+        <span id="display-month" class="month-title"></span>
+    </h2>
+    
+    <div id="loading">데이터를 불러오는 중입니다...</div>
+
+    <div id="calendar-container" class="calendar-wrapper" style="display: none;">
+        <div class="calendar-grid" id="calendar-grid">
+            <!-- 요일 헤더 -->
+            <div class="day-header sun">일</div>
+            <div class="day-header">월</div>
+            <div class="day-header">화</div>
+            <div class="day-header">수</div>
+            <div class="day-header">목</div>
+            <div class="day-header">금</div>
+            <div class="day-header sat">토</div>
+            <!-- 스크립트로 날짜 칸들이 이 아래에 생성됩니다 -->
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 💡 [여기에 링크 붙여넣기]
+        // 월간 일정표용 구글 스프레드시트 링크를 넣으세요. (반드시 pub?output=tsv 로 끝나야 함)
+        // ==========================================
+        const sheetUrl = "복사하신_링크를_여기에_붙여넣으세요";
+
+        fetch(sheetUrl)
+            .then(response => response.text())
+            .then(data => {
+                const rows = data.split('\n');
+                
+                // 1. 기준 연월 파싱 (B1 셀)
+                let targetYear = new Date().getFullYear();
+                let targetMonth = new Date().getMonth() + 1;
+
+                if (rows.length > 0) {
+                    const headerRow = rows[0].split('\t');
+                    if (headerRow.length >= 2) {
+                        const dateStr = headerRow[1].trim(); // "2026-08"
+                        if (dateStr.includes('-')) {
+                            const parts = dateStr.split('-');
+                            targetYear = parseInt(parts[0]);
+                            targetMonth = parseInt(parts[1]);
+                        }
+                    }
+                }
+
+                // 타이틀 업데이트
+                document.getElementById('display-month').innerText = `${targetYear}년 ${targetMonth}월`;
+
+                // 2. 일정 데이터 추출 (3행부터 시작, 인덱스 2)
+                const events = {};
+                for (let i = 2; i < rows.length; i++) {
+                    if (rows[i].trim() === "") continue;
+                    const columns = rows[i].split('\t');
+                    if (columns.length >= 2) {
+                        const dayNum = parseInt(columns[0].trim());
+                        const eventText = columns[1].trim();
+                        if (!isNaN(dayNum) && eventText) {
+                            // 같은 날짜에 여러 일정이 있을 수 있으므로 누적 저장
+                            if(events[dayNum]) {
+                                events[dayNum] += `<br><br>${eventText}`;
+                            } else {
+                                events[dayNum] = eventText;
+                            }
+                        }
+                    }
+                }
+
+                // 3. 달력 그리기 로직
+                renderCalendar(targetYear, targetMonth, events);
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('calendar-container').style.display = 'block';
+            })
+            .catch(error => {
+                console.error("데이터 로드 오류:", error);
+                document.getElementById('loading').innerText = "데이터를 불러오지 못했습니다. 스프레드시트 링크를 확인해 주세요.";
+            });
+
+        function renderCalendar(year, month, events) {
+            const grid = document.getElementById('calendar-grid');
+            
+            // 해당 월의 1일의 요일 (0: 일요일, 6: 토요일)
+            const firstDay = new Date(year, month - 1, 1).getDay();
+            // 해당 월의 총 일수
+            const lastDate = new Date(year, month, 0).getDate();
+            
+            let html = "";
+
+            // 1일 이전의 빈 칸 채우기
+            for (let i = 0; i < firstDay; i++) {
+                html += `<div class="calendar-cell empty"></div>`;
+            }
+
+            // 실제 날짜 칸 생성
+            for (let day = 1; day <= lastDate; day++) {
+                // 현재 날짜의 요일 계산 (일요일, 토요일 클래스 부여용)
+                const currentDayOfWeek = new Date(year, month - 1, day).getDay();
+                let dayClass = "calendar-cell";
+                if (currentDayOfWeek === 0) dayClass += " sun";
+                if (currentDayOfWeek === 6) dayClass += " sat";
+
+                // 일정이 있으면 박스 형태로 삽입
+                let eventHtml = "";
+                if (events[day]) {
+                    eventHtml = `<div class="event-box">${events[day]}</div>`;
+                }
+
+                html += `<div class="${dayClass}">
+                            <div class="date-num">${day}</div>
+                            ${eventHtml}
+                         </div>`;
+            }
+
+            // 마지막 날짜 이후의 남은 빈 칸 채우기 (전체 칸 수가 7의 배수가 되도록)
+            const totalCells = firstDay + lastDate;
+            const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+            for (let i = 0; i < remainingCells; i++) {
+                html += `<div class="calendar-cell empty"></div>`;
+            }
+
+            // 헤더 아래에 날짜 칸들 추가 (기존 헤더 유지)
+            grid.innerHTML += html;
+        }
+    </script>
+</body>
+</html>
