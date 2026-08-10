@@ -5,22 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>월간 일정표 - 연세대학교 조정부</title>
 
-    <!-- 파비콘 및 OG 태그 설정 -->
+    <!-- 💡 파비콘 (브라우저 탭 아이콘) 설정 -->
     <link rel="icon" href="yrt_logo.png" type="image/png">
-    <link rel="apple-touch-icon" href="yrt_logo.png">
+    <link rel="apple-touch-icon" href="yrt_logo.png"> <!-- 아이폰 홈 화면 추가용 아이콘 -->
+
+    <!-- 💡 카카오톡 등 링크 공유 시 미리보기(Open Graph) 설정 -->
     <meta property="og:title" content="월간 일정표 - 연세대학교 조정부">
     <meta property="og:description" content="Yonsei Rowing Team 월간 훈련 및 행사 일정표입니다.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://yonseirowingteam.github.io/rowing/monthly.html">
-    <meta property="og:image" content="https://yonseirowingteam.github.io/rowing/yrt_logo.png">
+    
+    <!-- 🚨 실제 웹사이트 주소 (수정 완료) -->
+    <meta property="og:url" content="https://rowingteam.yonsei.ac.kr/monthly.html">
+    <meta property="og:image" content="https://rowingteam.yonsei.ac.kr/yrt_logo.png">
 
     <style>
-        /* 기본 디자인 설정 */
+        /* 기본 디자인 설정 (PC 환경) */
         body { font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; padding: 40px; max-width: 1200px; margin: 0 auto; background-color: #ffffff; }
         h2 { color: #003876; border-bottom: 2px solid #003876; padding-bottom: 10px; font-weight: bold; display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 15px; }
         .month-title { font-size: 1.8rem; color: #333; }
         
-        /* 💡 추가된 안내 문구 디자인 */
+        /* 추가된 안내 문구 디자인 */
         .info-message {
             background-color: #f0f6fc; /* 연한 파란색 배경 */
             color: #003876;
@@ -45,7 +49,7 @@
         .calendar-cell.sun .date-num { color: #d9534f; }
         .calendar-cell.sat .date-num { color: #0275d8; }
         
-        /* 일정 텍스트 박스 */
+        /* 일정 텍스트 박스 공통 */
         .event-box { 
             background-color: #e6f0fa; color: #003876; padding: 8px 10px; 
             font-size: 0.9rem; line-height: 1.4; margin-bottom: 4px; 
