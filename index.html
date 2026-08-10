@@ -150,7 +150,7 @@
         #easter-boat.sail {
             transform: translateX(calc(100vw + 300px)); /* 화면 끝까지 이동 */
             /* 💡 출발할 때만 8초 동안 일정한 속도(linear)로 애니메이션 적용 */
-            transition: transform 8s linear; 
+            transition: transform 6s linear; 
         }
 
         /* 반응형 모바일 디자인 */
@@ -252,7 +252,7 @@
                 // transition이 없으므로 애니메이션 없이 즉시 원위치로 텔레포트 복귀합니다.
                 setTimeout(() => {
                     boat.classList.remove('sail'); 
-                }, 8500);
+                }, 6500);
             }
         });
     </script>
