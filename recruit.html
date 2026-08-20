@@ -120,21 +120,8 @@
         /* ========================================= */
         /* 🎁 이스터에그 CSS 시작 */
         /* ========================================= */
-        
-        /* 1. 마우스 클릭 물보라 이펙트 */
-        .splash {
-            position: fixed;
-            pointer-events: none;
-            font-size: 1.5rem;
-            animation: floatUp 0.8s ease-out forwards;
-            z-index: 9999;
-        }
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(0.8); opacity: 1; }
-            100% { transform: translateY(-40px) scale(1.5); opacity: 0; }
-        }
 
-        /* 2. 훈련부장 시크릿 토스트 팝업 */
+        /* 1. 훈련부장 시크릿 토스트 팝업 */
         #training-toast {
             position: fixed;
             bottom: -100px;
@@ -160,13 +147,13 @@
         /* 지상훈련 텍스트 클릭 유도용 커서 */
         #secret-training { cursor: pointer; user-select: none; }
 
-        /* 3. 개발자 이스터에그: 숨겨진 투명 마침표 */
+        /* 2. 개발자 이스터에그: 숨겨진 투명 마침표 */
         .secret-creator { position: absolute; bottom: 15px; right: 20px; color: #003876; font-size: 0.85rem; display: flex; align-items: center; justify-content: flex-end; cursor: default; z-index: 10; }
         .secret-creator .secret-text { max-width: 0; overflow: hidden; white-space: nowrap; transition: max-width 0.6s ease, opacity 0.6s ease; opacity: 0; color: #82c8fa; font-weight: bold; }
         .secret-creator:hover .dot { color: #82c8fa; }
         .secret-creator:hover .secret-text { max-width: 300px; opacity: 1; margin-left: 8px; }
 
-        /* 4. 개발자 이스터에그: 청춘 5번 클릭 토스트 팝업 */
+        /* 3. 개발자 이스터에그: 청춘 5번 클릭 토스트 팝업 */
         #developer-toast {
             position: fixed;
             bottom: -100px;
@@ -527,7 +514,7 @@
 
     <!-- 🎁 이스터에그 토스트 팝업 컨테이너 추가 -->
     <div id="training-toast">
-        <span class="ko">✨ 페이지 제작 훈련부장 강예은: 지옥의 에르고 훈련에 오신 것을 환영합니다! (도망치지 마세요 😈)</span>
+        <span class="ko">✨ 훈련부장 강예은: 지옥의 에르고 훈련에 오신 것을 환영합니다! (도망치지 마세요 😈)</span>
         <span class="en">✨ Training Manager: Welcome to the hellish Ergometer training! (Don't run away 😈)</span>
     </div>
 
@@ -550,30 +537,7 @@
         }
 
         // ==========================================
-        // 🎁 이스터에그 1: 물보라 클릭 이펙트
-        // ==========================================
-        document.addEventListener('click', function(e) {
-            // 버튼이나 링크를 누를 때는 물방울이 방해되지 않도록 예외 처리
-            if(e.target.closest('a') || e.target.closest('button')) return;
-
-            const splash = document.createElement('div');
-            splash.innerHTML = '💦';
-            splash.className = 'splash';
-            
-            // 마우스 클릭 위치 설정 (스크롤 위치 보정)
-            splash.style.left = (e.clientX - 10) + 'px';
-            splash.style.top = (e.clientY - 15) + 'px';
-            
-            document.body.appendChild(splash);
-
-            // 애니메이션이 끝나면 요소 삭제 (성능 최적화)
-            setTimeout(() => {
-                splash.remove();
-            }, 800);
-        });
-
-        // ==========================================
-        // 🎁 이스터에그 2: 훈련부장의 비밀 메시지
+        // 🎁 이스터에그 1: 훈련부장의 비밀 메시지
         // ==========================================
         let trainingClickCount = 0;
         let trainingClickTimer;
@@ -601,7 +565,7 @@
         });
 
         // ==========================================
-        // 🎁 개발자 이스터에그 1: 콘솔 창 메시지
+        // 🎁 개발자 이스터에그 2: 콘솔 창 메시지
         // ==========================================
         console.log(
             "%c🚣‍♂️ Coded by 26/27 주장단 훈련부장 강예은", 
@@ -610,7 +574,7 @@
         console.log("리크루팅 페이지 소스를 확인하고 계시군요! 조정부에서 만나요 😎");
 
         // ==========================================
-        // 🎁 개발자 이스터에그 2: 청춘 5번 클릭 토스트
+        // 🎁 개발자 이스터에그 3: 청춘 5번 클릭 토스트
         // ==========================================
         let devClickCount = 0;
         let devClickTimer;
