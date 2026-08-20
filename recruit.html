@@ -62,13 +62,13 @@
         .hero-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; width: 100%; margin-top: 30px; }
         .hero-poster { max-width: 100%; width: 450px; height: auto; box-shadow: none; margin-bottom: 25px; }
 
-        /* 💡 수정됨: 스크롤 유도 애니메이션을 밝은 배경에 맞게 디자인 변경 */
+        /* 스크롤 유도 애니메이션 */
         .scroll-down {
             position: absolute;
-            top: 25px; /* 남색 배경 바로 아래 하늘색 섹션의 최상단에 배치 */
+            top: 25px;
             left: 50%;
             transform: translateX(-50%);
-            color: #003876; /* 남색 대신 짙은 연세블루 텍스트 */
+            color: #003876;
             font-size: 0.85rem;
             font-weight: bold;
             letter-spacing: 1px;
@@ -76,7 +76,6 @@
             cursor: pointer;
             z-index: 10;
         }
-        /* 아래로 내려찍듯 통통 튀는 애니메이션 */
         @keyframes bounce-down {
             0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
             40% { transform: translateY(8px) translateX(-50%); }
@@ -118,15 +117,56 @@
         .floating-btn { position: fixed; bottom: 30px; right: 30px; background-color: #d9534f; color: #fff; padding: 15px 25px; border-radius: 50px; font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(217, 83, 79, 0.4); transition: transform 0.3s; z-index: 1000; }
         .floating-btn:hover { transform: scale(1.05); color: #fff; }
 
+        /* ========================================= */
+        /* 🎁 이스터에그 CSS 시작 */
+        /* ========================================= */
+        
+        /* 1. 마우스 클릭 물보라 이펙트 */
+        .splash {
+            position: fixed;
+            pointer-events: none;
+            font-size: 1.5rem;
+            animation: floatUp 0.8s ease-out forwards;
+            z-index: 9999;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.8); opacity: 1; }
+            100% { transform: translateY(-40px) scale(1.5); opacity: 0; }
+        }
+
+        /* 2. 훈련부장 시크릿 토스트 팝업 */
+        #training-toast {
+            position: fixed;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #d9534f;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1000;
+            pointer-events: none;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+        #training-toast.show { bottom: 40px; opacity: 1; }
+
+        /* 지상훈련 텍스트 클릭 유도용 커서 */
+        #secret-training { cursor: pointer; user-select: none; }
+
         /* 모바일 반응형 */
         @media (max-width: 768px) {
             .hero { padding: 40px 15px 40px 15px; }
             .lang-toggle-btn { top: 15px; right: 15px; padding: 6px 14px; font-size: 0.85rem; }
             .hero-poster { width: 100%; max-width: 320px; box-shadow: none; margin-top: 15px; margin-bottom: 20px; }
-            
-            section { padding: 50px 15px; } /* 모바일용 패딩 조정 */
-            .scroll-down { top: 15px; } /* 모바일에서는 화살표를 조금 더 위로 */
-
+            section { padding: 50px 15px; } 
+            .scroll-down { top: 15px; } 
             .section-title { font-size: 1.6rem; margin-bottom: 30px; }
             .activity-grid { grid-template-columns: 1fr; }
             .floating-btn { display: none; }
@@ -137,7 +177,6 @@
 
     <!-- 1. Hero 섹션 -->
     <header class="hero">
-        <!-- 🌐 언어 전환 버튼 -->
         <button class="lang-toggle-btn" onclick="toggleLanguage()">
             <span class="ko">🌐 ENGLISH</span>
             <span class="en">🌐 KOREAN</span>
@@ -154,7 +193,6 @@
 
     <!-- 2. About Us -->
     <section id="about" class="bg-blue">
-        <!-- 💡 스크롤 유도 화살표가 Hero 섹션을 벗어나 하늘색 배경 최상단에 배치됨 -->
         <div class="scroll-down" onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})">
             <span class="ko">▼ 아래로 스크롤 ▼</span>
             <span class="en">▼ SCROLL DOWN ▼</span>
@@ -201,7 +239,8 @@
             <div class="activity-grid">
                 <div class="activity-card">
                     <h3>
-                        <span class="ko">🏋️ 지상 훈련</span>
+                        <!-- 💡 이스터에그 타겟 태그 적용됨 (id="secret-training") -->
+                        <span class="ko" id="secret-training">🏋️ 지상 훈련</span>
                         <span class="en">🏋️ Land Training</span>
                     </h3>
                     <p class="ko"><strong>[로잉머신] 화·목 18:00~20:00 (스포츠과학관)</strong><br>기본자세 연습 및 근력·근지구력 훈련<br><br><strong>[웨이트] 주중 1회 (인근 헬스장)</strong><br>레그프레스, 스쿼트 등 코어/하체 강화</p>
@@ -212,7 +251,7 @@
                         <span class="ko">🌊 수상 훈련</span>
                         <span class="en">🌊 Water Training</span>
                     </h3>
-                    <p class="ko"><strong>매주 주말 14:00~17:00 (하남 미사리)</strong><br>실제 배를 타고 물 위에서 팀원들과 호흡을 맞추는 본격적인 수상 훈련 진행</p>
+                    <p class="ko"><strong>매주 주말 10:00~13:00 (하남 미사리)</strong><br>실제 배를 타고 물 위에서 팀원들과 호흡을 맞추는 본격적인 수상 훈련 진행</p>
                     <p class="en"><strong>Every Weekend 10:00~13:00 (Misari Rowing Regatta)</strong><br>Full-scale water training riding a real boat and coordinating with teammates.</p>
                 </div>
                 <div class="activity-card">
@@ -300,7 +339,7 @@
                         <span class="en">Step 4. New Member OT & First Training</span>
                     </div>
                     <div class="timeline-desc">
-                        <span class="ko">9월 10일 (목)</span>
+                        <span class="ko">9월 12일 (토) 예정</span>
                         <span class="en">Scheduled for Sep 12 (Sat)</span>
                     </div>
                 </div>
@@ -447,18 +486,74 @@
         <span class="en">Apply 📝</span>
     </a>
 
-    <!-- 🌐 자바스크립트 언어 토글 기능 -->
+    <!-- 🎁 이스터에그 토스트 팝업 컨테이너 추가 -->
+    <div id="training-toast">
+        <span class="ko">✨ 페이지 제작 훈련부장 강예은: 지옥의 에르고 훈련에 오신 것을 환영합니다! (도망치지 마세요 😈)</span>
+        <span class="en">✨ Training Manager: Welcome to the hellish Ergometer training! (Don't run away 😈)</span>
+    </div>
+
+    <!-- 🌐 자바스크립트 모음 -->
     <script>
+        // 1. 언어 토글 기능
         function toggleLanguage() {
             document.body.classList.toggle('en-mode');
-            
-            // 페이지 브라우저 탭 타이틀(제목)도 함께 변경
             if(document.body.classList.contains('en-mode')) {
                 document.title = "2026-2 Yonsei Rowing Team Recruiting";
             } else {
                 document.title = "2026-2 연세대학교 조정부 신입부원 모집";
             }
         }
+
+        // ==========================================
+        // 🎁 이스터에그 1: 물보라 클릭 이펙트
+        // ==========================================
+        document.addEventListener('click', function(e) {
+            // 버튼이나 링크를 누를 때는 물방울이 방해되지 않도록 예외 처리
+            if(e.target.closest('a') || e.target.closest('button')) return;
+
+            const splash = document.createElement('div');
+            splash.innerHTML = '💦';
+            splash.className = 'splash';
+            
+            // 마우스 클릭 위치 설정 (스크롤 위치 보정)
+            splash.style.left = (e.clientX - 10) + 'px';
+            splash.style.top = (e.clientY - 15) + 'px';
+            
+            document.body.appendChild(splash);
+
+            // 애니메이션이 끝나면 요소 삭제 (성능 최적화)
+            setTimeout(() => {
+                splash.remove();
+            }, 800);
+        });
+
+        // ==========================================
+        // 🎁 이스터에그 2: 훈련부장의 비밀 메시지
+        // ==========================================
+        let trainingClickCount = 0;
+        let trainingClickTimer;
+        const secretTrainingTitle = document.getElementById('secret-training');
+        const trainingToast = document.getElementById('training-toast');
+
+        secretTrainingTitle.addEventListener('click', () => {
+            trainingClickCount++;
+            clearTimeout(trainingClickTimer);
+
+            if (trainingClickCount >= 5) {
+                trainingToast.classList.add('show');
+                trainingClickCount = 0; 
+                
+                // 4초 뒤에 팝업창 숨기기
+                setTimeout(() => { 
+                    trainingToast.classList.remove('show'); 
+                }, 4000);
+            } else {
+                // 1.5초 안에 다음 클릭이 없으면 카운트 초기화
+                trainingClickTimer = setTimeout(() => { 
+                    trainingClickCount = 0; 
+                }, 1500);
+            }
+        });
     </script>
 </body>
 </html>
