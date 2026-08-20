@@ -29,8 +29,8 @@
         /* 🌐 언어 토글 버튼 스타일 */
         .lang-toggle-btn {
             position: absolute;
-            top: 25px;
-            right: 25px;
+            top: 20px;
+            right: 20px;
             background-color: rgba(255, 255, 255, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.5);
             color: #fff;
@@ -53,14 +53,35 @@
         .bg-white { background-color: #ffffff; }
         .bg-blue { background-color: #f0f6fc; }
 
-        /* 버튼 스타일 */
-        .btn-main { display: inline-block; background-color: #003876; color: #fff; padding: 18px 40px; font-size: 1.2rem; font-weight: bold; border-radius: 50px; text-align: center; transition: all 0.3s; box-shadow: 0 4px 10px rgba(0,56,118,0.3); border: none; cursor: pointer; word-break: keep-all; }
+        /* 💡 버튼 스타일 (사이즈 다이어트: padding과 font-size 축소) */
+        .btn-main { display: inline-block; background-color: #003876; color: #fff; padding: 14px 30px; font-size: 1.1rem; font-weight: bold; border-radius: 50px; text-align: center; transition: all 0.3s; box-shadow: 0 4px 10px rgba(0,56,118,0.3); border: none; cursor: pointer; word-break: keep-all; }
         .btn-main:hover { background-color: #002855; transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,56,118,0.4); color: #fff; }
         
-        /* 1. Hero 섹션 */
-        .hero { position: relative; padding: 60px 20px 60px 20px; display: flex; align-items: center; justify-content: center; text-align: center; background-color: #192150; }
-        .hero-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; width: 100%; margin-top: 40px; }
-        .hero-poster { max-width: 100%; width: 550px; height: auto; box-shadow: none; margin-bottom: 40px; }
+        /* 1. Hero 섹션 (여백 축소) */
+        .hero { position: relative; padding: 50px 20px 40px 20px; display: flex; align-items: center; justify-content: center; text-align: center; background-color: #192150; }
+        .hero-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; width: 100%; margin-top: 30px; }
+        
+        /* 💡 포스터 크기 다이어트 (550px -> 450px) */
+        .hero-poster { max-width: 100%; width: 450px; height: auto; box-shadow: none; margin-bottom: 25px; }
+
+        /* 💡 스크롤 유도 애니메이션 */
+        .scroll-down {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            z-index: 10;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+            40% { transform: translateY(-10px) translateX(-50%); }
+            60% { transform: translateY(-5px) translateX(-50%); }
+        }
 
         /* 2. About 섹션 */
         .about-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
@@ -99,9 +120,12 @@
 
         /* 모바일 반응형 */
         @media (max-width: 768px) {
-            .hero { padding: 40px 15px 50px 15px; }
+            .hero { padding: 40px 15px 40px 15px; }
             .lang-toggle-btn { top: 15px; right: 15px; padding: 6px 14px; font-size: 0.85rem; }
-            .hero-poster { width: 100%; max-width: 400px; box-shadow: none; margin-top: 15px; }
+            
+            /* 💡 모바일 포스터 크기 다이어트 (400px -> 320px) */
+            .hero-poster { width: 100%; max-width: 320px; box-shadow: none; margin-top: 15px; margin-bottom: 20px; }
+            
             section { padding: 50px 15px; }
             .section-title { font-size: 1.6rem; margin-bottom: 30px; }
             .activity-grid { grid-template-columns: 1fr; }
@@ -125,6 +149,12 @@
                 <span class="ko">🚀 구글폼으로 2026-2 신입부원 지원하기</span>
                 <span class="en">🚀 Apply for 2026-2 YRT via Google Form</span>
             </a>
+        </div>
+
+        <!-- 💡 스크롤 유도 화살표 애니메이션 -->
+        <div class="scroll-down" onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})">
+            <span class="ko">▼ 아래로 스크롤 ▼</span>
+            <span class="en">▼ SCROLL DOWN ▼</span>
         </div>
     </header>
 
@@ -309,7 +339,6 @@
                 <span class="en">FAQ</span>
             </h2>
             
-            <!-- 기존 FAQ -->
             <div class="about-card" style="margin-bottom: 20px;">
                 <h4 style="margin: 0 0 10px 0; color: #003876;">
                     <span class="ko">Q. 운동을 한 번도 전문적으로 해본 적 없는데 괜찮나요?</span>
@@ -334,8 +363,6 @@
                 <p class="ko">A. 배의 두뇌와 눈 역할을 하는 '콕스(Coxswain)' 포지션이 있습니다. 배 전체를 지휘해야 하므로 목소리가 크고 리더십 있는 분을 적극 환영합니다.</p>
                 <p class="en">A. There is a 'Coxswain' position that acts as the brain and eyes of the boat. Since you have to command the boat, we actively welcome those with a loud voice and leadership.</p>
             </div>
-
-            <!-- 새로 추가된 FAQ 3가지 -->
             <div class="about-card" style="margin-bottom: 20px;">
                 <h4 style="margin: 0 0 10px 0; color: #003876;">
                     <span class="ko">Q. 학기 중 훈련은 꼭 참여해야 하나요?</span>
@@ -392,7 +419,7 @@
                     <span class="ko">당신의 가장 뜨거운 청춘을 기다립니다.</span>
                     <span class="en">We await your most passionate youth.</span>
                 </p>
-                <a href="https://forms.gle/w2uACtzGeUgcfH4p6" target="_blank" class="btn-main" style="background-color: #ffffff; color: #192150;">
+                <a href="https://forms.gle/w2uACtzGeUgcfH4p6" target="_blank" class="btn-main" style="background-color: #ffffff; color: #003876;">
                     <span class="ko">📝 구글폼으로 신입부원 지원하기</span>
                     <span class="en">📝 Apply via Google Form</span>
                 </a>
