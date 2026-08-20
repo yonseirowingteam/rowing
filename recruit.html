@@ -21,10 +21,10 @@
         * { box-sizing: border-box; }
         
         /* 🌐 언어 전환 제어 CSS */
-        .en { display: none; } /* 기본적으로 영어는 숨김 */
-        body.en-mode .ko { display: none; } /* 영어 모드일 때 한국어 숨김 */
-        body.en-mode .en { display: inline; } /* 영어 모드일 때 영어 표시 */
-        body.en-mode div.en { display: block; } /* 블록 요소용 예외 처리 */
+        .en { display: none; }
+        body.en-mode .ko { display: none; }
+        body.en-mode .en { display: inline; }
+        body.en-mode div.en { display: block; }
 
         /* 🌐 언어 토글 버튼 스타일 */
         .lang-toggle-btn {
@@ -58,7 +58,7 @@
         .btn-main:hover { background-color: #002855; transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,56,118,0.4); color: #fff; }
         
         /* 1. Hero 섹션 */
-        .hero { position: relative; padding: 60px 20px 60px 20px; display: flex; align-items: center; justify-content: center; text-align: center; background-color: #181e45; }
+        .hero { position: relative; padding: 60px 20px 60px 20px; display: flex; align-items: center; justify-content: center; text-align: center; background-color: #192150; }
         .hero-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; width: 100%; margin-top: 40px; }
         .hero-poster { max-width: 100%; width: 550px; height: auto; box-shadow: none; margin-bottom: 40px; }
 
@@ -93,7 +93,7 @@
         .contact-info { font-size: 1.2rem; margin: 15px 0; }
         .contact-info a { color: #82c8fa; font-weight: bold; }
 
-        /* 🚀 플로팅 버튼 */
+        /* 🚀 플로팅 버튼 (PC용 기본 설정) */
         .floating-btn { position: fixed; bottom: 30px; right: 30px; background-color: #d9534f; color: #fff; padding: 15px 25px; border-radius: 50px; font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(217, 83, 79, 0.4); transition: transform 0.3s; z-index: 1000; }
         .floating-btn:hover { transform: scale(1.05); color: #fff; }
 
@@ -105,7 +105,9 @@
             section { padding: 50px 15px; }
             .section-title { font-size: 1.6rem; margin-bottom: 30px; }
             .activity-grid { grid-template-columns: 1fr; }
-            .floating-btn { bottom: 20px; right: 20px; padding: 12px 20px; font-size: 1rem; }
+            
+            /* 💡 모바일 화면(너비 768px 이하)에서 플로팅 버튼 숨김 처리 */
+            .floating-btn { display: none; }
         }
     </style>
 </head>
