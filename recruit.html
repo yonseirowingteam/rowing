@@ -31,24 +31,25 @@
         .btn-main { display: inline-block; background-color: #003876; color: #fff; padding: 18px 40px; font-size: 1.2rem; font-weight: bold; border-radius: 50px; text-align: center; transition: all 0.3s; box-shadow: 0 4px 10px rgba(0,56,118,0.3); border: none; cursor: pointer; }
         .btn-main:hover { background-color: #002855; transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,56,118,0.4); color: #fff; }
         
-        /* 1. Hero 섹션 (포스터 삽입형으로 수정됨) */
+        /* 1. Hero 섹션 (포스터 삽입형 - 배경색 일치) */
         .hero { 
             position: relative; 
-            padding: 80px 20px 60px 20px; 
+            padding: 60px 20px 60px 20px; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             text-align: center; 
-            background-color: #172242; /* 포스터의 남색 배경과 동일한 색상 매칭 */
+            /* 💡 포스터 배경색과 완벽하게 일치하는 색상 코드로 변경 */
+            background-color: #1b2445; 
         }
         .hero-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; width: 100%; }
         
-        /* 💡 추가된 메인 포스터 이미지 디자인 */
+        /* 💡 그림자 제거하여 완벽하게 스며들게 함 */
         .hero-poster {
             max-width: 100%;
-            width: 550px; /* PC에서는 너무 크지 않게 적당히 제한 */
+            width: 550px; 
             height: auto;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            box-shadow: none; /* 그림자 효과 제거 */
             margin-bottom: 40px;
         }
 
@@ -91,9 +92,9 @@
 
         /* 모바일 반응형 */
         @media (max-width: 768px) {
-            /* 💡 포스터 모바일 맞춤 설정 */
             .hero { padding: 40px 15px 50px 15px; }
-            .hero-poster { width: 100%; max-width: 400px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+            /* 💡 모바일에서도 그림자 완벽 제거 */
+            .hero-poster { width: 100%; max-width: 400px; box-shadow: none; }
             
             section { padding: 50px 15px; }
             .section-title { font-size: 1.6rem; margin-bottom: 30px; }
@@ -104,14 +105,13 @@
 </head>
 <body>
 
-    <!-- 1. Hero 섹션 (포스터 삽입형) -->
+    <!-- 1. Hero 섹션 -->
     <header class="hero">
         <div class="hero-content">
-            <!-- 💡 준비하신 포스터 이미지 삽입 -->
             <img src="header.png" alt="2026-2 연세대학교 조정부 리크루팅 포스터" class="hero-poster">
             
-            <!-- 💡 구글폼 링크 삽입 (버튼 색상을 눈에 띄게 흰색으로 반전) -->
-            <a href="[구글폼 링크 삽입]" target="_blank" class="btn-main" style="background-color: #ffffff; color: #172242;">🚀 2026-2 신입부원 지원하기</a>
+            <!-- 💡 구글폼 링크 삽입 -->
+            <a href="[구글폼 링크 삽입]" target="_blank" class="btn-main" style="background-color: #ffffff; color: #1b2445;">🚀 2026-2 신입부원 지원하기</a>
         </div>
     </header>
 
