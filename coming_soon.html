@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coming Soon - 연세대학교 조정부</title>
+    
+    <link rel="icon" href="yrt_logo.png" type="image/png">
+    
+    <style>
+        /* 기본 설정 (어두운 시네마틱 테마) */
+        body { 
+            font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            background-color: #181e45; 
+            color: #ffffff; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh;
+            text-align: center;
+        }
+        
+        a { text-decoration: none; }
+        * { box-sizing: border-box; }
+
+        /* 🌐 언어 전환 제어 CSS */
+        .en { display: none; }
+        body.en-mode .ko { display: none; }
+        body.en-mode .en { display: inline; }
+        body.en-mode div.en { display: block; }
+
+        /* 🌐 언어 토글 버튼 스타일 */
+        .lang-toggle-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        .lang-toggle-btn:hover { background-color: rgba(255, 255, 255, 0.2); }
+
+        /* 콘텐츠 영역 */
+        .content-wrap {
+            padding: 40px 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 { font-size: 2.2rem; margin-bottom: 10px; word-break: keep-all; }
+        p { font-size: 1.1rem; color: #a0aabf; margin-bottom: 40px; line-height: 1.5; word-break: keep-all; }
+
+        /* 인스타그램 임베드 컨테이너 */
+        .ig-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 10px;
+            margin: 0 auto 40px auto;
+            max-width: 340px; /* 릴스 사이즈에 최적화 */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* 돌아가기 버튼 */
+        .btn-back {
+            display: inline-block;
+            background-color: #ffffff;
+            color: #181e45;
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            transition: all 0.3s;
+        }
+        .btn-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255,255,255,0.2);
+        }
+
+        /* 모바일 대응 */
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            p { font-size: 1rem; }
+            .lang-toggle-btn { top: 15px; right: 15px; padding: 6px 14px; font-size: 0.85rem; }
+            .content-wrap { margin-top: 40px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 언어 전환 버튼 -->
+    <button class="lang-toggle-btn" onclick="toggleLanguage()">
+        <span class="ko">🌐 ENGLISH</span>
+        <span class="en">🌐 KOREAN</span>
+    </button>
+
+    <div class="content-wrap">
+        <h1>
+            <span class="ko">공식 홍보영상 제작 중! 🎬</span>
+            <span class="en">Official Promo Video in the Making! 🎬</span>
+        </h1>
+        <p>
+            <span class="ko">멋진 본편이 곧 공개될 예정입니다.<br>그 전에, <strong>2026 난창 국제대학조정대회</strong>의 뜨거운 열기를 먼저 릴스로 만나보세요! 🔥</span>
+            <span class="en">Our full video is coming soon.<br>In the meantime, feel the heat of the <strong>2026 Nanchang International Regatta</strong> through this sneak peek! 🔥</span>
+        </p>
+
+        <!-- 💡 인스타그램 릴스 임베드 (화면 안에서 바로 재생됨) -->
+        <div class="ig-container">
+            <iframe src="https://www.instagram.com/reel/DcKcFfET7zG/embed" width="100%" height="540" frameborder="0" scrolling="no" allowtransparency="true" style="border-radius: 8px;"></iframe>
+        </div>
+
+        <!-- 모집 페이지로 돌아가기 버튼 -->
+        <a href="recruit.html" class="btn-back">
+            <span class="ko">⬅ 모집 안내 페이지로 돌아가기</span>
+            <span class="en">⬅ Back to Recruiting Page</span>
+        </a>
+    </div>
+
+    <script>
+        function toggleLanguage() {
+            document.body.classList.toggle('en-mode');
+        }
+    </script>
+</body>
+</html>
