@@ -160,6 +160,38 @@
         /* 지상훈련 텍스트 클릭 유도용 커서 */
         #secret-training { cursor: pointer; user-select: none; }
 
+        /* 3. 개발자 이스터에그: 숨겨진 투명 마침표 */
+        .secret-creator { position: absolute; bottom: 15px; right: 20px; color: #003876; font-size: 0.85rem; display: flex; align-items: center; justify-content: flex-end; cursor: default; z-index: 10; }
+        .secret-creator .secret-text { max-width: 0; overflow: hidden; white-space: nowrap; transition: max-width 0.6s ease, opacity 0.6s ease; opacity: 0; color: #82c8fa; font-weight: bold; }
+        .secret-creator:hover .dot { color: #82c8fa; }
+        .secret-creator:hover .secret-text { max-width: 300px; opacity: 1; margin-left: 8px; }
+
+        /* 4. 개발자 이스터에그: 청춘 5번 클릭 토스트 팝업 */
+        #developer-toast {
+            position: fixed;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #002855;
+            color: #82c8fa;
+            padding: 15px 25px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 2000;
+            pointer-events: none;
+            text-align: center;
+            width: 90%;
+            max-width: 450px;
+        }
+        #developer-toast.show { bottom: 40px; opacity: 1; }
+        
+        /* 5번 클릭 유도 문구 커서 변경 */
+        #secret-click-text { cursor: pointer; user-select: none; }
+
         /* 모바일 반응형 */
         @media (max-width: 768px) {
             .hero { padding: 40px 15px 40px 15px; }
@@ -447,14 +479,15 @@
     </section>
 
     <!-- 6. Apply & Contact -->
-    <section id="contact" class="bg-blue">
+    <section id="contact" class="bg-blue" style="position: relative;">
         <div class="container text-center" style="display: flex; flex-direction: column; align-items: center;">
             <div class="contact-box" style="width: 100%;">
                 <h2 style="margin-top: 0;">
                     <span class="ko">지금 바로 YRT에 합류하세요!</span>
                     <span class="en">Join YRT Right Now!</span>
                 </h2>
-                <p style="margin-bottom: 30px;">
+                <!-- 💡 여기에 id를 부여하여 클릭을 감지합니다 -->
+                <p style="margin-bottom: 30px;" id="secret-click-text">
                     <span class="ko">당신의 가장 뜨거운 청춘을 기다립니다.</span>
                     <span class="en">We await your most passionate youth.</span>
                 </p>
@@ -478,6 +511,12 @@
                 📸 Instagram: <a href="https://instagram.com/yonseirowing" target="_blank">@yonseirowing</a>
             </div>
         </div>
+
+        <!-- 🎁 개발자 이스터에그: 숨겨진 투명 마침표 -->
+        <div class="secret-creator">
+            <span class="dot">.</span>
+            <span class="secret-text">Coded by 훈련부장 강예은 👩‍💻</span>
+        </div>
     </section>
 
     <!-- 🚀 플로팅 지원하기 버튼 -->
@@ -490,6 +529,12 @@
     <div id="training-toast">
         <span class="ko">✨ 페이지 제작 훈련부장 강예은: 지옥의 에르고 훈련에 오신 것을 환영합니다! (도망치지 마세요 😈)</span>
         <span class="en">✨ Training Manager: Welcome to the hellish Ergometer training! (Don't run away 😈)</span>
+    </div>
+
+    <!-- 🎁 개발자 이스터에그 토스트 팝업 컨테이너 -->
+    <div id="developer-toast">
+        <span class="ko">✨ 이 페이지는 26/27 훈련부장 강예은이 영혼을 갈아 넣었습니다 💻</span>
+        <span class="en">✨ Proudly hand-coded by YRT Training Manager Yeeun Kang 💻</span>
     </div>
 
     <!-- 🌐 자바스크립트 모음 -->
@@ -551,6 +596,41 @@
                 // 1.5초 안에 다음 클릭이 없으면 카운트 초기화
                 trainingClickTimer = setTimeout(() => { 
                     trainingClickCount = 0; 
+                }, 1500);
+            }
+        });
+
+        // ==========================================
+        // 🎁 개발자 이스터에그 1: 콘솔 창 메시지
+        // ==========================================
+        console.log(
+            "%c🚣‍♂️ Coded by 26/27 주장단 훈련부장 강예은", 
+            "color: #82c8fa; font-size: 16px; font-weight: bold; background-color: #002855; padding: 10px; border-radius: 8px;"
+        );
+        console.log("리크루팅 페이지 소스를 확인하고 계시군요! 조정부에서 만나요 😎");
+
+        // ==========================================
+        // 🎁 개발자 이스터에그 2: 청춘 5번 클릭 토스트
+        // ==========================================
+        let devClickCount = 0;
+        let devClickTimer;
+        const secretClickText = document.getElementById('secret-click-text');
+        const developerToast = document.getElementById('developer-toast');
+
+        secretClickText.addEventListener('click', () => {
+            devClickCount++;
+            clearTimeout(devClickTimer);
+
+            if (devClickCount >= 5) {
+                developerToast.classList.add('show');
+                devClickCount = 0; 
+                
+                setTimeout(() => { 
+                    developerToast.classList.remove('show'); 
+                }, 4000);
+            } else {
+                devClickTimer = setTimeout(() => { 
+                    devClickCount = 0; 
                 }, 1500);
             }
         });
