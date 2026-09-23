@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>연세대학교 조정부 (Yonsei Rowing Team)</title>
+
+    <!-- 💡 파비콘 (브라우저 탭 아이콘) 설정 -->
+    <link rel="icon" href="yrt_logo.png" type="image/png">
+    <link rel="apple-touch-icon" href="yrt_logo.png">
+
+    <!-- 💡 카카오톡 등 링크 공유 시 미리보기(Open Graph) 설정 -->
+    <meta property="og:title" content="연세대학교 조정부 (Yonsei Rowing Team)">
+    <meta property="og:description" content="Yonsei Rowing Team 일정 관리 및 훈련 스케줄">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://rowingteam.yonsei.ac.kr">
+    <meta property="og:image" content="https://rowingteam.yonsei.ac.kr/yrt_logo.png">
+
+    <style>
+        /* 기본 스타일 설정 */
+        body {
+            font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden; /* 배가 지나갈 때 가로 스크롤 생김 방지 */
+        }
+
+        /* 메인 로고 디자인 (이스터에그를 위해 클릭 가능하게 설정) */
+        .main-logo {
+            width: 150px; 
+            height: auto;
+            margin-bottom: 20px; 
+            cursor: pointer; /* 클릭 유도를 위한 커서 */
+            -webkit-tap-highlight-color: transparent; /* 모바일 클릭 시 깜빡임 제거 */
+        }
+        
+        h1 {
+            color: #003876;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            margin-top: 0;
+            letter-spacing: -0.05em;
+        }
+        
+        p {
+            color: #666666;
+            margin-bottom: 50px;
+            font-size: 1.1rem;
+        }
+
+        /* 버튼 컨테이너 및 디자인 */
+        .btn-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 20px 40px;
+            background-color: #ffffff;
+            color: #003876;
+            border: 2px solid #003876;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn:hover {
+            background-color: #003876;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 56, 118, 0.2);
+        }
+
+        /* ========================================= */
+        /* 🎁 이스터에그용 특수 CSS 시작 */
+        /* ========================================= */
+
+        /* 1. 토스트 팝업 (로고 5번 클릭) */
+        #toast {
+            position: fixed;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #003876;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* 통통 튀는 애니메이션 */
+            z-index: 1000;
+            pointer-events: none;
+        }
+        #toast.show {
+            bottom: 40px;
+            opacity: 1;
+        }
+
+        /* 2. 숨겨진 투명 마침표 호버 (하단) */
+        .secret-footer {
+            position: absolute;
+            bottom: 20px;
+            color: #fdfdfd; /* 배경색과 거의 똑같이 숨김 */
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: default;
+        }
+        .secret-footer .secret-text {
+            max-width: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            transition: max-width 0.6s ease, opacity 0.6s ease, margin-left 0.6s ease;
+            opacity: 0;
+            margin-left: 0;
+            color: #003876;
+            font-weight: bold;
+        }
+        .secret-footer:hover .dot {
+            color: #003876; /* 마우스를 올리면 파란색으로 변함 */
+        }
+        .secret-footer:hover .secret-text {
+            max-width: 350px;
+            opacity: 1;
+            margin-left: 8px;
+        }
+
+        /* 3. 코나미 코드 배 지나가기 (타이핑) */
+        #easter-boat {
+            position: fixed;
+            bottom: 15%;
+            left: -150px; /* 화면 밖 대기 */
+            font-size: 4rem;
+            z-index: 9999;
+            pointer-events: none;
+            /* 💡 돌아올 때의 애니메이션을 없애기 위해 transition을 지움 */
+        }
+        #easter-boat.sail {
+            transform: translateX(calc(100vw + 300px)); /* 화면 끝까지 이동 */
+            /* 💡 출발할 때만 8초 동안 일정한 속도(linear)로 애니메이션 적용 */
+            transition: transform 6s linear; 
+        }
+
+        /* 반응형 모바일 디자인 */
+        @media (max-width: 768px) {
+            .main-logo { width: 120px; margin-bottom: 15px; }
+            h1 { font-size: 2rem; text-align: center; }
+            p { font-size: 1rem; margin-bottom: 40px; text-align: center; padding: 0 20px; word-break: keep-all; }
+            .btn-container { flex-direction: column; gap: 15px; width: 80%; max-width: 320px; }
+            .btn { width: 100%; box-sizing: border-box; padding: 16px 20px; font-size: 1.1rem; text-align: center; }
+            
+            /* 모바일 팝업 크기 조정 */
+            #toast { font-size: 0.9rem; padding: 12px 20px; width: 85%; text-align: center; box-sizing: border-box; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 💡 메인 로고 (🎁 이스터에그 발동의 핵심) -->
+    <img src="yrt_logo.png" alt="연세대학교 조정부 로고" class="main-logo" id="secret-logo">
+    
+    <h1>연세대학교 조정부</h1>
+    <p>Yonsei Rowing Team 일정 관리 및 훈련 스케줄</p>
+
+    <div class="btn-container">
+        <a href="monthly.html" target="_blank" class="btn">월간 일정표 확인</a>
+        <a href="training.html" target="_blank" class="btn">주간 훈련 스케줄 확인</a>
+    </div>
+
+    <!-- 🎁 이스터에그: 투명 마침표 호버 -->
+    <div class="secret-footer">
+        <span class="dot">.</span>
+        <span class="secret-text">Created by 26/27 주장단 훈련부장 강예은</span>
+    </div>
+
+    <!-- 🎁 이스터에그: 토스트 팝업 창 (기본 숨김) -->
+    <div id="toast">✨ 이 사이트는 26/27 주장단 훈련부장 강예은이 만들었습니다!</div>
+
+    <!-- 🎁 이스터에그: 화면을 가로지르는 배 (기본 숨김) -->
+    <div id="easter-boat">🚣‍♀️</div>
+
+    <!-- 🎁 이스터에그 작동 스크립트 -->
+    <script>
+        // ==========================================
+        // 1. 콘솔 창 비밀 메시지 (개발자 도구 F12 전용)
+        // ==========================================
+        console.log(
+            "%c🚣‍♂️ Developed by 26/27 주장단 훈련부장 강예은", 
+            "color: #003876; font-size: 18px; font-weight: bold; padding: 10px; border: 2px solid #003876; border-radius: 8px;"
+        );
+        console.log("소스 코드를 뜯어보시는 당신! 웹 개발에 관심이 있으시군요 😎");
+
+        // ==========================================
+        // 2. 로고 5번 연속 다중 클릭 시 토스트 알림창
+        // ==========================================
+        let clickCount = 0;
+        let clickTimer;
+        const logo = document.getElementById('secret-logo');
+        const toast = document.getElementById('toast');
+
+        logo.addEventListener('click', () => {
+            clickCount++;
+            clearTimeout(clickTimer); 
+
+            if (clickCount >= 5) {
+                toast.classList.add('show');
+                clickCount = 0; 
+                
+                setTimeout(() => { 
+                    toast.classList.remove('show'); 
+                }, 3500);
+            } else {
+                clickTimer = setTimeout(() => { 
+                    clickCount = 0; 
+                }, 1500);
+            }
+        });
+
+        // ==========================================
+        // 3. 코나미 코드 (키보드로 특정 단어 타이핑 시 배 지나가기)
+        // ==========================================
+        let keysPressed = [];
+        const secretWords = ["YEEUN", "ROWING"];
+        const boat = document.getElementById('easter-boat');
+
+        window.addEventListener('keydown', (e) => {
+            keysPressed.push(e.key.toUpperCase());
+            
+            if (keysPressed.length > 10) {
+                keysPressed.shift();
+            }
+
+            const currentString = keysPressed.join('');
+
+            if (secretWords.some(word => currentString.includes(word))) {
+                boat.classList.add('sail'); 
+                keysPressed = []; 
+
+                // 완전히 지나간 후 8.5초 뒤에 클래스를 제거하면, 
+                // transition이 없으므로 애니메이션 없이 즉시 원위치로 텔레포트 복귀합니다.
+                setTimeout(() => {
+                    boat.classList.remove('sail'); 
+                }, 6500);
+            }
+        });
+    </script>
+</body>
+</html>
