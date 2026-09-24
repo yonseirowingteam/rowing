@@ -5,16 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>월간 일정표 - 연세대학교 조정부</title>
 
-    <!-- 💡 파비콘 (브라우저 탭 아이콘) 설정 -->
     <link rel="icon" href="yrt_logo.png" type="image/png">
-    <link rel="apple-touch-icon" href="yrt_logo.png"> <!-- 아이폰 홈 화면 추가용 아이콘 -->
+    <link rel="apple-touch-icon" href="yrt_logo.png">
 
-    <!-- 💡 카카오톡 등 링크 공유 시 미리보기(Open Graph) 설정 -->
     <meta property="og:title" content="월간 일정표 - 연세대학교 조정부">
     <meta property="og:description" content="Yonsei Rowing Team 월간 훈련 및 행사 일정표입니다.">
     <meta property="og:type" content="website">
-    
-    <!-- 🚨 실제 웹사이트 주소 (수정 완료) -->
     <meta property="og:url" content="https://rowingteam.yonsei.ac.kr/monthly.html">
     <meta property="og:image" content="https://rowingteam.yonsei.ac.kr/yrt_logo.png">
 
@@ -26,16 +22,23 @@
         
         /* 추가된 안내 문구 디자인 */
         .info-message {
-            background-color: #f0f6fc; /* 연한 파란색 배경 */
-            color: #003876;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            margin-bottom: 25px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            background-color: #f0f6fc; color: #003876; padding: 12px 16px; border-radius: 8px;
+            font-size: 0.95rem; margin-bottom: 10px; display: inline-flex; align-items: center; gap: 8px;
         }
+
+        /* 💡 범례(Legend) 표시 - 어떤 색이 무슨 일정인지 안내 */
+        .legend-container {
+            display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; font-size: 0.85rem; font-weight: bold;
+        }
+        .legend-item { display: flex; align-items: center; gap: 5px; }
+        .legend-color { width: 12px; height: 12px; border-radius: 3px; }
+        
+        /* 💡 카테고리별 색상 (범례 및 실제 이벤트 공통 사용) */
+        .cat-water { background-color: #e3f2fd; color: #0d47a1; border-left-color: #0d47a1; } /* 파란색: 수상훈련 */
+        .cat-land { background-color: #efebe9; color: #5d4037; border-left-color: #5d4037; } /* 갈색: 지상훈련 */
+        .cat-school { background-color: #e8eaf6; color: #1a237e; border-left-color: #1a237e; } /* 네이비: 학교행사 */
+        .cat-notice { background-color: #ffebee; color: #b71c1c; border-left-color: #b71c1c; } /* 빨간색: 공지사항 */
+        .cat-default { background-color: #f3f4f6; color: #374151; border-left-color: #374151; } /* 기본 회색 */
 
         /* 달력 그리드 디자인 */
         .calendar-wrapper { border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
@@ -49,19 +52,21 @@
         .calendar-cell.sun .date-num { color: #d9534f; }
         .calendar-cell.sat .date-num { color: #0275d8; }
         
-        /* 일정 텍스트 박스 공통 */
+        /* 💡 일정 텍스트 박스 공통 구조 (색상은 카테고리 클래스가 결정) */
         .event-box { 
-            background-color: #e6f0fa; color: #003876; padding: 8px 10px; 
-            font-size: 0.9rem; line-height: 1.4; margin-bottom: 4px; 
+            padding: 6px 8px; font-size: 0.85rem; line-height: 1.3; margin-bottom: 4px; 
             word-break: keep-all; z-index: 2; position: relative; 
             transition: transform 0.2s, box-shadow 0.2s;
+            border-left-style: solid; border-left-width: 0px; 
         }
         .event-box.clickable { cursor: pointer; }
         .event-box.clickable:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); z-index: 10; }
-        .event-box.single { margin: 0 10px 4px 10px; border-radius: 4px; border-left: 4px solid #003876; }
-        .event-box.start { margin: 0 -2px 4px 10px; border-radius: 4px 0 0 4px; border-left: 4px solid #003876; }
-        .event-box.middle { margin: 0 -2px 4px -2px; border-radius: 0; padding-left: 14px; }
-        .event-box.end { margin: 0 10px 4px -2px; border-radius: 0 4px 4px 0; padding-left: 14px; }
+        
+        /* 연속 일정 처리 (시작, 중간, 끝 위치에 따른 테두리/여백 조정) */
+        .event-box.single { margin: 0 8px 4px 8px; border-radius: 4px; border-left-width: 4px; }
+        .event-box.start { margin: 0 -2px 4px 8px; border-radius: 4px 0 0 4px; border-left-width: 4px; }
+        .event-box.middle { margin: 0 -2px 4px -2px; border-radius: 0; padding-left: 12px; }
+        .event-box.end { margin: 0 8px 4px -2px; border-radius: 0 4px 4px 0; padding-left: 12px; }
         
         #loading { text-align: center; color: #666; margin-top: 50px; font-size: 1.1rem; }
 
@@ -76,14 +81,8 @@
         .back-btn:hover { background-color: #003876; color: #ffffff; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0, 56, 118, 0.15); }
 
         /* 팝업(모달) 창 디자인 */
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.4); z-index: 999; align-items: center; justify-content: center;
-        }
-        .modal-content {
-            background: #ffffff; padding: 30px; border-radius: 12px; width: 85%; max-width: 400px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2); position: relative; text-align: left;
-        }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); z-index: 999; align-items: center; justify-content: center; }
+        .modal-content { background: #ffffff; padding: 30px; border-radius: 12px; width: 85%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); position: relative; text-align: left; }
         .modal-title { color: #003876; font-size: 1.3rem; font-weight: bold; margin-top: 0; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; }
         .modal-body { font-size: 1rem; line-height: 1.6; color: #333; white-space: pre-wrap; }
         .modal-close-btn { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.5rem; color: #999; cursor: pointer; transition: color 0.2s; }
@@ -95,17 +94,19 @@
             h2 { flex-direction: column; align-items: flex-start; gap: 5px; font-size: 1.3rem; }
             .month-title { font-size: 1.4rem; }
             
-            /* 모바일 안내 문구 크기 조정 */
-            .info-message { font-size: 0.85rem; padding: 10px 12px; margin-bottom: 15px; width: 100%; box-sizing: border-box; }
+            .info-message { font-size: 0.85rem; padding: 10px 12px; margin-bottom: 10px; width: 100%; box-sizing: border-box; }
+            .legend-container { margin-bottom: 15px; gap: 10px; }
 
             .day-header { padding: 6px 0; font-size: 0.85rem; }
             .calendar-cell { min-height: 90px; padding: 5px 0; }
             .date-num { font-size: 0.85rem; padding: 0 5px; margin-bottom: 4px; }
+            
             .event-box { padding: 3px 2px; font-size: 0.7rem; line-height: 1.2; white-space: normal; word-break: break-all; letter-spacing: -0.05em; }
             .event-box.single { margin: 0 2px 2px 2px; border-left-width: 3px; }
             .event-box.start { margin: 0 -1px 2px 2px; border-left-width: 3px; }
             .event-box.middle { margin: 0 -1px 2px -1px; padding-left: 4px; }
             .event-box.end { margin: 0 2px 2px -1px; padding-left: 4px; }
+            
             .back-btn-container { margin-top: 40px; }
             .back-btn { padding: 12px 28px; font-size: 1rem; }
             .modal-content { padding: 25px; width: 80%; }
@@ -119,9 +120,16 @@
         <span id="display-month" class="month-title"></span>
     </h2>
     
-    <!-- 💡 새롭게 추가된 클릭 유도 안내 문구 -->
     <div class="info-message">
         👆 <strong>안내:</strong> 색칠된 일정을 클릭하시면 상세 시간과 장소를 확인할 수 있습니다.
+    </div>
+
+    <!-- 💡 어떤 색이 어떤 훈련인지 알려주는 범례 -->
+    <div class="legend-container" id="calendar-legend" style="display: none;">
+        <div class="legend-item"><div class="legend-color cat-water"></div>수상 훈련</div>
+        <div class="legend-item"><div class="legend-color cat-land"></div>지상 훈련</div>
+        <div class="legend-item"><div class="legend-color cat-school"></div>학교 행사</div>
+        <div class="legend-item"><div class="legend-color cat-notice"></div>공지사항</div>
     </div>
 
     <div id="loading">데이터를 불러오는 중입니다...</div>
@@ -132,12 +140,10 @@
         </div>
     </div>
 
-    <!-- 하단에 추가된 홈으로 돌아가기 버튼 -->
     <div class="back-btn-container" id="back-button-container" style="display: none;">
         <a href="index.html" class="back-btn">← 홈으로 돌아가기</a>
     </div>
 
-    <!-- 클릭 시 나타날 세부 일정 팝업(모달) 창 -->
     <div class="modal-overlay" id="modal-overlay">
         <div class="modal-content" id="modal-content">
             <button class="modal-close-btn" onclick="closeModal()">×</button>
@@ -157,6 +163,7 @@
                 let targetYear = new Date().getFullYear();
                 let targetMonth = new Date().getMonth() + 1;
 
+                // 1행에서 연도/월 파싱
                 if (rows.length > 0) {
                     const headerRow = rows[0].split('\t');
                     if (headerRow.length >= 2) {
@@ -172,52 +179,79 @@
                 document.getElementById('display-month').innerText = `${targetYear}년 ${targetMonth}월`;
 
                 const rawEvents = {};
+
+                // 2행부터 데이터 파싱 (5열 포맷 적용)
                 for (let i = 2; i < rows.length; i++) {
                     if (rows[i].trim() === "") continue;
                     const columns = rows[i].split('\t');
-                    if (columns.length >= 2) {
-                        const dayNum = parseInt(columns[0].trim());
-                        const eventText = columns[1].trim();
-                        const eventDetails = columns.length >= 3 && columns[2].trim() !== "" ? columns[2].replace(/<br>/g, '\n') : null;
+                    
+                    if (columns.length >= 4) {
+                        const startDay = parseInt(columns[0].trim());
+                        // 종료일이 비어있으면 시작일과 동일하게(당일 일정) 취급
+                        const endDay = columns[1].trim() !== "" ? parseInt(columns[1].trim()) : startDay;
+                        const category = columns[2].trim();
+                        const eventText = columns[3].trim();
+                        const eventDetails = columns.length >= 5 && columns[4].trim() !== "" ? columns[4].replace(/<br>/g, '\n') : null;
 
-                        if (!isNaN(dayNum) && eventText) {
-                            if (!rawEvents[dayNum]) rawEvents[dayNum] = [];
-                            rawEvents[dayNum].push({ text: eventText, details: eventDetails });
+                        if (!isNaN(startDay) && eventText) {
+                            // 시작일부터 종료일까지 매일매일 일정 복사 (연속 일정 생성 로직)
+                            for (let d = startDay; d <= endDay; d++) {
+                                if (!rawEvents[d]) rawEvents[d] = [];
+                                rawEvents[d].push({ 
+                                    text: eventText, 
+                                    category: category, 
+                                    details: eventDetails,
+                                    isOriginalStart: (d === startDay),
+                                    isOriginalEnd: (d === endDay)
+                                });
+                            }
                         }
                     }
                 }
 
-                const normalize = str => str.replace(/[\s"'\r\n]/g, '').toLowerCase();
+                // 카테고리 문자열을 CSS 클래스로 매핑하는 헬퍼 함수
+                const getCategoryClass = (cat) => {
+                    if (cat.includes('수상')) return 'cat-water';
+                    if (cat.includes('지상')) return 'cat-land';
+                    if (cat.includes('학교')) return 'cat-school';
+                    if (cat.includes('공지')) return 'cat-notice';
+                    return 'cat-default';
+                };
+
                 const eventMap = {};
                 const lastDate = new Date(targetYear, targetMonth, 0).getDate();
 
+                // 연결된 일정을 시각적으로 이어주기 위한 타입 결정 (single, start, middle, end)
                 for (let day = 1; day <= lastDate; day++) {
                     if (!rawEvents[day]) continue;
                     if (!eventMap[day]) eventMap[day] = [];
                     const dayOfWeek = new Date(targetYear, targetMonth - 1, day).getDay();
 
                     rawEvents[day].forEach(eventObj => {
-                        const text = eventObj.text;
-                        const details = eventObj.details;
-                        const normText = normalize(text);
-                        
-                        let prevDayHas = (day > 1) && rawEvents[day - 1] && rawEvents[day - 1].some(t => normalize(t.text) === normText);
-                        let nextDayHas = (day < lastDate) && rawEvents[day + 1] && rawEvents[day + 1].some(t => normalize(t.text) === normText);
-
-                        if (dayOfWeek === 0) prevDayHas = false; 
-                        if (dayOfWeek === 6) nextDayHas = false; 
-
                         let type = 'single';
-                        if (prevDayHas && nextDayHas) type = 'middle';
-                        else if (!prevDayHas && nextDayHas) type = 'start';
-                        else if (prevDayHas && !nextDayHas) type = 'end';
+                        
+                        // 시작일, 종료일 판별
+                        const isStart = eventObj.isOriginalStart;
+                        const isEnd = eventObj.isOriginalEnd;
 
-                        eventMap[day].push({ text, type, details });
+                        if (!isStart && !isEnd) type = 'middle';
+                        else if (isStart && !isEnd) type = 'start';
+                        else if (!isStart && isEnd) type = 'end';
+
+                        // 토요일(줄 끝)에서 잘리면 end 처리, 일요일(줄 시작)에서 시작하면 start 처리
+                        if (dayOfWeek === 6 && !isEnd) type = 'end';
+                        if (dayOfWeek === 0 && !isStart && !isEnd) type = 'start';
+                        if (dayOfWeek === 0 && !isStart && isEnd) type = 'single';
+
+                        const catClass = getCategoryClass(eventObj.category);
+                        eventMap[day].push({ text: eventObj.text, type: type, details: eventObj.details, catClass: catClass });
                     });
                 }
 
                 renderCalendar(targetYear, targetMonth, eventMap);
+                
                 document.getElementById('loading').style.display = 'none';
+                document.getElementById('calendar-legend').style.display = 'flex';
                 document.getElementById('calendar-container').style.display = 'block';
                 document.getElementById('back-button-container').style.display = 'block';
             })
@@ -243,6 +277,7 @@
                 let eventHtml = "";
                 if (events[day]) {
                     events[day].forEach((evt, idx) => {
+                        // 중간이나 끝에 걸친 텍스트는 숨겨서 바(Bar) 형태만 유지
                         const textStyle = (evt.type === 'middle' || evt.type === 'end') ? 'color: transparent; user-select: none;' : '';
                         let clickableClass = '';
                         let clickAction = '';
@@ -254,7 +289,8 @@
                             clickAction = `onclick="openMonthlyModal('${eventId}')"`;
                         }
 
-                        eventHtml += `<div class="event-box ${evt.type} ${clickableClass}" ${clickAction}>
+                        // 💡 카테고리 클래스(evt.catClass)가 적용되어 배경/글자 색이 바뀜
+                        eventHtml += `<div class="event-box ${evt.type} ${evt.catClass} ${clickableClass}" ${clickAction}>
                                           <span style="${textStyle}">${evt.text}</span>
                                       </div>`;
                     });
