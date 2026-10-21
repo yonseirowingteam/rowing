@@ -77,9 +77,30 @@
         .photo-grid-item img { width: 100%; border-radius: 8px; display: block; }
         .photo-grid-caption { font-size: 0.8rem; text-align: center; color: var(--text-muted); margin-top: 5px; }
 
+        /* 클릭 가능한 이미지 스타일 */
+        .clickable-img { cursor: pointer; transition: 0.3s; }
+        .clickable-img:hover { opacity: 0.8; }
+
+        /* 💡 모달 (이미지 확대) CSS */
+        .modal {
+            display: none; position: fixed; z-index: 1000; padding-top: 60px;
+            left: 0; top: 0; width: 100%; height: 100%; overflow: auto;
+            background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            margin: auto; display: block; max-width: 90%; max-height: 80vh;
+            border-radius: 8px; animation: zoom 0.3s ease; object-fit: contain;
+        }
+        .modal-close {
+            position: absolute; top: 15px; right: 25px; color: #f1f1f1;
+            font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .modal-close:hover, .modal-close:focus { color: #bbb; text-decoration: none; }
+
         #loading { text-align: center; padding: 50px; font-size: 1.2rem; color: var(--text-muted); }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes zoom { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     </style>
 </head>
 <body>
@@ -168,8 +189,13 @@
     </div>
 </div>
 
+<!-- 💡 이미지 확대 모달 컨테이너 -->
+<div id="image-modal" class="modal" onclick="closeModal()">
+    <span class="modal-close">&times;</span>
+    <img class="modal-content" id="expanded-img">
+</div>
+
 <script>
-    // 💡 구글 시트 웹에 게시 CSV 주소
     const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQKSCkdKmmNi07nmmO5RN6vDmt_dobOqdCpluVAoP-91dyu36nyuMjuXJXMXrzQDquOq9seEpHtN5_6/pub?gid=995447885&single=true&output=csv";
     const TARGET_METERS = 50000;
     
@@ -177,6 +203,15 @@
     let curData = [];
     let ticketStats = [];
     let currentMonth = 10;
+
+    // 모달 열기/닫기 기능
+    function openModal(src) {
+        document.getElementById('image-modal').style.display = "block";
+        document.getElementById('expanded-img').src = src;
+    }
+    function closeModal() {
+        document.getElementById('image-modal').style.display = "none";
+    }
 
     function extractDriveUrl(text) {
         if (!text) return null;
@@ -221,33 +256,27 @@
         return `${dateObj.getFullYear()}-${m}-${d} ${hh}:${mm}`;
     }
 
-    // 💡 [핵심 해결 로직] 헤더 이름 무시하고 무조건 열(Column) 순서대로 가져오기
     Papa.parse(CSV_URL, {
         download: true,
-        header: false, // 헤더 텍스트 찾기 옵션 끄기 (Python의 index 매핑과 동일)
+        header: false, 
         skipEmptyLines: true,
         complete: function(results) {
             allData = [];
-            
-            // 첫 번째 줄(index 0)은 텍스트 기둥이므로 건너뛰고 1부터 시작
             for (let i = 1; i < results.data.length; i++) {
                 let row = results.data[i];
-                
-                // 0:날짜, 1:이름, 2:총거리, 3:운동종류, 4:사진링크, 5/6:구분/메모
                 let rawDate = row[0] || '';
                 let rawName = row[1] || '';
                 let rawDist = row[2] || '0';
                 let rawType = row[3] || '';
                 let rawPhoto = row[4] || '';
                 
-                // 질문 삭제로 인해 열 순서가 당겨졌을 경우 보정
                 let rawGroup = '기존';
                 let rawMemo = '';
                 if (row.length > 6) {
                     rawGroup = row[5] || '기존';
                     rawMemo = row[6] || '';
                 } else if (row.length === 6) {
-                    rawMemo = row[5] || ''; // '구분' 질문이 사라지고 '메모'가 당겨진 경우
+                    rawMemo = row[5] || ''; 
                 }
 
                 if (rawName.trim() !== '' && rawDate.trim() !== '') {
@@ -272,7 +301,6 @@
                     allData.push(dataObj);
                 }
             }
-
             document.getElementById('loading').style.display = 'none';
             document.getElementById('app').style.display = 'block';
             loadSeason();
@@ -343,7 +371,6 @@
 
     function renderRank() {
         let excluded = currentMonth === 10 ? ['김경일', '강예은'] : [];
-        
         let tkts = ticketStats.filter(s => !excluded.includes(s.name));
         tkts.sort((a,b) => b.total - a.total || b.ergo - a.ergo);
         
@@ -419,7 +446,8 @@
         let phtml = myP.length ? '' : '<div style="color:var(--text-muted); font-size:0.9rem;">등록된 사진이 없습니다.</div>';
         myP.forEach(r => {
             let cap = r.dist > 0 ? `${r.dist.toLocaleString()}m` : r.type;
-            phtml += `<div class="photo-grid-item"><img src="${r.photo}"><div class="photo-grid-caption">${r.dateStr.split(' ')[0]} (${cap})</div></div>`;
+            // 💡 클릭 가능한 이미지 클래스 및 이벤트 추가
+            phtml += `<div class="photo-grid-item"><img src="${r.photo}" class="clickable-img" onclick="openModal(this.src)"><div class="photo-grid-caption">${r.dateStr.split(' ')[0]} (${cap})</div></div>`;
         });
         document.getElementById('my-gallery').innerHTML = phtml;
     }
@@ -430,10 +458,11 @@
         
         pData.slice(0, 10).forEach(r => {
             let mHtml = r.memo ? `<div class="gallery-memo">💬 ${r.memo}</div>` : '';
+            // 💡 클릭 가능한 이미지 클래스 및 이벤트 추가
             html += `<div class="gallery-item">
                         <div class="gallery-header">${r.name} 님의 인증 🏃‍♂️ <span class="gallery-date">(${r.dateStr})</span></div>
                         ${mHtml}
-                        <img src="${r.photo}">
+                        <img src="${r.photo}" class="clickable-img" onclick="openModal(this.src)">
                      </div><div class="divider"></div>`;
         });
         document.getElementById('global-gallery').innerHTML = html;
