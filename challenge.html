@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>조정부 운동인증 챌린지</title>
+    
+    <!-- 💡 이모티콘 파비콘 추가 -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚣‍♀️</text></svg>">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <style>
         /* Streamlit 테마 모방 CSS */
@@ -77,11 +81,9 @@
         .photo-grid-item img { width: 100%; border-radius: 8px; display: block; }
         .photo-grid-caption { font-size: 0.8rem; text-align: center; color: var(--text-muted); margin-top: 5px; }
 
-        /* 클릭 가능한 이미지 스타일 */
         .clickable-img { cursor: pointer; transition: 0.3s; }
         .clickable-img:hover { opacity: 0.8; }
 
-        /* 💡 모달 (이미지 확대) CSS */
         .modal {
             display: none; position: fixed; z-index: 1000; padding-top: 60px;
             left: 0; top: 0; width: 100%; height: 100%; overflow: auto;
@@ -189,7 +191,6 @@
     </div>
 </div>
 
-<!-- 💡 이미지 확대 모달 컨테이너 -->
 <div id="image-modal" class="modal" onclick="closeModal()">
     <span class="modal-close">&times;</span>
     <img class="modal-content" id="expanded-img">
@@ -204,7 +205,6 @@
     let ticketStats = [];
     let currentMonth = 10;
 
-    // 모달 열기/닫기 기능
     function openModal(src) {
         document.getElementById('image-modal').style.display = "block";
         document.getElementById('expanded-img').src = src;
@@ -446,7 +446,6 @@
         let phtml = myP.length ? '' : '<div style="color:var(--text-muted); font-size:0.9rem;">등록된 사진이 없습니다.</div>';
         myP.forEach(r => {
             let cap = r.dist > 0 ? `${r.dist.toLocaleString()}m` : r.type;
-            // 💡 클릭 가능한 이미지 클래스 및 이벤트 추가
             phtml += `<div class="photo-grid-item"><img src="${r.photo}" class="clickable-img" onclick="openModal(this.src)"><div class="photo-grid-caption">${r.dateStr.split(' ')[0]} (${cap})</div></div>`;
         });
         document.getElementById('my-gallery').innerHTML = phtml;
@@ -458,7 +457,6 @@
         
         pData.slice(0, 10).forEach(r => {
             let mHtml = r.memo ? `<div class="gallery-memo">💬 ${r.memo}</div>` : '';
-            // 💡 클릭 가능한 이미지 클래스 및 이벤트 추가
             html += `<div class="gallery-item">
                         <div class="gallery-header">${r.name} 님의 인증 🏃‍♂️ <span class="gallery-date">(${r.dateStr})</span></div>
                         ${mHtml}
@@ -478,3 +476,7 @@
 
 </body>
 </html>
+```<ElicitationsGroup>
+</ElicitationsGroup>
+<FollowUp>
+</FollowUp>
