@@ -6,7 +6,6 @@
     <title>조정부 운동인증 챌린지</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <style>
-        /* Streamlit 테마 모방 CSS */
         :root {
             --primary: #ff4b4b;
             --bg: #ffffff;
@@ -36,7 +35,6 @@
             font-size: 1rem; margin-bottom: 15px; background-color: var(--bg); font-family: var(--font);
         }
 
-        /* Streamlit 스타일 탭 */
         .tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 25px; }
         .tab-btn {
             flex: 1; padding: 12px 5px; background: transparent; border: none; font-size: 1rem;
@@ -47,32 +45,27 @@
         .tab-content { display: none; animation: fadeIn 0.3s; }
         .tab-content.active { display: block; }
 
-        /* Streamlit 스타일 메트릭 카드 */
         .metric-row { display: flex; gap: 15px; margin-bottom: 25px; }
         .metric-card { flex: 1; display: flex; flex-direction: column; }
         .metric-label { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 3px; }
         .metric-value { font-size: 1.8rem; font-weight: 700; color: var(--text-main); line-height: 1.2; }
         .metric-delta { font-size: 0.85rem; color: var(--text-muted); margin-top: 3px; }
 
-        /* 명예의 전당 랭킹 카드 */
         .rank-board { display: flex; gap: 10px; margin-bottom: 30px; text-align: center; }
         .rank-card { flex: 1; background-color: var(--card-bg); padding: 15px 5px; border-radius: 10px; box-shadow: 1px 1px 3px rgba(0,0,0,0.05); }
         .rank-card .medal { font-size: 1.6rem; margin-bottom: 5px; }
         .rank-card .name { font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 5px; }
         .rank-card .ticket { font-size: 1rem; font-weight: 700; color: var(--primary); }
 
-        /* Streamlit 스타일 프로그레스 바 */
         .progress-wrapper { margin-bottom: 15px; }
         .progress-header { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 5px; }
         .progress-bg { width: 100%; height: 12px; background-color: var(--border); border-radius: 6px; overflow: hidden; }
         .progress-fill { height: 100%; background-color: var(--primary); transition: width 0.8s ease; }
 
-        /* 데이터 테이블 */
         table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.9rem; }
         th { text-align: left; padding: 10px; color: var(--text-muted); border-bottom: 1px solid var(--border); font-weight: 600; }
         td { padding: 10px; border-bottom: 1px solid var(--border); }
 
-        /* 갤러리 피드 */
         .gallery-item { margin-bottom: 30px; }
         .gallery-header { font-weight: 600; margin-bottom: 5px; }
         .gallery-date { font-size: 0.85rem; color: var(--text-muted); font-weight: normal; }
@@ -98,7 +91,6 @@
     <div id="loading">데이터를 불러오는 중입니다... 🚣</div>
 
     <div id="app" style="display: none;">
-        <!-- 시즌 선택 -->
         <select id="season-select" onchange="loadSeason()">
             <option value="10">🏆 10월 (시즌2 - 진행중)</option>
             <option value="9">🏆 9월 (시즌1 - 종료)</option>
@@ -106,14 +98,12 @@
         
         <div id="season-info" class="info-box"></div>
         
-        <!-- 탭 네비게이션 -->
         <div class="tabs">
             <button class="tab-btn active" onclick="openTab('tab-rank', this)">🏆 랭킹 보드</button>
             <button class="tab-btn" onclick="openTab('tab-mypage', this)">👤 내 기록실</button>
             <button class="tab-btn" onclick="openTab('tab-gallery', this)">📸 갤러리</button>
         </div>
 
-        <!-- 탭 1: 랭킹 보드 -->
         <div id="tab-rank" class="tab-content active">
             <h3 style="margin-top:0;">🔥 <span class="month-txt"></span>월 명예의 전당</h3>
             <div id="rule-caption" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;"></div>
@@ -125,7 +115,6 @@
             <div id="rank-distance"></div>
         </div>
 
-        <!-- 탭 2: 내 기록실 -->
         <div id="tab-mypage" class="tab-content">
             <h3 style="margin-top:0;">🔍 <span class="month-txt"></span>월 내 기록 찾아보기</h3>
             <select id="member-select" onchange="renderMyPage()">
@@ -170,7 +159,6 @@
             </div>
         </div>
 
-        <!-- 탭 3: 갤러리 -->
         <div id="tab-gallery" class="tab-content">
             <h3 style="margin-top:0;">📸 <span class="month-txt"></span>월 훈련 갤러리</h3>
             <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">부원들의 뜨거운 땀방울을 확인하세요!</div>
@@ -194,32 +182,39 @@
         return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : null;
     }
 
-    // 강력한 날짜 파서 (시간 초단위까지 완벽 인식)
+    // 강력한 날짜 파서
     function parseDate(str) {
         if (!str) return null;
-        let nums = str.match(/\d+/g);
+        let s = str.trim();
+        // 엑셀 숫자 형태 날짜
+        if (!isNaN(s) && !s.includes(':')) return new Date((parseFloat(s) - 25569) * 86400 * 1000);
+        
+        let nums = s.match(/\d+/g);
         if (nums && nums.length >= 3) {
-            let y = parseInt(nums[0]); if (y < 100) y += 2000;
-            let m = parseInt(nums[1]) - 1;
+            let y = parseInt(nums[0]); 
+            let m = parseInt(nums[1]);
             let d = parseInt(nums[2]);
-            let date = new Date(y, m, d);
+            if (y <= 12 && d > 1000) { let t = y; y = d; d = m; m = t; } // MM/DD/YYYY 예외 처리
+            else if (y < 100) y += 2000;
+            
+            let date = new Date(y, m - 1, d);
             
             if (nums.length >= 5) {
                 let hh = parseInt(nums[3]);
                 let mm = parseInt(nums[4]);
                 let ss = nums.length >= 6 ? parseInt(nums[5]) : 0;
-                let upStr = str.toUpperCase();
+                let upStr = s.toUpperCase();
                 if ((upStr.includes('오후') || upStr.includes('PM')) && hh < 12) hh += 12;
                 if ((upStr.includes('오전') || upStr.includes('AM')) && hh === 12) hh = 0;
                 date.setHours(hh, mm, ss);
             }
             return date;
         }
-        return null;
+        return new Date(str);
     }
 
     function formatDateTime(dateObj) {
-        if(!dateObj) return "";
+        if(!dateObj || isNaN(dateObj.getTime())) return "날짜 미상";
         let m = String(dateObj.getMonth() + 1).padStart(2, '0');
         let d = String(dateObj.getDate()).padStart(2, '0');
         let hh = String(dateObj.getHours()).padStart(2, '0');
@@ -227,38 +222,52 @@
         return `${dateObj.getFullYear()}-${m}-${d} ${hh}:${mm}`;
     }
 
-    // 파파파스로 구글 시트 데이터 로드
     Papa.parse(CSV_URL, {
         download: true,
         header: true,
+        skipEmptyLines: true,
         complete: function(results) {
-            allData = results.data.filter(r => r['이름'] && r['날짜']).map((r, i) => {
-                let dObj = parseDate(r['날짜']);
-                let dist = parseInt(String(r['총거리']||'0').replace(/,/g, '')) || 0;
-                let type = r['운동종류'] || '';
-                let ergo = (type.includes('러닝') || type.includes('달리기')) ? 0 : dist;
-                
-                return {
-                    idx: i,
-                    dateObj: dObj,
-                    month: dObj ? dObj.getMonth() + 1 : 0,
-                    dateStr: formatDateTime(dObj),
-                    name: r['이름'].replace(/\s/g, ''),
-                    type: type,
-                    dist: dist,
-                    ergoDist: ergo,
-                    photo: extractDriveUrl(r['사진링크']),
-                    memo: r['메모'] || '',
-                    group: (r['구분'] || '기존').trim()
-                };
-            });
+            allData = [];
             
-            // 강서윤 예외 처리 (폼에 질문 없어도 강제 적용)
-            allData.forEach(r => { if(r.name === '강서윤') r.group = '신입'; });
+            results.data.forEach((row, i) => {
+                // 💡 [핵심 해결] 구글 시트 특수 인코딩(BOM) 및 띄어쓰기 완벽 제거
+                let cleanRow = {};
+                for (let key in row) {
+                    let cleanKey = key.replace(/[\uFEFF\u200B]/g, '').trim();
+                    cleanRow[cleanKey] = row[key];
+                }
+                
+                if (cleanRow['이름'] && cleanRow['날짜']) {
+                    let dObj = parseDate(cleanRow['날짜']);
+                    let dist = parseInt(String(cleanRow['총거리']||'0').replace(/,/g, '')) || 0;
+                    let type = cleanRow['운동종류'] || '';
+                    let ergo = (type.includes('러닝') || type.includes('달리기')) ? 0 : dist;
+                    
+                    let dataObj = {
+                        idx: i,
+                        dateObj: dObj,
+                        month: (dObj && !isNaN(dObj.getTime())) ? dObj.getMonth() + 1 : 0,
+                        dateStr: formatDateTime(dObj),
+                        name: cleanRow['이름'].replace(/\s/g, ''),
+                        type: type,
+                        dist: dist,
+                        ergoDist: ergo,
+                        photo: extractDriveUrl(cleanRow['사진링크']),
+                        memo: cleanRow['메모'] || '',
+                        group: (cleanRow['구분'] || '기존').trim()
+                    };
+                    
+                    if(dataObj.name === '강서윤') dataObj.group = '신입';
+                    allData.push(dataObj);
+                }
+            });
 
             document.getElementById('loading').style.display = 'none';
             document.getElementById('app').style.display = 'block';
             loadSeason();
+        },
+        error: function() {
+            document.getElementById('loading').innerText = "데이터를 불러오는 중 오류가 발생했습니다.";
         }
     });
 
@@ -273,7 +282,7 @@
             infoBox.innerHTML = "ℹ️ <b>9월 챌린지는 종료되었습니다.</b> (기존 부원 전용 / 러닝 미포함 / 랭킹 보너스 없음)";
             ruleBox.innerHTML = "💡 추첨권 규칙: 인증 1회당 <b>1장</b> | 5만m 달성 <b>+3장</b>";
             curData = allData.filter(r => r.month === 9 && r.group === '기존');
-            curData.forEach(r => r.ergoDist = r.dist); // 9월은 예외없이 전부 에르고
+            curData.forEach(r => r.ergoDist = r.dist);
         } else {
             infoBox.innerHTML = "ℹ️ <b>10월 챌린지 진행 중!</b> (전체 부원 대상 / 러닝 포함 / 에르고 1~3위 보너스 지급)";
             ruleBox.innerHTML = "💡 추첨권 규칙: 인증 1회당 <b>1장</b> | 에르고 5만m 달성 <b>+3장</b> | 에르고 랭킹 1~3위 <b>+3, +2, +1장</b>";
@@ -308,7 +317,6 @@
             s.bRank = 0;
         });
 
-        // 10월 랭킹 보너스 (관리자 제외)
         let excluded = currentMonth === 10 ? ['김경일', '강예은'] : [];
         let rEligible = ticketStats.filter(s => !excluded.includes(s.name) && s.ergo > 0);
         rEligible.sort((a,b) => b.ergo - a.ergo);
@@ -325,7 +333,6 @@
     function renderRank() {
         let excluded = currentMonth === 10 ? ['김경일', '강예은'] : [];
         
-        // 추첨권 랭킹
         let tkts = ticketStats.filter(s => !excluded.includes(s.name));
         tkts.sort((a,b) => b.total - a.total || b.ergo - a.ergo);
         
@@ -338,9 +345,8 @@
                         <div class="ticket">${tkts[i].total}장</div>
                      </div>`;
         }
-        document.getElementById('rank-tickets').innerHTML = html;
+        document.getElementById('rank-tickets').innerHTML = html || "<div style='color:gray; font-size:0.9rem;'>데이터가 없습니다.</div>";
 
-        // 거리 랭킹
         let dists = ticketStats.filter(s => !excluded.includes(s.name) && s.ergo > 0);
         dists.sort((a,b) => b.ergo - a.ergo);
         
@@ -359,7 +365,7 @@
                     <div class="progress-bg"><div class="progress-fill" style="width: ${pct}%"></div></div>
                 </div>`;
         }
-        document.getElementById('rank-distance').innerHTML = dHtml;
+        document.getElementById('rank-distance').innerHTML = dHtml || "<div style='color:gray; font-size:0.9rem;'>데이터가 없습니다.</div>";
     }
 
     function renderMyPage() {
@@ -370,16 +376,20 @@
 
         let s = ticketStats.find(x => x.name === name) || {total:0, base:0, b50k:0, bRank:0, ergo:0, count:0};
         
-        document.getElementById('my-ticket').innerText = `🎟️ ${s.total} 장`;
+        document.getElementById('my-ticket').innerText = `${s.total} 장`;
         document.getElementById('my-ticket-detail').innerText = currentMonth === 10 ? 
             `기본 ${s.base} + 5만m ${s.b50k} + 랭킹 ${s.bRank}` : `기본 ${s.base} + 보너스 ${s.b50k}`;
             
-        document.getElementById('my-ergo').innerText = `🚣 ${s.ergo.toLocaleString()} m`;
+        document.getElementById('my-ergo').innerText = `${s.ergo.toLocaleString()} m`;
         document.getElementById('my-ergo-detail').innerText = `총 인증(러닝 포함): ${s.count}회`;
 
         let rem = Math.max(0, TARGET_METERS - s.ergo);
         let pct = Math.min((s.ergo / TARGET_METERS)*100, 100);
-        document.getElementById('my-progress-bar').style.width = pct + '%';
+        
+        // setTimeout을 주어 애니메이션이 부드럽게 작동하도록 처리
+        document.getElementById('my-progress-bar').style.width = '0%';
+        setTimeout(() => { document.getElementById('my-progress-bar').style.width = pct + '%'; }, 50);
+        
         if(rem > 0) {
             document.getElementById('my-progress-msg').innerHTML = "보너스 달성 진행도";
             document.getElementById('my-progress-remain').innerHTML = `보너스까지 <b style="color:var(--primary)">${rem.toLocaleString()}m</b> 남음`;
@@ -388,15 +398,13 @@
             document.getElementById('my-progress-remain').innerText = "보너스 3장 획득 완료";
         }
 
-        // 개인 테이블
-        let myD = curData.filter(r => r.name === name).sort((a,b) => b.dateObj - a.dateObj);
+        let myD = curData.filter(r => r.name === name).sort((a,b) => b.dateObj - a.dateObj || b.idx - a.idx);
         let tb = '';
         myD.forEach(r => {
             tb += `<tr><td>${r.dateStr.split(' ')[0]}</td><td>${r.type}</td><td>${r.dist.toLocaleString()}</td><td>${r.memo}</td></tr>`;
         });
         document.querySelector('#my-table tbody').innerHTML = tb;
 
-        // 개인 갤러리
         let myP = myD.filter(r => r.photo);
         let phtml = myP.length ? '' : '<div style="color:var(--text-muted); font-size:0.9rem;">등록된 사진이 없습니다.</div>';
         myP.forEach(r => {
@@ -408,7 +416,7 @@
 
     function renderGallery() {
         let pData = curData.filter(r => r.photo).sort((a,b) => b.dateObj - a.dateObj || b.idx - a.idx);
-        let html = pData.length ? '' : '<div style="color:var(--text-muted);">아직 사진이 없습니다.</div>';
+        let html = pData.length ? '' : '<div style="color:var(--text-muted); font-size:0.9rem;">아직 사진이 없습니다.</div>';
         
         pData.slice(0, 10).forEach(r => {
             let mHtml = r.memo ? `<div class="gallery-memo">💬 ${r.memo}</div>` : '';
