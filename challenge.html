@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -67,13 +66,12 @@
         .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .photo-grid-caption { font-size: 0.8rem; text-align: center; color: var(--text-muted); margin-top: 5px; }
 
-        /* 💡 11월 전용 랭킹 UI CSS */
+        /* 💡 11월 전용 랭킹 UI CSS (시상대 및 레이싱) */
         .podium-wrap { display: flex; align-items: flex-end; justify-content: center; height: 190px; margin: 20px 0 40px 0; gap: 8px; }
         .podium-box { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; border-radius: 12px 12px 0 0; color: white; padding-top: 10px; font-weight: bold; position: relative; box-shadow: 0 -4px 10px rgba(0,0,0,0.1); }
-        .podium-1 { width: 34%; height: 100%; background: linear-gradient(135deg, #fbc2eb, #a6c1ee); z-index: 3; } /* 1위 색상 */
-        .podium-2 { width: 32%; height: 75%; background: linear-gradient(135deg, #e0c3fc, #8ec5fc); z-index: 2; } /* 2위 색상 */
-        .podium-3 { width: 32%; height: 60%; background: linear-gradient(135deg, #ffd1ff, #fad0c4); z-index: 1; } /* 3위 색상 */
-        
+        .podium-1 { width: 34%; height: 100%; background: linear-gradient(135deg, #fbc2eb, #a6c1ee); z-index: 3; }
+        .podium-2 { width: 32%; height: 75%; background: linear-gradient(135deg, #e0c3fc, #8ec5fc); z-index: 2; }
+        .podium-3 { width: 32%; height: 60%; background: linear-gradient(135deg, #ffd1ff, #fad0c4); z-index: 1; }
         .podium-medal { font-size: 1.8rem; margin-top: -30px; filter: drop-shadow(1px 2px 2px rgba(0,0,0,0.2)); }
         .podium-prize { font-size: 0.85rem; background: rgba(0,0,0,0.4); border-radius: 10px; padding: 3px 8px; margin-top: 5px; letter-spacing: 0.5px; }
         .podium-name { margin-top: 8px; font-size: 1.1rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.4); }
@@ -86,6 +84,20 @@
         .race-boat { position: absolute; right: -16px; top: -3px; font-size: 22px; line-height: 26px; filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.3)); }
         .race-score { width: 100px; font-size: 0.8rem; text-align: left; margin-left: 20px; color: var(--text-muted); line-height: 1.2; }
         .race-score b { color: var(--text-main); font-size: 0.9rem; }
+
+        /* 💡 11월 전용 내 기록실 출석부(스탬프) UI CSS */
+        .stamp-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-bottom: 20px; }
+        .stamp-box { 
+            aspect-ratio: 1; border: 2px dashed var(--border); border-radius: 10px; 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 1.2rem; color: var(--border); font-weight: bold; background-color: var(--bg); transition: 0.3s; 
+        }
+        .stamp-box.stamped { 
+            border: 2px solid var(--primary); background-color: #fff0f0; color: var(--primary); 
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @media (max-width: 450px) { .stamp-grid { grid-template-columns: repeat(5, 1fr); gap: 8px; } }
 
         .modal { display: none; position: fixed; z-index: 1000; padding-top: 60px; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px); }
         .modal-content { margin: auto; display: block; max-width: 90%; max-height: 80vh; border-radius: 8px; animation: zoom 0.3s ease; object-fit: contain; }
@@ -124,7 +136,6 @@
             <h3 style="margin-top:0;">🔥 <span class="month-txt"></span>월 명예의 전당</h3>
             <div id="rule-caption" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;"></div>
             
-            <!-- 9월, 10월 전용 랭킹 UI -->
             <div id="rank-standard" style="display: none;">
                 <h4 style="margin-bottom: 10px;">🎟️ 추첨권 획득 순위</h4>
                 <div id="rank-tickets" class="rank-board"></div>
@@ -132,7 +143,6 @@
                 <div id="rank-distance"></div>
             </div>
 
-            <!-- 💡 11월 전용 랭킹 UI -->
             <div id="rank-november" style="display: none;">
                 <h4 style="margin-bottom: 0px; text-align: center; color: var(--text-main);">🏆 명예의 시상대 (Top 3)</h4>
                 <p style="text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">상금 5만 / 3만 / 1만</p>
@@ -163,15 +173,24 @@
                     </div>
                 </div>
 
-                <h4 style="margin-bottom: 10px;" id="lbl-progress">🎯 50,000m 보너스(3장) 진행도</h4>
-                <div class="progress-wrapper">
-                    <div class="progress-header">
-                        <span id="my-progress-msg"></span>
-                        <span id="my-progress-remain" style="color: var(--text-muted);"></span>
+                <!-- 9/10월 전용 프로그레스 바 -->
+                <div id="progress-section" style="display: none;">
+                    <h4 style="margin-bottom: 10px;" id="lbl-progress">🎯 50,000m 보너스(3장) 진행도</h4>
+                    <div class="progress-wrapper">
+                        <div class="progress-header">
+                            <span id="my-progress-msg"></span>
+                            <span id="my-progress-remain" style="color: var(--text-muted);"></span>
+                        </div>
+                        <div class="progress-bg">
+                            <div class="progress-fill" id="my-progress-bar" style="width: 0%;"></div>
+                        </div>
                     </div>
-                    <div class="progress-bg">
-                        <div class="progress-fill" id="my-progress-bar" style="width: 0%;"></div>
-                    </div>
+                </div>
+
+                <!-- 💡 11월 전용 14일 출석부 스탬프 -->
+                <div id="stamp-section" style="display: none;">
+                    <h4 style="margin-bottom: 10px;">🗓️ 14일 출석부 스탬프</h4>
+                    <div class="stamp-grid" id="stamp-grid-container"></div>
                 </div>
 
                 <h4 style="margin-top: 30px; margin-bottom: 10px;">📝 최근 인증 내역</h4>
@@ -207,7 +226,7 @@
     let allData = [];
     let curData = [];
     let ticketStats = [];
-    let currentMonth = 11; // 11월 기본 세팅
+    let currentMonth = 11;
 
     function openModal(src) { document.getElementById('image-modal').style.display = "block"; document.getElementById('expanded-img').src = src; }
     function closeModal() { document.getElementById('image-modal').style.display = "none"; }
@@ -260,7 +279,6 @@
                     let dObj = parseDate(rawDate);
                     let dist = parseInt(String(rawDist).replace(/,/g, '')) || 0;
                     
-                    // 11월 에르고 여부 판별 (러닝, 자전거 등 제외)
                     let isErgoStr = (rawType.includes('러닝') || rawType.includes('달리기') || rawType.includes('자전거') || rawType.includes('사이클')) ? false : true;
                     let ergoDist = isErgoStr ? dist : 0;
 
@@ -297,8 +315,7 @@
             ruleBox.innerHTML = "💡 규칙: 인증 1회당 <b>1장</b> | 에르고 5만m 달성 <b>+3장</b> | 에르고 랭킹 1~3위 <b>+3, +2, +1장</b>";
             curData = allData.filter(r => r.month === 10);
         } else if (currentMonth === 11) {
-            // 💡 11월 챌린지 룰 세팅 (11월 4일 ~ 11월 17일)
-            infoBox.innerHTML = "ℹ️ <b>11월 챌린지(11/4~11/17) 진행 중!</b> (1일 1회 누적 / 1~3위 상금 지급 / 동점 시 에르고 횟수 우선)";
+            infoBox.innerHTML = "ℹ️ <b>11월 챌린지 진행 중!</b> (1일 1회 누적 / 1~3위 상금 지급 / 동점 시 에르고 횟수 우선)";
             ruleBox.innerHTML = "💡 규칙: 기간 내 최대 14회 (하루 1회만 인정) | 4명 이상 동점 시 에르고 횟수로 순위 결정";
             curData = allData.filter(r => r.month === 11 && r.dateObj.getDate() >= 4 && r.dateObj.getDate() <= 17);
         }
@@ -316,28 +333,21 @@
 
     function calcStats() {
         if (currentMonth === 11) {
-            // 💡 11월 중복 제거 로직 (같은 날 여러 번 해도 1회. 단, 에르고가 있으면 에르고로 인정)
             let userMap = {};
             curData.forEach(r => {
                 if(!userMap[r.name]) userMap[r.name] = {};
-                // 오늘 날짜에 기록이 없거나, 기존 기록이 에르고가 아닌데 새 기록이 에르고라면 덮어씀
-                if(userMap[r.name][r.dateOnly] !== true) {
-                    userMap[r.name][r.dateOnly] = r.isErgo;
-                }
+                if(userMap[r.name][r.dateOnly] !== true) { userMap[r.name][r.dateOnly] = r.isErgo; }
             });
             
             ticketStats = Object.keys(userMap).map(name => {
                 let days = userMap[name];
-                let totalDays = Math.min(Object.keys(days).length, 14); // 최대 14회 제한
+                let totalDays = Math.min(Object.keys(days).length, 14);
                 let ergoDays = Object.values(days).filter(v => v).length;
                 return { name: name, total: totalDays, ergo: ergoDays };
             });
-            
-            // 1순위: 총 인증 횟수 / 2순위: 에르고 횟수
             ticketStats.sort((a,b) => b.total - a.total || b.ergo - a.ergo);
 
         } else {
-            // 9, 10월 로직
             let map = {};
             curData.forEach(r => {
                 if(!map[r.name]) map[r.name] = { name: r.name, count: 0, ergo: 0 };
@@ -365,7 +375,6 @@
             document.getElementById('rank-standard').style.display = 'none';
             document.getElementById('rank-november').style.display = 'block';
 
-            // 1. 🏆 시상대 렌더링 (Top 3)
             let podiumHtml = '';
             let pData = ticketStats.slice(0, 3);
             if(pData.length === 0) {
@@ -374,8 +383,6 @@
                 let pClasses = ["podium-1", "podium-2", "podium-3"];
                 let pPrizes = ["5만원", "3만원", "1만원"];
                 let pMedals = ["🥇", "🥈", "🥉"];
-                
-                // 디스플레이 순서: 2등 - 1등 - 3등 (실제 시상대 모양)
                 let displayOrder = [1, 0, 2]; 
                 
                 displayOrder.forEach(idx => {
@@ -392,7 +399,6 @@
             }
             document.getElementById('nov-podium').innerHTML = podiumHtml;
 
-            // 2. 🏁 레이싱 트랙 렌더링 (Top 10)
             let raceHtml = '';
             let raceData = ticketStats.slice(0, 10);
             raceData.forEach((row, i) => {
@@ -410,13 +416,11 @@
             });
             document.getElementById('nov-race').innerHTML = raceHtml || "<div style='color:gray; font-size:0.9rem; text-align:center;'>기록이 없습니다.</div>";
             
-            // 레이싱 바 애니메이션
             setTimeout(() => {
                 document.querySelectorAll('.race-fill').forEach(el => { el.style.width = el.getAttribute('data-width'); });
             }, 100);
 
         } else {
-            // 9, 10월 랭킹 보드
             document.getElementById('rank-standard').style.display = 'block';
             document.getElementById('rank-november').style.display = 'none';
             
@@ -449,9 +453,7 @@
         box.style.display = 'block';
 
         let s = ticketStats.find(x => x.name === name) || {total:0, base:0, b50k:0, bRank:0, ergo:0, count:0};
-        let pBar = document.getElementById('my-progress-bar');
-        pBar.style.width = '0%';
-
+        
         if (currentMonth === 11) {
             document.getElementById('lbl-ticket').innerText = "내 인증 횟수 (출석)";
             document.getElementById('my-ticket').innerText = `${s.total} 회`;
@@ -461,18 +463,19 @@
             document.getElementById('my-ergo').innerText = `${s.ergo} 회`;
             document.getElementById('my-ergo-detail').innerText = "동점 시 우선순위 부여";
 
-            document.getElementById('lbl-progress').innerText = "🎯 14회 완주 진행도";
-            let rem = Math.max(0, 14 - s.total);
-            let pct = Math.min((s.total / 14)*100, 100);
-            setTimeout(() => { pBar.style.width = pct + '%'; }, 50);
+            // 💡 11월: 프로그레스 바 숨기고 스탬프 보드 띄우기
+            document.getElementById('progress-section').style.display = 'none';
+            document.getElementById('stamp-section').style.display = 'block';
 
-            if(rem > 0) {
-                document.getElementById('my-progress-msg').innerHTML = `완주까지 <b style="color:var(--primary)">${rem}회</b> 남음`;
-                document.getElementById('my-progress-remain').innerText = `${s.total} / 14`;
-            } else {
-                document.getElementById('my-progress-msg').innerHTML = "🎉 <b>14회 완주 달성!</b>";
-                document.getElementById('my-progress-remain').innerText = "고생하셨습니다!";
+            let stampHtml = '';
+            for(let i=1; i<=14; i++) {
+                if (i <= s.total) {
+                    stampHtml += `<div class="stamp-box stamped">🚣‍♀️</div>`;
+                } else {
+                    stampHtml += `<div class="stamp-box">${i}</div>`;
+                }
             }
+            document.getElementById('stamp-grid-container').innerHTML = stampHtml;
 
         } else {
             document.getElementById('lbl-ticket').innerText = "내 추첨권";
@@ -483,7 +486,12 @@
             document.getElementById('my-ergo').innerText = `${s.ergo.toLocaleString()} m`;
             document.getElementById('my-ergo-detail').innerText = `총 인증(러닝 포함): ${s.count}회`;
 
-            document.getElementById('lbl-progress').innerText = "🎯 50,000m 보너스(3장) 진행도";
+            // 💡 9, 10월: 스탬프 숨기고 프로그레스 바 띄우기
+            document.getElementById('progress-section').style.display = 'block';
+            document.getElementById('stamp-section').style.display = 'none';
+
+            let pBar = document.getElementById('my-progress-bar');
+            pBar.style.width = '0%';
             let rem = Math.max(0, TARGET_METERS - s.ergo);
             let pct = Math.min((s.ergo / TARGET_METERS)*100, 100);
             setTimeout(() => { pBar.style.width = pct + '%'; }, 50);
@@ -533,5 +541,3 @@
 
 </body>
 </html>
-
-```
