@@ -298,7 +298,7 @@
             curData = allData.filter(r => r.month === 10);
         } else if (currentMonth === 11) {
             // 💡 11월 챌린지 룰 세팅 (11월 4일 ~ 11월 17일)
-            infoBox.innerHTML = "ℹ️ <b>11월 챌린지 진행 중!</b> (1일 1회 누적 / 1~3위 상금 지급 / 동점 시 에르고 횟수 우선)";
+            infoBox.innerHTML = "ℹ️ <b>11월 챌린지(11/4~11/17) 진행 중!</b> (1일 1회 누적 / 1~3위 상금 지급 / 동점 시 에르고 횟수 우선)";
             ruleBox.innerHTML = "💡 규칙: 기간 내 최대 14회 (하루 1회만 인정) | 4명 이상 동점 시 에르고 횟수로 순위 결정";
             curData = allData.filter(r => r.month === 11 && r.dateObj.getDate() >= 4 && r.dateObj.getDate() <= 17);
         }
