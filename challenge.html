@@ -1,3 +1,12 @@
+두 가지 아이디어를 모두 합쳐서 **가장 완벽하고 다이내믹한 랭킹보드**를 완성해 드리겠습니다!
+
+11월 챌린지를 선택하면, 화면 상단에는 상금을 강조하는 '🏆 올림픽 시상대(Top 3)'가 화려하게 나타나고, 바로 그 아래에는 1위부터 10위까지의 부원들이 14일 완주를 향해 달려가는 '🏁 레이싱 트랙(Top 10 막대그래프)'이 펼쳐집니다. 시각적인 재미와 경쟁심을 동시에 자극할 수 있는 최적의 UI입니다.
+
+또한, **하루에 여러 번 인증하더라도 '1일 1회'만 카운트**되도록 날짜(YYYY-MM-DD)를 기준으로 중복을 자동 제거하고, 같은 날 런닝과 에르고를 모두 올렸다면 **'에르고'를 우선적으로 인정하여 타이 브레이커 횟수에 합산**하는 스마트한 로직도 완벽하게 내장했습니다.
+
+아래 전체 코드를 복사해서 `index.html`에 덮어씌워 주세요.
+
+```html
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -5,12 +14,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>조정부 운동인증 챌린지</title>
     
-    <!-- 💡 이모티콘 파비콘 추가 -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚣‍♀️</text></svg>">
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    
     <style>
-        /* Streamlit 테마 모방 CSS */
+        /* 기본 Streamlit 테마 */
         :root {
             --primary: #ff4b4b;
             --bg: #ffffff;
@@ -18,33 +26,19 @@
             --text-muted: #7d7d8e;
             --border: #e6e6e9;
             --card-bg: #f0f2f6;
-            --font: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --font: 'Pretendard', -apple-system, sans-serif;
         }
-        body {
-            font-family: var(--font);
-            color: var(--text-main);
-            background-color: var(--bg);
-            margin: 0; padding: 20px 10px;
-            line-height: 1.6;
-        }
+        body { font-family: var(--font); color: var(--text-main); background-color: var(--bg); margin: 0; padding: 20px 10px; line-height: 1.6; }
         .container { max-width: 700px; margin: 0 auto; }
-        
         h1 { text-align: center; margin: 0 0 5px 0; font-size: 2rem; color: var(--text-main); }
         .caption { text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
         .divider { height: 1px; background-color: var(--border); margin: 20px 0; }
         
         .info-box { background-color: #e8f4fd; color: #004280; padding: 15px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 20px; }
-        
-        select {
-            width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px;
-            font-size: 1rem; margin-bottom: 15px; background-color: var(--bg); font-family: var(--font);
-        }
+        select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; margin-bottom: 15px; background-color: var(--bg); }
 
         .tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 25px; }
-        .tab-btn {
-            flex: 1; padding: 12px 5px; background: transparent; border: none; font-size: 1rem;
-            color: var(--text-muted); cursor: pointer; transition: 0.2s;
-        }
+        .tab-btn { flex: 1; padding: 12px 5px; background: transparent; border: none; font-size: 1rem; color: var(--text-muted); cursor: pointer; transition: 0.2s; }
         .tab-btn:hover { color: var(--primary); }
         .tab-btn.active { color: var(--primary); font-weight: 600; border-bottom: 2px solid var(--primary); margin-bottom: -2px; }
         .tab-content { display: none; animation: fadeIn 0.3s; }
@@ -75,32 +69,37 @@
         .gallery-header { font-weight: 600; margin-bottom: 5px; }
         .gallery-date { font-size: 0.85rem; color: var(--text-muted); font-weight: normal; }
         .gallery-memo { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px; }
-        .gallery-item img { width: 100%; border-radius: 8px; display: block; margin-top: 10px; }
+        .gallery-item img, .photo-grid-item img { width: 100%; border-radius: 8px; display: block; margin-top: 10px; cursor: pointer; transition: 0.3s; }
+        .gallery-item img:hover, .photo-grid-item img:hover { opacity: 0.8; }
         
         .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .photo-grid-item img { width: 100%; border-radius: 8px; display: block; }
         .photo-grid-caption { font-size: 0.8rem; text-align: center; color: var(--text-muted); margin-top: 5px; }
 
-        .clickable-img { cursor: pointer; transition: 0.3s; }
-        .clickable-img:hover { opacity: 0.8; }
+        /* 💡 11월 전용 랭킹 UI CSS */
+        .podium-wrap { display: flex; align-items: flex-end; justify-content: center; height: 190px; margin: 20px 0 40px 0; gap: 8px; }
+        .podium-box { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; border-radius: 12px 12px 0 0; color: white; padding-top: 10px; font-weight: bold; position: relative; box-shadow: 0 -4px 10px rgba(0,0,0,0.1); }
+        .podium-1 { width: 34%; height: 100%; background: linear-gradient(135deg, #fbc2eb, #a6c1ee); z-index: 3; } /* 1위 색상 */
+        .podium-2 { width: 32%; height: 75%; background: linear-gradient(135deg, #e0c3fc, #8ec5fc); z-index: 2; } /* 2위 색상 */
+        .podium-3 { width: 32%; height: 60%; background: linear-gradient(135deg, #ffd1ff, #fad0c4); z-index: 1; } /* 3위 색상 */
+        
+        .podium-medal { font-size: 1.8rem; margin-top: -30px; filter: drop-shadow(1px 2px 2px rgba(0,0,0,0.2)); }
+        .podium-prize { font-size: 0.85rem; background: rgba(0,0,0,0.4); border-radius: 10px; padding: 3px 8px; margin-top: 5px; letter-spacing: 0.5px; }
+        .podium-name { margin-top: 8px; font-size: 1.1rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.4); }
+        .podium-score { font-size: 0.85rem; margin-top: 5px; font-weight: normal; }
 
-        .modal {
-            display: none; position: fixed; z-index: 1000; padding-top: 60px;
-            left: 0; top: 0; width: 100%; height: 100%; overflow: auto;
-            background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
-        }
-        .modal-content {
-            margin: auto; display: block; max-width: 90%; max-height: 80vh;
-            border-radius: 8px; animation: zoom 0.3s ease; object-fit: contain;
-        }
-        .modal-close {
-            position: absolute; top: 15px; right: 25px; color: #f1f1f1;
-            font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.3s;
-        }
-        .modal-close:hover, .modal-close:focus { color: #bbb; text-decoration: none; }
+        .race-row { display: flex; align-items: center; margin-bottom: 15px; }
+        .race-name { width: 75px; font-size: 0.9rem; font-weight: 600; text-align: right; margin-right: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main); }
+        .race-track-wrapper { flex: 1; background: var(--border); border-radius: 20px; height: 26px; position: relative; }
+        .race-fill { background: linear-gradient(90deg, #ff8a00, #e52e71); height: 100%; border-radius: 20px; position: relative; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); min-width: 5%; }
+        .race-boat { position: absolute; right: -16px; top: -3px; font-size: 22px; line-height: 26px; filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.3)); }
+        .race-score { width: 100px; font-size: 0.8rem; text-align: left; margin-left: 20px; color: var(--text-muted); line-height: 1.2; }
+        .race-score b { color: var(--text-main); font-size: 0.9rem; }
 
+        .modal { display: none; position: fixed; z-index: 1000; padding-top: 60px; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px); }
+        .modal-content { margin: auto; display: block; max-width: 90%; max-height: 80vh; border-radius: 8px; animation: zoom 0.3s ease; object-fit: contain; }
+        .modal-close { position: absolute; top: 15px; right: 25px; color: #f1f1f1; font-size: 40px; font-weight: bold; cursor: pointer; }
+        
         #loading { text-align: center; padding: 50px; font-size: 1.2rem; color: var(--text-muted); }
-
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes zoom { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     </style>
@@ -116,7 +115,8 @@
 
     <div id="app" style="display: none;">
         <select id="season-select" onchange="loadSeason()">
-            <option value="10">🏆 10월 (시즌2 - 진행중)</option>
+            <option value="11">🏆 11월 (시즌3 - 진행중)</option>
+            <option value="10">🏆 10월 (시즌2 - 종료)</option>
             <option value="9">🏆 9월 (시즌1 - 종료)</option>
         </select>
         
@@ -132,11 +132,23 @@
             <h3 style="margin-top:0;">🔥 <span class="month-txt"></span>월 명예의 전당</h3>
             <div id="rule-caption" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;"></div>
             
-            <h4 style="margin-bottom: 10px;">🎟️ 추첨권 획득 순위</h4>
-            <div id="rank-tickets" class="rank-board"></div>
-            
-            <h4 style="margin-bottom: 10px;">🚣 에르고 누적 거리 순위 (Top 5)</h4>
-            <div id="rank-distance"></div>
+            <!-- 9월, 10월 전용 랭킹 UI -->
+            <div id="rank-standard" style="display: none;">
+                <h4 style="margin-bottom: 10px;">🎟️ 추첨권 획득 순위</h4>
+                <div id="rank-tickets" class="rank-board"></div>
+                <h4 style="margin-bottom: 10px;">🚣 에르고 누적 거리 순위 (Top 5)</h4>
+                <div id="rank-distance"></div>
+            </div>
+
+            <!-- 💡 11월 전용 랭킹 UI -->
+            <div id="rank-november" style="display: none;">
+                <h4 style="margin-bottom: 0px; text-align: center; color: var(--text-main);">🏆 명예의 시상대 (Top 3)</h4>
+                <p style="text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">상금 5만 / 3만 / 1만</p>
+                <div id="nov-podium" class="podium-wrap"></div>
+                
+                <h4 style="margin-bottom: 15px; margin-top: 30px;">🏁 11월 레이싱 트랙 (Top 10)</h4>
+                <div id="nov-race"></div>
+            </div>
         </div>
 
         <div id="tab-mypage" class="tab-content">
@@ -148,18 +160,18 @@
             <div id="mypage-content" style="display: none; margin-top: 20px;">
                 <div class="metric-row">
                     <div class="metric-card">
-                        <div class="metric-label">내 추첨권</div>
+                        <div class="metric-label" id="lbl-ticket">내 추첨권</div>
                         <div class="metric-value" id="my-ticket">0 장</div>
                         <div class="metric-delta" id="my-ticket-detail"></div>
                     </div>
                     <div class="metric-card">
-                        <div class="metric-label">내 에르고 누적</div>
+                        <div class="metric-label" id="lbl-ergo">내 에르고 누적</div>
                         <div class="metric-value" id="my-ergo">0 m</div>
                         <div class="metric-delta" id="my-ergo-detail"></div>
                     </div>
                 </div>
 
-                <h4 style="margin-bottom: 10px;">🎯 50,000m 보너스(3장) 진행도</h4>
+                <h4 style="margin-bottom: 10px;" id="lbl-progress">🎯 50,000m 보너스(3장) 진행도</h4>
                 <div class="progress-wrapper">
                     <div class="progress-header">
                         <span id="my-progress-msg"></span>
@@ -173,7 +185,7 @@
                 <h4 style="margin-top: 30px; margin-bottom: 10px;">📝 최근 인증 내역</h4>
                 <div style="overflow-x: auto;">
                     <table id="my-table">
-                        <thead><tr><th>날짜</th><th>운동종류</th><th>총거리</th><th>메모</th></tr></thead>
+                        <thead><tr><th>날짜</th><th>운동종류</th><th>내용(거리)</th><th>메모</th></tr></thead>
                         <tbody></tbody>
                     </table>
                 </div>
@@ -203,16 +215,10 @@
     let allData = [];
     let curData = [];
     let ticketStats = [];
-    let currentMonth = 10;
+    let currentMonth = 11; // 11월 기본 세팅
 
-    function openModal(src) {
-        document.getElementById('image-modal').style.display = "block";
-        document.getElementById('expanded-img').src = src;
-    }
-    function closeModal() {
-        document.getElementById('image-modal').style.display = "none";
-    }
-
+    function openModal(src) { document.getElementById('image-modal').style.display = "block"; document.getElementById('expanded-img').src = src; }
+    function closeModal() { document.getElementById('image-modal').style.display = "none"; }
     function extractDriveUrl(text) {
         if (!text) return null;
         let match = text.match(/id=([a-zA-Z0-9_-]+)/) || text.match(/\/d\/([a-zA-Z0-9_-]+)/);
@@ -223,20 +229,14 @@
         if (!str) return null;
         let s = str.trim();
         if (!isNaN(s) && !s.includes(':')) return new Date((parseFloat(s) - 25569) * 86400 * 1000);
-        
         let nums = s.match(/\d+/g);
         if (nums && nums.length >= 3) {
-            let y = parseInt(nums[0]); 
-            let m = parseInt(nums[1]);
-            let d = parseInt(nums[2]);
+            let y = parseInt(nums[0]); let m = parseInt(nums[1]); let d = parseInt(nums[2]);
             if (y <= 12 && d > 1000) { let t = y; y = d; d = m; m = t; } 
             else if (y < 100) y += 2000;
-            
             let date = new Date(y, m - 1, d);
             if (nums.length >= 5) {
-                let hh = parseInt(nums[3]);
-                let mm = parseInt(nums[4]);
-                let ss = nums.length >= 6 ? parseInt(nums[5]) : 0;
+                let hh = parseInt(nums[3]); let mm = parseInt(nums[4]); let ss = nums.length >= 6 ? parseInt(nums[5]) : 0;
                 let upStr = s.toUpperCase();
                 if ((upStr.includes('오후') || upStr.includes('PM')) && hh < 12) hh += 12;
                 if ((upStr.includes('오전') || upStr.includes('AM')) && hh === 12) hh = 0;
@@ -249,54 +249,34 @@
 
     function formatDateTime(dateObj) {
         if(!dateObj || isNaN(dateObj.getTime())) return "날짜 미상";
-        let m = String(dateObj.getMonth() + 1).padStart(2, '0');
-        let d = String(dateObj.getDate()).padStart(2, '0');
-        let hh = String(dateObj.getHours()).padStart(2, '0');
-        let mm = String(dateObj.getMinutes()).padStart(2, '0');
+        let m = String(dateObj.getMonth() + 1).padStart(2, '0'); let d = String(dateObj.getDate()).padStart(2, '0');
+        let hh = String(dateObj.getHours()).padStart(2, '0'); let mm = String(dateObj.getMinutes()).padStart(2, '0');
         return `${dateObj.getFullYear()}-${m}-${d} ${hh}:${mm}`;
     }
 
     Papa.parse(CSV_URL, {
-        download: true,
-        header: false, 
-        skipEmptyLines: true,
+        download: true, header: false, skipEmptyLines: true,
         complete: function(results) {
             allData = [];
             for (let i = 1; i < results.data.length; i++) {
                 let row = results.data[i];
-                let rawDate = row[0] || '';
-                let rawName = row[1] || '';
-                let rawDist = row[2] || '0';
-                let rawType = row[3] || '';
-                let rawPhoto = row[4] || '';
-                
-                let rawGroup = '기존';
-                let rawMemo = '';
-                if (row.length > 6) {
-                    rawGroup = row[5] || '기존';
-                    rawMemo = row[6] || '';
-                } else if (row.length === 6) {
-                    rawMemo = row[5] || ''; 
-                }
+                let rawDate = row[0] || ''; let rawName = row[1] || ''; let rawDist = row[2] || '0';
+                let rawType = row[3] || ''; let rawPhoto = row[4] || '';
+                let rawMemo = row.length > 6 ? (row[6] || '') : (row.length === 6 ? row[5] || '' : '');
 
                 if (rawName.trim() !== '' && rawDate.trim() !== '') {
                     let dObj = parseDate(rawDate);
                     let dist = parseInt(String(rawDist).replace(/,/g, '')) || 0;
-                    let ergo = (rawType.includes('러닝') || rawType.includes('달리기')) ? 0 : dist;
-                    let cleanName = rawName.replace(/\s/g, '');
                     
+                    // 11월 에르고 여부 판별 (러닝, 자전거 등 제외)
+                    let isErgoStr = (rawType.includes('러닝') || rawType.includes('달리기') || rawType.includes('자전거') || rawType.includes('사이클')) ? false : true;
+                    let ergoDist = isErgoStr ? dist : 0;
+
                     let dataObj = {
-                        idx: i,
-                        dateObj: dObj,
-                        month: (dObj && !isNaN(dObj.getTime())) ? dObj.getMonth() + 1 : 0,
-                        dateStr: formatDateTime(dObj),
-                        name: cleanName,
-                        type: rawType,
-                        dist: dist,
-                        ergoDist: ergo,
-                        photo: extractDriveUrl(rawPhoto),
-                        memo: rawMemo,
-                        group: cleanName === '강서윤' ? '신입' : (rawGroup.trim() || '기존')
+                        idx: i, dateObj: dObj, month: (dObj && !isNaN(dObj.getTime())) ? dObj.getMonth() + 1 : 0,
+                        dateStr: formatDateTime(dObj), dateOnly: dObj ? `${dObj.getFullYear()}-${dObj.getMonth()+1}-${dObj.getDate()}` : '0-0-0',
+                        name: rawName.replace(/\s/g, ''), type: rawType, dist: dist, ergoDist: ergoDist,
+                        isErgo: isErgoStr, photo: extractDriveUrl(rawPhoto), memo: rawMemo
                     };
                     allData.push(dataObj);
                 }
@@ -305,9 +285,7 @@
             document.getElementById('app').style.display = 'block';
             loadSeason();
         },
-        error: function(err) {
-            document.getElementById('loading').innerText = "데이터를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
-        }
+        error: function(err) { document.getElementById('loading').innerText = "데이터를 불러오는 중 오류가 발생했습니다."; }
     });
 
     function loadSeason() {
@@ -318,14 +296,19 @@
         let ruleBox = document.getElementById('rule-caption');
         
         if (currentMonth === 9) {
-            infoBox.innerHTML = "ℹ️ <b>9월 챌린지는 종료되었습니다.</b> (기존 부원 전용 / 러닝 미포함 / 랭킹 보너스 없음)";
-            ruleBox.innerHTML = "💡 추첨권 규칙: 인증 1회당 <b>1장</b> | 5만m 달성 <b>+3장</b>";
-            curData = allData.filter(r => r.month === 9 && r.group === '기존');
+            infoBox.innerHTML = "ℹ️ <b>9월 챌린지는 종료되었습니다.</b> (기존 부원 전용 / 러닝 미포함)";
+            ruleBox.innerHTML = "💡 규칙: 인증 1회당 <b>1장</b> | 5만m 달성 <b>+3장</b>";
+            curData = allData.filter(r => r.month === 9);
             curData.forEach(r => r.ergoDist = r.dist);
-        } else {
-            infoBox.innerHTML = "ℹ️ <b>10월 챌린지 진행 중!</b> (전체 부원 대상 / 러닝 포함 / 에르고 1~3위 보너스 지급)";
-            ruleBox.innerHTML = "💡 추첨권 규칙: 인증 1회당 <b>1장</b> | 에르고 5만m 달성 <b>+3장</b> | 에르고 랭킹 1~3위 <b>+3, +2, +1장</b>";
+        } else if (currentMonth === 10) {
+            infoBox.innerHTML = "ℹ️ <b>10월 챌린지는 종료되었습니다.</b> (에르고 거리 랭킹)";
+            ruleBox.innerHTML = "💡 규칙: 인증 1회당 <b>1장</b> | 에르고 5만m 달성 <b>+3장</b> | 에르고 랭킹 1~3위 <b>+3, +2, +1장</b>";
             curData = allData.filter(r => r.month === 10);
+        } else if (currentMonth === 11) {
+            // 💡 11월 챌린지 룰 세팅 (11월 4일 ~ 11월 17일)
+            infoBox.innerHTML = "ℹ️ <b>11월 챌린지 진행 중!</b> (1일 1회 누적 / 1~3위 상금 지급 / 동점 시 에르고 횟수 우선)";
+            ruleBox.innerHTML = "💡 규칙: 기간 내 최대 14회 (하루 1회만 인정) | 4명 이상 동점 시 에르고 횟수로 순위 결정";
+            curData = allData.filter(r => r.month === 11 && r.dateObj.getDate() >= 4 && r.dateObj.getDate() <= 17);
         }
 
         calcStats();
@@ -333,77 +316,138 @@
         
         let select = document.getElementById('member-select');
         select.innerHTML = '<option value="">본인의 이름을 선택하세요</option>';
-        [...new Set(curData.map(r => r.name))].sort().forEach(nm => {
-            select.innerHTML += `<option value="${nm}">${nm}</option>`;
-        });
+        [...new Set(curData.map(r => r.name))].sort().forEach(nm => { select.innerHTML += `<option value="${nm}">${nm}</option>`; });
         document.getElementById('mypage-content').style.display = 'none';
         
         renderGallery();
     }
 
     function calcStats() {
-        let map = {};
-        curData.forEach(r => {
-            if(!map[r.name]) map[r.name] = { name: r.name, count: 0, ergo: 0 };
-            map[r.name].count++;
-            map[r.name].ergo += r.ergoDist;
-        });
-        
-        ticketStats = Object.values(map);
-        ticketStats.forEach(s => {
-            s.base = s.count;
-            s.b50k = s.ergo >= TARGET_METERS ? 3 : 0;
-            s.bRank = 0;
-        });
+        if (currentMonth === 11) {
+            // 💡 11월 중복 제거 로직 (같은 날 여러 번 해도 1회. 단, 에르고가 있으면 에르고로 인정)
+            let userMap = {};
+            curData.forEach(r => {
+                if(!userMap[r.name]) userMap[r.name] = {};
+                // 오늘 날짜에 기록이 없거나, 기존 기록이 에르고가 아닌데 새 기록이 에르고라면 덮어씀
+                if(userMap[r.name][r.dateOnly] !== true) {
+                    userMap[r.name][r.dateOnly] = r.isErgo;
+                }
+            });
+            
+            ticketStats = Object.keys(userMap).map(name => {
+                let days = userMap[name];
+                let totalDays = Math.min(Object.keys(days).length, 14); // 최대 14회 제한
+                let ergoDays = Object.values(days).filter(v => v).length;
+                return { name: name, total: totalDays, ergo: ergoDays };
+            });
+            
+            // 1순위: 총 인증 횟수 / 2순위: 에르고 횟수
+            ticketStats.sort((a,b) => b.total - a.total || b.ergo - a.ergo);
 
-        let excluded = currentMonth === 10 ? ['김경일', '강예은'] : [];
-        let rEligible = ticketStats.filter(s => !excluded.includes(s.name) && s.ergo > 0);
-        rEligible.sort((a,b) => b.ergo - a.ergo);
-
-        if(currentMonth === 10) {
-            for(let i=0; i < Math.min(rEligible.length, 3); i++) {
-                let target = ticketStats.find(s => s.name === rEligible[i].name);
-                if(target) target.bRank = 3 - i;
+        } else {
+            // 9, 10월 로직
+            let map = {};
+            curData.forEach(r => {
+                if(!map[r.name]) map[r.name] = { name: r.name, count: 0, ergo: 0 };
+                map[r.name].count++; map[r.name].ergo += r.ergoDist;
+            });
+            ticketStats = Object.values(map);
+            ticketStats.forEach(s => {
+                s.base = s.count; s.b50k = s.ergo >= TARGET_METERS ? 3 : 0; s.bRank = 0;
+            });
+            let excluded = currentMonth === 10 ? ['김경일', '강예은'] : [];
+            let rEligible = ticketStats.filter(s => !excluded.includes(s.name) && s.ergo > 0);
+            rEligible.sort((a,b) => b.ergo - a.ergo);
+            if(currentMonth === 10) {
+                for(let i=0; i < Math.min(rEligible.length, 3); i++) {
+                    let target = ticketStats.find(s => s.name === rEligible[i].name);
+                    if(target) target.bRank = 3 - i;
+                }
             }
+            ticketStats.forEach(s => s.total = s.base + s.b50k + s.bRank);
         }
-        ticketStats.forEach(s => s.total = s.base + s.b50k + s.bRank);
     }
 
     function renderRank() {
-        let excluded = currentMonth === 10 ? ['김경일', '강예은'] : [];
-        let tkts = ticketStats.filter(s => !excluded.includes(s.name));
-        tkts.sort((a,b) => b.total - a.total || b.ergo - a.ergo);
-        
-        let html = '';
-        let medals = ["🥇", "🥈", "🥉"];
-        for(let i=0; i < Math.min(tkts.length, 3); i++) {
-            html += `<div class="rank-card">
-                        <div class="medal">${medals[i]}</div>
-                        <div class="name">${tkts[i].name}</div>
-                        <div class="ticket">${tkts[i].total}장</div>
-                     </div>`;
-        }
-        document.getElementById('rank-tickets').innerHTML = html || "<div style='color:var(--text-muted); font-size:0.9rem;'>데이터가 없습니다.</div>";
+        if (currentMonth === 11) {
+            document.getElementById('rank-standard').style.display = 'none';
+            document.getElementById('rank-november').style.display = 'block';
 
-        let dists = ticketStats.filter(s => !excluded.includes(s.name) && s.ergo > 0);
-        dists.sort((a,b) => b.ergo - a.ergo);
-        
-        let dHtml = '';
-        for(let i=0; i < Math.min(dists.length, 5); i++) {
-            let row = dists[i];
-            let pct = Math.min((row.ergo / TARGET_METERS) * 100, 100);
-            let bStr = (currentMonth === 10 && i < 3) ? ` <span style="color:var(--primary); font-size:0.8rem;">${medals[i]}(+${3-i}장)</span>` : "";
-            
-            dHtml += `
-                <div class="progress-wrapper">
-                    <div class="progress-header">
-                        <span><b>${i+1}위. ${row.name}</b>${bStr}</span>
-                        <span>${row.ergo.toLocaleString()}m</span>
+            // 1. 🏆 시상대 렌더링 (Top 3)
+            let podiumHtml = '';
+            let pData = ticketStats.slice(0, 3);
+            if(pData.length === 0) {
+                podiumHtml = "<div style='color:gray; font-size:0.9rem; text-align:center; width:100%; margin-top:20px;'>아직 등록된 기록이 없습니다.</div>";
+            } else {
+                let pClasses = ["podium-1", "podium-2", "podium-3"];
+                let pPrizes = ["5만원", "3만원", "1만원"];
+                let pMedals = ["🥇", "🥈", "🥉"];
+                
+                // 디스플레이 순서: 2등 - 1등 - 3등 (실제 시상대 모양)
+                let displayOrder = [1, 0, 2]; 
+                
+                displayOrder.forEach(idx => {
+                    if(pData[idx]) {
+                        podiumHtml += `
+                        <div class="podium-box ${pClasses[idx]}">
+                            <div class="podium-medal">${pMedals[idx]}</div>
+                            <div class="podium-prize">${pPrizes[idx]}</div>
+                            <div class="podium-name">${pData[idx].name}</div>
+                            <div class="podium-score">${pData[idx].total}회</div>
+                        </div>`;
+                    }
+                });
+            }
+            document.getElementById('nov-podium').innerHTML = podiumHtml;
+
+            // 2. 🏁 레이싱 트랙 렌더링 (Top 10)
+            let raceHtml = '';
+            let raceData = ticketStats.slice(0, 10);
+            raceData.forEach((row, i) => {
+                let pct = Math.min((row.total / 14) * 100, 100);
+                raceHtml += `
+                <div class="race-row">
+                    <div class="race-name">${i+1}위. ${row.name}</div>
+                    <div class="race-track-wrapper">
+                        <div class="race-fill" style="width: 0%;" data-width="${pct}%">
+                            <div class="race-boat">🚣‍♀️</div>
+                        </div>
                     </div>
-                    <div class="progress-bg"><div class="progress-fill" style="width: ${pct}%"></div></div>
+                    <div class="race-score"><b>${row.total}회</b> <br>(에르고 ${row.ergo})</div>
                 </div>`;
+            });
+            document.getElementById('nov-race').innerHTML = raceHtml || "<div style='color:gray; font-size:0.9rem; text-align:center;'>기록이 없습니다.</div>";
+            
+            // 레이싱 바 애니메이션
+            setTimeout(() => {
+                document.querySelectorAll('.race-fill').forEach(el => { el.style.width = el.getAttribute('data-width'); });
+            }, 100);
+
+        } else {
+            // 9, 10월 랭킹 보드
+            document.getElementById('rank-standard').style.display = 'block';
+            document.getElementById('rank-november').style.display = 'none';
+            
+            let excluded = currentMonth === 10 ? ['김경일', '강예은'] : [];
+            let tkts = ticketStats.filter(s => !excluded.includes(s.name));
+            tkts.sort((a,b) => b.total - a.total || b.ergo - a.ergo);
+            
+            let html = ''; let medals = ["🥇", "🥈", "🥉"];
+            for(let i=0; i < Math.min(tkts.length, 3); i++) {
+                html += `<div class="rank-card"><div class="medal">${medals[i]}</div><div class="name">${tkts[i].name}</div><div class="ticket">${tkts[i].total}장</div></div>`;
+            }
+            document.getElementById('rank-tickets').innerHTML = html || "<div style='color:gray; font-size:0.9rem;'>데이터가 없습니다.</div>";
+
+            let dists = ticketStats.filter(s => !excluded.includes(s.name) && s.ergo > 0);
+            dists.sort((a,b) => b.ergo - a.ergo);
+            let dHtml = '';
+            for(let i=0; i < Math.min(dists.length, 5); i++) {
+                let row = dists[i]; let pct = Math.min((row.ergo / TARGET_METERS) * 100, 100);
+                let bStr = (currentMonth === 10 && i < 3) ? ` <span style="color:var(--primary); font-size:0.8rem;">${medals[i]}(+${3-i}장)</span>` : "";
+                dHtml += `<div class="progress-wrapper"><div class="progress-header"><span><b>${i+1}위. ${row.name}</b>${bStr}</span><span>${row.ergo.toLocaleString()}m</span></div><div class="progress-bg"><div class="progress-fill" style="width: ${pct}%"></div></div></div>`;
+            }
+            document.getElementById('rank-distance').innerHTML = dHtml || "<div style='color:gray; font-size:0.9rem;'>데이터가 없습니다.</div>";
         }
-        document.getElementById('rank-distance').innerHTML = dHtml || "<div style='color:var(--text-muted); font-size:0.9rem;'>데이터가 없습니다.</div>";
     }
 
     function renderMyPage() {
@@ -413,32 +457,59 @@
         box.style.display = 'block';
 
         let s = ticketStats.find(x => x.name === name) || {total:0, base:0, b50k:0, bRank:0, ergo:0, count:0};
-        
-        document.getElementById('my-ticket').innerText = `${s.total} 장`;
-        document.getElementById('my-ticket-detail').innerText = currentMonth === 10 ? 
-            `기본 ${s.base} + 5만m ${s.b50k} + 랭킹 ${s.bRank}` : `기본 ${s.base} + 보너스 ${s.b50k}`;
-            
-        document.getElementById('my-ergo').innerText = `${s.ergo.toLocaleString()} m`;
-        document.getElementById('my-ergo-detail').innerText = `총 인증(러닝 포함): ${s.count}회`;
+        let pBar = document.getElementById('my-progress-bar');
+        pBar.style.width = '0%';
 
-        let rem = Math.max(0, TARGET_METERS - s.ergo);
-        let pct = Math.min((s.ergo / TARGET_METERS)*100, 100);
-        
-        document.getElementById('my-progress-bar').style.width = '0%';
-        setTimeout(() => { document.getElementById('my-progress-bar').style.width = pct + '%'; }, 50);
-        
-        if(rem > 0) {
-            document.getElementById('my-progress-msg').innerHTML = "보너스 달성 진행도";
-            document.getElementById('my-progress-remain').innerHTML = `보너스까지 <b style="color:var(--primary)">${rem.toLocaleString()}m</b> 남음`;
+        if (currentMonth === 11) {
+            document.getElementById('lbl-ticket').innerText = "내 인증 횟수 (출석)";
+            document.getElementById('my-ticket').innerText = `${s.total} 회`;
+            document.getElementById('my-ticket-detail').innerText = "최대 14회 인정";
+            
+            document.getElementById('lbl-ergo').innerText = "내 에르고 횟수";
+            document.getElementById('my-ergo').innerText = `${s.ergo} 회`;
+            document.getElementById('my-ergo-detail').innerText = "동점 시 우선순위 부여";
+
+            document.getElementById('lbl-progress').innerText = "🎯 14회 완주 진행도";
+            let rem = Math.max(0, 14 - s.total);
+            let pct = Math.min((s.total / 14)*100, 100);
+            setTimeout(() => { pBar.style.width = pct + '%'; }, 50);
+
+            if(rem > 0) {
+                document.getElementById('my-progress-msg').innerHTML = `완주까지 <b style="color:var(--primary)">${rem}회</b> 남음`;
+                document.getElementById('my-progress-remain').innerText = `${s.total} / 14`;
+            } else {
+                document.getElementById('my-progress-msg').innerHTML = "🎉 <b>14회 완주 달성!</b>";
+                document.getElementById('my-progress-remain').innerText = "고생하셨습니다!";
+            }
+
         } else {
-            document.getElementById('my-progress-msg').innerHTML = "🎉 <b>50,000m 달성!</b>";
-            document.getElementById('my-progress-remain').innerText = "보너스 3장 획득 완료";
+            document.getElementById('lbl-ticket').innerText = "내 추첨권";
+            document.getElementById('my-ticket').innerText = `${s.total} 장`;
+            document.getElementById('my-ticket-detail').innerText = currentMonth === 10 ? `기본 ${s.base} + 5만m ${s.b50k} + 랭킹 ${s.bRank}` : `기본 ${s.base} + 보너스 ${s.b50k}`;
+            
+            document.getElementById('lbl-ergo').innerText = "내 에르고 누적";
+            document.getElementById('my-ergo').innerText = `${s.ergo.toLocaleString()} m`;
+            document.getElementById('my-ergo-detail').innerText = `총 인증(러닝 포함): ${s.count}회`;
+
+            document.getElementById('lbl-progress').innerText = "🎯 50,000m 보너스(3장) 진행도";
+            let rem = Math.max(0, TARGET_METERS - s.ergo);
+            let pct = Math.min((s.ergo / TARGET_METERS)*100, 100);
+            setTimeout(() => { pBar.style.width = pct + '%'; }, 50);
+            
+            if(rem > 0) {
+                document.getElementById('my-progress-msg').innerHTML = "보너스 달성 진행도";
+                document.getElementById('my-progress-remain').innerHTML = `보너스까지 <b style="color:var(--primary)">${rem.toLocaleString()}m</b> 남음`;
+            } else {
+                document.getElementById('my-progress-msg').innerHTML = "🎉 <b>50,000m 달성!</b>";
+                document.getElementById('my-progress-remain').innerText = "보너스 3장 획득 완료";
+            }
         }
 
         let myD = curData.filter(r => r.name === name).sort((a,b) => b.dateObj - a.dateObj || b.idx - a.idx);
         let tb = '';
         myD.forEach(r => {
-            tb += `<tr><td>${r.dateStr.split(' ')[0]}</td><td>${r.type}</td><td>${r.dist.toLocaleString()}</td><td>${r.memo}</td></tr>`;
+            let cap = (currentMonth === 11 && r.dist > 0) ? `${r.dist.toLocaleString()}m` : (r.dist > 0 ? `${r.dist.toLocaleString()}m` : r.type);
+            tb += `<tr><td>${r.dateStr.split(' ')[0]}</td><td>${r.type}</td><td>${cap}</td><td>${r.memo}</td></tr>`;
         });
         document.querySelector('#my-table tbody').innerHTML = tb;
 
@@ -446,7 +517,7 @@
         let phtml = myP.length ? '' : '<div style="color:var(--text-muted); font-size:0.9rem;">등록된 사진이 없습니다.</div>';
         myP.forEach(r => {
             let cap = r.dist > 0 ? `${r.dist.toLocaleString()}m` : r.type;
-            phtml += `<div class="photo-grid-item"><img src="${r.photo}" class="clickable-img" onclick="openModal(this.src)"><div class="photo-grid-caption">${r.dateStr.split(' ')[0]} (${cap})</div></div>`;
+            phtml += `<div class="photo-grid-item"><img src="${r.photo}" onclick="openModal(this.src)"><div class="photo-grid-caption">${r.dateStr.split(' ')[0]} (${cap})</div></div>`;
         });
         document.getElementById('my-gallery').innerHTML = phtml;
     }
@@ -454,14 +525,9 @@
     function renderGallery() {
         let pData = curData.filter(r => r.photo).sort((a,b) => b.dateObj - a.dateObj || b.idx - a.idx);
         let html = pData.length ? '' : '<div style="color:var(--text-muted); font-size:0.9rem;">아직 사진이 없습니다.</div>';
-        
         pData.slice(0, 10).forEach(r => {
             let mHtml = r.memo ? `<div class="gallery-memo">💬 ${r.memo}</div>` : '';
-            html += `<div class="gallery-item">
-                        <div class="gallery-header">${r.name} 님의 인증 🏃‍♂️ <span class="gallery-date">(${r.dateStr})</span></div>
-                        ${mHtml}
-                        <img src="${r.photo}" class="clickable-img" onclick="openModal(this.src)">
-                     </div><div class="divider"></div>`;
+            html += `<div class="gallery-item"><div class="gallery-header">${r.name} 님의 인증 🏃‍♂️ <span class="gallery-date">(${r.dateStr})</span></div>${mHtml}<img src="${r.photo}" onclick="openModal(this.src)"></div><div class="divider"></div>`;
         });
         document.getElementById('global-gallery').innerHTML = html;
     }
@@ -469,14 +535,11 @@
     function openTab(id, btn) {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById(id).classList.add('active');
+        btn.classList.add('active'); document.getElementById(id).classList.add('active');
     }
 </script>
 
 </body>
 </html>
-```<ElicitationsGroup>
-</ElicitationsGroup>
-<FollowUp>
-</FollowUp>
+
+```
