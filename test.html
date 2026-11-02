@@ -80,7 +80,8 @@
         .race-row { display: flex; align-items: center; margin-bottom: 15px; }
         .race-name { width: 75px; font-size: 0.9rem; font-weight: 600; text-align: right; margin-right: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main); }
         .race-track-wrapper { flex: 1; background: var(--border); border-radius: 20px; height: 26px; position: relative; }
-        .race-fill { background: linear-gradient(90deg, #ff8a00, #e52e71); height: 100%; border-radius: 20px; position: relative; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); min-width: 5%; }
+        /* 💡 청량한 물결 느낌의 블루 그라데이션으로 변경 */
+        .race-fill { background: linear-gradient(90deg, #4facfe, #00f2fe); height: 100%; border-radius: 20px; position: relative; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); min-width: 5%; }
         .race-boat { position: absolute; right: -16px; top: -3px; font-size: 22px; line-height: 26px; filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.3)); }
         .race-score { width: 100px; font-size: 0.8rem; text-align: left; margin-left: 20px; color: var(--text-muted); line-height: 1.2; }
         .race-score b { color: var(--text-main); font-size: 0.9rem; }
@@ -312,7 +313,6 @@
             ruleBox.innerHTML = "💡 규칙: 인증 1회당 <b>1장</b> | 에르고 5만m 달성 <b>+3장</b> | 에르고 랭킹 1~3위 <b>+3, +2, +1장</b>";
             curData = allData.filter(r => r.month === 10);
         } else if (currentMonth === 11) {
-            // 💡 [테스트 모드 변경점] 11월 챌린지 테스트를 위해 10월 데이터를 대신 끌어옵니다!
             infoBox.innerHTML = "ℹ️ <b>[테스트 모드] 11월 UI 미리보기</b> (10월 데이터를 11월 규칙에 맞춰 보여줍니다.)";
             ruleBox.innerHTML = "💡 규칙: 기간 내 최대 14회 (하루 1회만 인정) | 4명 이상 동점 시 에르고 횟수로 순위 결정";
             curData = allData.filter(r => r.month === 10); // 10월 데이터로 테스트
@@ -337,7 +337,6 @@
                 if(userMap[r.name][r.dateOnly] !== true) { userMap[r.name][r.dateOnly] = r.isErgo; }
             });
             
-            // 💡 11월 랭킹에서도 관리자 제외 (테스트 정확도 향상)
             ticketStats = Object.keys(userMap)
                 .map(name => {
                     let days = userMap[name];
@@ -375,7 +374,7 @@
             document.getElementById('rank-standard').style.display = 'none';
             document.getElementById('rank-november').style.display = 'block';
 
-            let excluded = ['김경일', '강예은']; // 11월 랭킹보드에서 관리자 제외
+            let excluded = ['김경일', '강예은']; 
             let validStats = ticketStats.filter(s => !excluded.includes(s.name));
 
             let podiumHtml = '';
