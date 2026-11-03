@@ -314,9 +314,10 @@
             ruleBox.innerHTML = "💡 규칙: 인증 1회당 <b>1장</b> | 에르고 5만m 달성 <b>+3장</b> | 에르고 랭킹 1~3위 <b>+3, +2, +1장</b>";
             curData = allData.filter(r => r.month === 10);
         } else if (currentMonth === 11) {
-            infoBox.innerHTML = "ℹ️ <b>[테스트 모드] 11월 UI 미리보기</b> (10월 데이터를 11월 규칙에 맞춰 보여줍니다.)";
+            // 💡 [실전 모드 변경점] 11월 실제 데이터 연동되게 정상 복구 
+            infoBox.innerHTML = "ℹ️ <b>11월 챌린지 진행 중!</b> (1일 1회 누적 / 1~3위 상금 지급 / 동점 시 에르고 횟수 우선)";
             ruleBox.innerHTML = "💡 규칙: 기간 내 최대 14회 (하루 1회만 인정) | 4명 이상 동점 시 에르고 횟수로 순위 결정";
-            curData = allData.filter(r => r.month === 10); // 10월 데이터로 테스트
+            curData = allData.filter(r => r.month === 11 && r.dateObj.getDate() >= 4 && r.dateObj.getDate() <= 17); 
         }
 
         calcStats();
