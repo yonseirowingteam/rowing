@@ -358,7 +358,7 @@
             ticketStats.forEach(s => {
                 s.base = s.count; s.b50k = s.ergo >= TARGET_METERS ? 3 : 0; s.bRank = 0;
             });
-            let excluded = currentMonth === 10 ? ['김경일', '강예은'] : [];
+            let excluded = currentMonth === 10 ? ['김경일', '강예은','박천주','정환훈','유현진'] : [];
             let rEligible = ticketStats.filter(s => !excluded.includes(s.name) && s.ergo > 0);
             rEligible.sort((a,b) => b.ergo - a.ergo);
             if(currentMonth === 10) {
@@ -376,7 +376,7 @@
             document.getElementById('rank-standard').style.display = 'none';
             document.getElementById('rank-november').style.display = 'block';
 
-            let excluded = ['김경일', '강예은']; 
+            let excluded = ['김경일', '강예은','박천주','정환훈','유현진']; 
             let validStats = ticketStats.filter(s => !excluded.includes(s.name));
 
             let podiumHtml = '';
@@ -428,7 +428,7 @@
             document.getElementById('rank-standard').style.display = 'block';
             document.getElementById('rank-november').style.display = 'none';
             
-            let excluded = currentMonth === 10 ? ['김경일', '강예은'] : [];
+            let excluded = currentMonth === 10 ? ['김경일', '강예은','박천주','정환훈','유현진'] : [];
             let tkts = ticketStats.filter(s => !excluded.includes(s.name));
             tkts.sort((a,b) => b.total - a.total || b.ergo - a.ergo);
             
