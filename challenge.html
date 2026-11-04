@@ -80,7 +80,7 @@
         .race-row { display: flex; align-items: center; margin-bottom: 15px; }
         .race-name { width: 75px; font-size: 0.9rem; font-weight: 600; text-align: right; margin-right: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main); }
         .race-track-wrapper { flex: 1; background: var(--border); border-radius: 20px; height: 26px; position: relative; }
-        /* 💡 눈이 편안한 딥 오션 블루 그라데이션으로 변경 */
+        
         .race-fill { background: linear-gradient(90deg, #1a365d, #2b6cb0); height: 100%; border-radius: 20px; position: relative; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); min-width: 5%; }
         .race-boat { position: absolute; right: -16px; top: -3px; font-size: 22px; line-height: 26px; filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.3)); }
         .race-score { width: 100px; font-size: 0.8rem; text-align: left; margin-left: 20px; color: var(--text-muted); line-height: 1.2; }
@@ -314,7 +314,6 @@
             ruleBox.innerHTML = "💡 규칙: 인증 1회당 <b>1장</b> | 에르고 5만m 달성 <b>+3장</b> | 에르고 랭킹 1~3위 <b>+3, +2, +1장</b>";
             curData = allData.filter(r => r.month === 10);
         } else if (currentMonth === 11) {
-            // 💡 [실전 모드 변경점] 11월 실제 데이터 연동되게 정상 복구 
             infoBox.innerHTML = "ℹ️ <b>11월 챌린지 진행 중!</b> (1일 1회 누적 / 1~3위 상금 지급 / 동점 시 에르고 횟수 우선)";
             ruleBox.innerHTML = "💡 규칙: 기간 내 최대 14회 (하루 1회만 인정) | 4명 이상 동점 시 에르고 횟수로 순위 결정";
             curData = allData.filter(r => r.month === 11 && r.dateObj.getDate() >= 4 && r.dateObj.getDate() <= 17); 
@@ -358,7 +357,7 @@
             ticketStats.forEach(s => {
                 s.base = s.count; s.b50k = s.ergo >= TARGET_METERS ? 3 : 0; s.bRank = 0;
             });
-            let excluded = currentMonth === 10 ? ['김경일', '강예은','박천주','정환훈','유현진'] : [];
+            let excluded = currentMonth === 10 ? ['김경일', '강예은', '박천주', '정환훈', '유현진'] : [];
             let rEligible = ticketStats.filter(s => !excluded.includes(s.name) && s.ergo > 0);
             rEligible.sort((a,b) => b.ergo - a.ergo);
             if(currentMonth === 10) {
@@ -376,7 +375,7 @@
             document.getElementById('rank-standard').style.display = 'none';
             document.getElementById('rank-november').style.display = 'block';
 
-            let excluded = ['김경일', '강예은','박천주','정환훈','유현진']; 
+            let excluded = ['김경일', '강예은', '박천주', '정환훈', '유현진']; 
             let validStats = ticketStats.filter(s => !excluded.includes(s.name));
 
             let podiumHtml = '';
@@ -428,7 +427,7 @@
             document.getElementById('rank-standard').style.display = 'block';
             document.getElementById('rank-november').style.display = 'none';
             
-            let excluded = currentMonth === 10 ? ['김경일', '강예은','박천주','정환훈','유현진'] : [];
+            let excluded = currentMonth === 10 ? ['김경일', '강예은', '박천주', '정환훈', '유현진'] : [];
             let tkts = ticketStats.filter(s => !excluded.includes(s.name));
             tkts.sort((a,b) => b.total - a.total || b.ergo - a.ergo);
             
@@ -470,12 +469,17 @@
             document.getElementById('progress-section').style.display = 'none';
             document.getElementById('stamp-section').style.display = 'block';
 
+            // 💡 날짜별 도장 찍기 로직 추가
+            let myD = curData.filter(r => r.name === name);
+            let myDates = myD.map(r => r.dateObj.getDate()); 
+
             let stampHtml = '';
-            for(let i=1; i<=14; i++) {
-                if (i <= s.total) {
-                    stampHtml += `<div class="stamp-box stamped">🚣‍♀️</div>`;
+            // 11월 4일부터 17일까지 14일
+            for(let d=4; d<=17; d++) {
+                if (myDates.includes(d)) {
+                    stampHtml += `<div class="stamp-box stamped" title="11월 ${d}일 인증 완료">🚣‍♀️</div>`;
                 } else {
-                    stampHtml += `<div class="stamp-box">${i}</div>`;
+                    stampHtml += `<div class="stamp-box" style="font-size: 0.95rem;">${d}일</div>`;
                 }
             }
             document.getElementById('stamp-grid-container').innerHTML = stampHtml;
