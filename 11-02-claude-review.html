@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ppt8 시험 대비 – Pourbaix · 전기화학 측정법 · Cottrell</title>
+<style>
+:root{--bg:#f7f8fa;--card:#fff;--tx:#1c2430;--mu:#5b6675;--ac:#1f6feb;--bd:#dde2ea;--hi:#fff4d6;--rd:#c62828;--gr:#1b7f3b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#10151c;--card:#18202b;--tx:#e6ebf2;--mu:#98a4b5;--ac:#5aa2ff;--bd:#2a3545;--hi:#3a3216;--rd:#ff7b72;--gr:#56d364}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.7 -apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+header{padding:28px 18px 8px;max-width:920px;margin:auto}h1{margin:0;font-size:1.5rem}header p{color:var(--mu);margin:.4rem 0}
+nav{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5;border-bottom:1px solid var(--bd);display:flex;gap:6px;overflow-x:auto;padding:8px 14px;max-width:100%}
+nav button{border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:8px 14px;border-radius:20px;cursor:pointer;white-space:nowrap;font:inherit;font-size:.9rem}
+nav button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+main{max-width:920px;margin:auto;padding:14px}section{display:none}section.on{display:block}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin:12px 0}
+.c h3{margin:0 0 6px;font-size:1.05rem}.s{display:inline-block;background:var(--ac);color:#fff;border-radius:6px;padding:0 8px;font-size:.78rem;margin-right:6px;font-weight:700}
+.st{color:#e5a100;letter-spacing:2px}.q{background:var(--hi);border-left:4px solid #e5a100;padding:8px 12px;margin:8px 0;border-radius:6px;font-size:.93rem}
+.q small{color:var(--mu)}.m{color:var(--mu);font-size:.88rem}code,.f{font-family:ui-monospace,Menlo,monospace;background:rgba(127,127,127,.15);padding:1px 6px;border-radius:4px;font-size:.9em}
+.f{display:block;padding:8px 12px;margin:6px 0;overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.9rem}td,th{border:1px solid var(--bd);padding:6px 8px;text-align:left}th{background:rgba(127,127,127,.12)}.tw{overflow-x:auto}
+details{border:1px solid var(--bd);border-radius:10px;margin:8px 0;background:var(--card)}summary{padding:10px 14px;cursor:pointer;font-weight:600}details div{padding:0 14px 12px}
+.bad{color:var(--rd)}.ok{color:var(--gr)}
+#svgw{background:var(--card);border:1px solid var(--bd);border-radius:12px;overflow-x:auto}svg{display:block;min-width:620px;width:100%}
+svg text{fill:var(--tx);font-size:12px}.ln{fill:none;stroke-width:2.6;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.3s ease}.ln.show{stroke-dashoffset:0}
+.ctl{display:flex;gap:8px;align-items:center;margin:10px 0;flex-wrap:wrap}.ctl button{background:var(--ac);color:#fff;border:0;border-radius:8px;padding:8px 16px;cursor:pointer;font:inherit}.ctl button.g{background:var(--bd);color:var(--tx)}
+</style></head><body>
+<header><h1>Ppt8 시험 대비 노트</h1><p>2026.11.02(월) 수업 녹음(85분) + ppt-8.pdf 종합 · 녹음의 오인식 단어는 슬라이드 기준으로 교정했습니다.</p>
+<p class="m">※ 슬라이드 번호는 PDF 페이지 순서 기준(총 23장)입니다. 녹음은 <b>슬라이드 1~12(Cottrell 식)</b>까지만 다루고 마지막에 Anson plot을 언급하며 끝납니다. <b>13~23(마이크로전극, LSV, CV)은 이번 녹음에 설명이 없으므로</b> 슬라이드로 따로 공부해야 합니다.</p></header>
+<nav id="nav"></nav>
+<main>
+
+<section id="t0"><h2>① 집중 재공부 우선순위</h2>
+<div class="c"><h3>🔥 1순위 — 교수님이 반복·강조 (녹음 근거)</h3>
+<table><tr><th>주제</th><th>슬라이드</th><th>녹음 위치</th><th>왜 중요?</th></tr>
+<tr><td>Nernst 식은 <b>환원형</b>으로 쓰고 반응물→분모, 생성물→분자</td><td>1, 3~5</td><td>09:30, 21:00</td><td>Al 예제에서 학생에게 직접 질문("반응물이 뭐죠? Al 금속 아닙니다") – 출제 1순위</td></tr>
+<tr><td>식 ①②③은 <b>같은 반응</b> (양변에 4OH⁻ 더하기)</td><td>1</td><td>11:42~15:30</td><td>"학생들이 가장 많이 헷갈리는 부분". 어느 식에 Nernst를 써도 <code>E = 1.229 − 0.0591pH</code></td></tr>
+<tr><td>Pourbaix 경계선 중 <b>전기화학 반응이 아닌 선 ③, ⑤</b> → 수직선 (K 사용)</td><td>4, 5</td><td>31:07~34:16, 35:49</td><td>"Nernst 적용하면 틀림(not correct)" 이라고 강하게 경고. 산화수 +3 → +3 변화 없음</td></tr>
+<tr><td>Pourbaix = 열역학 정보만, 속도 정보 없음 (100년 vs 20~30년 수명 예시)</td><td>6</td><td>37:50~39:48</td><td>서술형 단골 – 한계점 4개 + 예시</td></tr>
+<tr><td>정상전위 단계: 계단 1~5 → 전류 응답이 왜 4와 5가 같은가</td><td>11</td><td>1:09:31~1:15:17</td><td>그림 (a)(b)(c) 해석 문제로 나오기 좋음</td></tr>
+<tr><td>Cottrell 식 유도 흐름, erf(3)≈1, δ=6√(Dt) ≈180 µm</td><td>11, 12</td><td>1:15:17~1:22:34</td><td>수식 + 숫자 계산 가능</td></tr></table></div>
+<div class="c"><h3>⭐ 2순위</h3><ul>
+<li><b>왜 정지(quiescent) 용액인가</b> – Nernst–Planck의 확산·이동(migration)·대류 중 대류는 안 주고, 지지전해질로 migration 제거 → 확산만 남음 (슬라이드 8, 녹음 50:14~51:48 — 교수님이 학생에게 질문함)</li>
+<li><b>2전극 vs 3전극</b> (슬라이드 8, 52:31~54:22) – 고전류에서 기준전극 전위가 흔들림 → Working/Counter/Reference</li>
+<li><b>RHE 변환</b> <code>E_RHE = E_ref + E°_ref + 0.059·pH</code> , SCE pH7 → +0.655 V (슬라이드 9, 54:22~58:46). 알칼리 pH14에서 높은 + 전위가 나와도 RHE면 이미 보정된 것</li>
+<li>전위(Potentiometry, i=0, Nernst) vs 전압전류법(Voltammetry, i≠0) / 정성 vs 정량 (슬라이드 7, 43:20~47:08)</li>
+<li>용어: Potentiostatic/Galvanostatic/Chronoamperometry/Chronopotentiometry/Chronocoulometry (슬라이드 7)</li></ul></div>
+<div class="c"><h3>📌 3순위 — 녹음에 없지만 슬라이드엔 있음 (직접 공부)</h3>
+<p>13 마이크로전극·시간상수 τ=R<sub>s</sub>C<sub>dl</sub> · 14 구형확산·정상상태 전류 · 15~18 LSV (Randles–Ševčík, 주사속도, 배경전류 제거) · 19~21 CV, ΔEp=57/n mV, 가역성 4기준 · 22 EC/ECE · 23 연속 산화환원. 다음 수업에서 다룰 가능성이 높으니 미리 읽어두세요.</p></div>
+<div class="c"><h3>🔁 교수님이 "정리해 둔" 직전 수업 복습 (녹음 시작)</h3><p>음극보호(impressed current cathodic protection): 외부 전원으로 전류를 공급 → 부식전위가 금속의 평형전위까지 내려가 완전 보호. <b>전하 보존</b>이 만족되는 점 = 전원이 공급한 산화전류를 수소환원 전류가 소모하는 점 (04:55~07:11).</p></div></section>
+
+<section id="t1"><h2>② 슬라이드별 상세 + 녹음 근거</h2><div id="slides"></div></section>
+
+<section id="t2"><h2>③ Al Pourbaix 작도법 — 단계별 애니메이션</h2>
+<p class="m">[이전/다음]을 눌러 선이 하나씩 그려지는 순서를 따라가세요. 이 순서가 시험에서 그려야 하는 순서입니다. (조건: [Al³⁺]=[AlO₂⁻]=10⁻⁶ M, 25 ℃)</p>
+<div class="ctl"><button class="g" onclick="go(-1)">◀ 이전</button><button onclick="go(1)">다음 ▶</button><button class="g" onclick="rs()">처음부터</button><b id="sn"></b></div>
+<div id="svgw"><svg id="pb" viewBox="0 0 700 420" role="img" aria-label="Al Pourbaix diagram"></svg></div>
+<div class="c" id="stx"></div>
+<div class="c"><h3>작도 체크리스트 (이 순서로 외우기)</h3>
+<ol><li>축: x=pH(0~14), y=E(V). 위=산화, 아래=환원.</li>
+<li>물 영역 점선 (a) <code>1.229−0.0591pH</code>, (b) <code>−0.0591pH</code> (기울기 같은 평행선).</li>
+<li>모든 반응을 <b>환원형</b>으로 쓴 뒤 전자 이동이 있는지 <b>산화수</b>로 판별.</li>
+<li>전자가 있으면(①②④) Nernst → 수평선(H⁺ 없음) 또는 기울기선. 없으면(③⑤) K → pH 수직선.</li>
+<li>겹치는 영역은 경계선(③⑤)으로 구분, 교차점에서 선을 끊는다.</li>
+<li>각 영역에 안정 화학종 표기 → 주어진 (pH, E)로 안정상 읽기.</li></ol></div></section>
+
+<section id="t3"><h2>④ 예상 문제 (녹음 강조점 기반)</h2><div id="qa"></div></section>
+
+<section id="t4"><h2>⑤ 받아쓰기 오류 교정표</h2><div class="tw"><table id="fix"><tr><th>녹음 인식</th><th>올바른 표현</th></tr></table></div></section>
+</main>
+<script>
+const tabs=["우선순위","슬라이드 상세","그래프 작도","예상 문제","용어 교정"];
+const nav=document.getElementById('nav');
+tabs.forEach((t,i)=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>sh(i);nav.appendChild(b)});
+function sh(i){document.querySelectorAll('section').forEach((s,j)=>s.classList.toggle('on',i==j));[...nav.children].forEach((b,j)=>b.classList.toggle('on',i==j));scrollTo(0,0)}
+sh(0);
+const S=[
+["1","Potential/pH diagram of water – O₂ 경우","★★★","산소 환원 <code>O₂+4H⁺+4e⁻=2H₂O</code>, E°=1.229 V(pH0). 양변에 4OH⁻를 더하면 ②③과 동일 반응. Nernst: <code>E=E°−(0.0591/4)log[1/(P<sub>O2</sub>[H⁺]⁴)]=1.229−0.0591pH</code> → pH0 1.229 / pH7 0.82 / pH14 0.401 V. ③식은 pOH=14−pH로 바꾸면 같은 결과.","\"Nernst 식은 항상 환원형으로 써서 반응물이 분모, 생성물이 분자\" (09:30). \"식이 달라 보여서 다른 반응이라 착각하는데 같은 반응\" (11:42). \"어느 식을 써도 같은 Nernst 식이 나온다\" (15:30). 직선 위=산소 안정(산화), 아래=물."],
+["2","H₂ 경우 + 물의 Pourbaix 도","★★★","<code>2H⁺+2e⁻=H₂</code>, pH0 0 V, pH7 −0.413, pH14 −0.828. <code>E=−0.0591pH</code> (b). 선 (a)(b)는 평행(기울기 −0.0591). (a) 위=O₂ 안정, (a)~(b) 사이=H₂O 안정, (b) 아래=H₂ 안정.","\"두 선 사이에서 물이 안정, 선 a 위는 산소, 선 b 아래는 수소\" (18:35). 선은 물-산소/물-수소의 평형 상태. 주어진 pH·전위 점을 찍어 안정상 판단 (19:21)."],
+["3","Pourbaix 도 정의 + Al ①","★★★","Pourbaix = 전위·pH에 따른 성분의 평형 상 다이어그램. ① <code>Al=Al³⁺+3e⁻</code>, <code>E=−1.66+(0.0591/3)log[Al³⁺]</code>. [Al³⁺]=1 → −1.66 V, 10⁻⁶ → −1.78 V. pH항 없음 → <b>수평선</b>. 농도가 낮아지면 선이 아래로 이동(보통 10⁻⁶ 사용).","\"산화형으로 쓰인 반응을 환원형으로 바꾸고 → Al³⁺가 분모\" (21:32). \"Nernst 식 = 평형전위 = 열역학 데이터. 속도(kinetics)는 알 수 없다\" (24:51)."],
+["4","Al ② Al₂O₃ 생성 + ③","★★★","② <code>2Al+3H₂O=Al₂O₃+6H⁺+6e⁻</code>, E°=−1.55 V (표에 없음 → ΔG°=−nFE°로 계산). <code>E=−1.55−0.0591pH</code>. Al³⁺와 Al₂O₃ 영역이 겹침 → ③ <code>2Al³⁺+3H₂O=Al₂O₃+6H⁺</code>: 산화수 변화 없음 → <b>비전기화학</b>, <code>K=[H⁺]⁶/[Al³⁺]²=10^−11.4</code>, <code>pH=−logK/6−log[Al³⁺]/3=3.9</code> → 수직선.","\"③에 Nernst를 적용하면 안 된다. 산화수가 +3 → +3 이라 전자 이동이 없다\" (31:07~32:42). \"표준전위는 ΔG=−nFE로 구한다\" (29:02)."],
+["5","Al ④ AlO₂⁻ + ⑤","★★★","④ <code>Al+2H₂O=AlO₂⁻+4H⁺+3e⁻</code>, <code>E=−1.262+0.02log[AlO₂⁻]−0.079pH</code> (기울기가 0.0591이 아님!). Al₂O₃와 AlO₂⁻ 겹침 → ⑤ <code>Al₂O₃+H₂O=2AlO₂⁻+2H⁺</code>, K=10^−29.2, <code>pH=14.6+log[AlO₂⁻]</code> → 10⁻⁶이면 pH 8.6 수직선.","\"기울기가 다르다\" (35:01). \"겹치므로 추가 경계선이 필요, 같은 방법\" (35:49). ④는 [AlO₂⁻]와 pH 둘 다에 의존."],
+["6","완성된 Al Pourbaix + 한계","★★★","pH·전위를 알면 가장 안정한 상을 읽음. 재료 선정 시 가장 먼저 보는 참고자료. 한계: ① 열역학적 가능성일 뿐 실제 발생 여부 아님 ② 반응속도 정보 없음 ③ 도달 시간 모름 ④ 합금이 아닌 단일 원소–물 계.","\"부식상 영역이어도 속도가 매우 느려 100년 걸리면 반응기 수명 20~30년이므로 사용 가능\" (39:06). 그래도 \"첫 스크리닝(first screen)으로 유효\" (39:48)."],
+["7","전기화학 측정법 분류","★★","Potentiostatic(V 제어, i 측정) / Galvanostatic(i 제어, V 측정) / Chronoamperometry(V 제어, i–t) / Chronopotentiometry(i 제어, V–t) / Chronocoulometry(Q–t). Potentiometry(i=0, Nernst, 농도↔전위) vs Voltammetry(i≠0, 전압전류곡선: 정성=산화환원전위, 정량=전류∝농도).","\"i=0이면 평형 → 바로 Nernst 식이 떠올라야\" (44:15). \"전류는 반응의 생성물이라 전류로 농도를 안다\" (46:31)."],
+["8","대류 기준 Voltammetry · 2/3전극","★★","교반(대류): 수력학적 – RDE, RRDE. 정지 용액: 펄스, stripping, LSV, CV, DME(Polarography). 2전극: Working+Reference → 전류로 기준전위 변동. 3전극: Working+Counter+Reference, 기준전극은 전위만, 대향전극이 전류 → 고전류에서 정확.","\"대부분이 정지 용액인 이유: 대류 안 주고, 지지전해질로 migration 제거 → 확산만 → 플럭스·전류 계산 쉬움\" (51:07~52:31). \"2전극은 전류가 작을 때만\" (53:44)."],
+["9","RHE","★★","<code>E_RHE=E_ref+E°_ref+0.059·pH</code>. SCE(+0.242) pH7 → E_vs.SCE+0.655 V. 수소 반응 Nernst의 −0.059pH를 상쇄해 어느 pH에서도 HER=0 V.","\"논문 x축이 RHE면 pH가 이미 보정된 것\" (58:46)."],
+["10","Potential Step · Diffusion layer","★★★","전위를 E₁→E₂로 순간 점프, 환원 시작 → 표면 O 농도 감소 → 농도구배로 전류. 빠른 전자전달(Nernstian)이면 표면농도는 Nernst 식으로 결정되고 물질전달이 율속. <code>δ(t)=2√(D<sub>0</sub>t)</code>, 시간이 갈수록 구배↓ → 전류↓.","\"농도구배 자체가 전류의 크기\" (1:03:32). \"전위가 고정이면 표면농도가 고정\" (1:06:42). 한계전류밀도는 표면농도=0인 특수한 경우일 뿐 – 표면농도가 반드시 0은 아님 (1:07:39)."],
+["11","Step size 효과 + Cottrell 설정","★★★","계단 1: 개시전위(onset) 이하 → 전류 0. 2·3: 전위↑ → 표면농도↓ → 구배↑ → 전류↑. 4·5: 표면농도 이미 0 → 구배·δ 동일 → 전류 동일(포화, 물질전달 한계). Fick 2법칙 + 초기/경계조건 → <code>C<sub>O</sub>(x,t)=C*<sub>O</sub> erf[x/(2√(D<sub>O</sub>t))]</code>.","\"δ는 시간만의 함수, 인가전위와 무관\" (1:12:33). \"4와 5가 똑같은 응답\" (1:11:32, 1:15:17). \"유도 과정 자체는 안 외워도 되고 결과만\" (1:17:02)."],
+["12","Cottrell 식 · δ · Anson plot","★★★","<code>i(t)=nFAD<sub>O</sub><sup>1/2</sup>C*<sub>O</sub>/(π<sup>1/2</sup>t<sup>1/2</sup>)</code>. erf(3)≈1 → x=δ=6√(D t); D=1×10⁻⁵ cm²/s, t=1 s → ≈180 µm. 선형 가정(2√(Dt))보다 큰 이유: 실제 구배는 곡선. 활용: 농도 아는 용액에서 D 결정 → 농도 모르는 용액의 C* 결정. Anson plot: Q vs t<sup>1/2</sup>.","\"이론 두께가 선형 가정보다 2~3배 길다\" (1:22:34). \"유일한 미지수는 확산계수\" (1:24:22). 녹음은 Anson plot 소개에서 끝남 (1:25:19)."],
+["13~23","마이크로전극 · 구형확산 · LSV · CV · EC/ECE","☆","(녹음 미포함) 마이크로전극: τ=R<sub>s</sub>C<sub>dl</sub>↓ (면적↓→C<sub>dl</sub>↓), 정상상태 i=nFADC*/r₀. LSV: Randles–Ševčík <code>i<sub>pc</sub>=2.69×10⁵n³ᐟ²AD¹ᐟ²C*v¹ᐟ²</code>, <i>i<sub>nf</sub>/i<sub>pc</sub></i>∝v¹ᐟ²→느린 주사. CV 가역 4기준: E₁/₂=(Epa+Epc)/2, ipc/ipa≈1, ΔEp=57/n mV, Ep가 v에 무관. EC: k↑ → 산화피크↓.","슬라이드만으로 학습. 다음 수업에서 다룰 예정이라면 그때 녹음과 함께 보강하세요."]];
+const sl=document.getElementById('slides');
+S.forEach(a=>{sl.insertAdjacentHTML('beforeend',`<div class="c"><h3><span class="s">슬라이드 ${a[0]}</span>${a[1]} <span class="st">${a[2]}</span></h3><div>${a[3]}</div><div class="q"><small>🎙 녹음</small><br>${a[4]}</div></div>`)});
+/* Pourbaix animation */
+const X=p=>50+p*(600/14),Y=e=>20+(1.5-e)*90,svg=document.getElementById('pb');
+let h='';for(let p=0;p<=14;p+=2)h+=`<line x1="${X(p)}" y1="20" x2="${X(p)}" y2="380" stroke="#8883" /><text x="${X(p)-4}" y="398">${p}</text>`;
+for(let e=-2;e<=1;e+=1)h+=`<line x1="50" y1="${Y(e)}" x2="650" y2="${Y(e)}" stroke="#8883"/><text x="12" y="${Y(e)+4}">${e}</text>`;
+h+=`<line x1="50" y1="20" x2="50" y2="380" stroke="currentColor"/><line x1="50" y1="380" x2="650" y2="380" stroke="currentColor"/><text x="640" y="414">pH</text><text x="8" y="14">E (V)</text>`;
+const L=[["a","M"+X(0)+","+Y(1.229)+"L"+X(14)+","+Y(.402),"#1f6feb",1,"4 4"],["b","M"+X(0)+","+Y(0)+"L"+X(14)+","+Y(-.827),"#1f6feb",1,"4 4"],
+["1","M"+X(0)+","+Y(-1.78)+"L"+X(3.9)+","+Y(-1.78),"#c62828"],["2","M"+X(3.9)+","+Y(-1.78)+"L"+X(8.6)+","+Y(-2.058),"#e07b00"],
+["3","M"+X(3.9)+","+Y(-1.78)+"L"+X(3.9)+","+Y(.999),"#1b7f3b"],["4","M"+X(8.6)+","+Y(-2.058)+"L"+X(14)+","+Y(-2.483),"#8e44ad"],["5","M"+X(8.6)+","+Y(-2.058)+"L"+X(8.6)+","+Y(.721),"#0097a7"]];
+L.forEach(l=>{h+=`<path id="l${l[0]}" class="ln" pathLength="1" d="${l[1]}" stroke="${l[2]}" ${l[4]?`style="stroke-width:1.8"`:''}/>`});
+const R=[[2,.4,"Al³⁺"],[6,-.2,"Al₂O₃"],[11.3,-.5,"AlO₂⁻"],[5,-2.3,"Al"],[9,1.0,"O₂ 안정"],[9,.15,"H₂O"],[2,-1.2,"H₂ 쪽"]];
+R.forEach((r,i)=>h+=`<text class="rg" id="r${i}" x="${X(r[0])}" y="${Y(r[1])}" style="opacity:0;font-size:15px;font-weight:700;transition:opacity 1s">${r[2]}</text>`);
+['a','b'].forEach((k,i)=>h+=`<text x="${X(10.3)}" y="${Y(i?-.62:.78)-8}" fill="#1f6feb" style="font-size:12px">(${k})</text>`);
+svg.innerHTML=h;
+const P=[
+["물 영역 (a)(b)","먼저 배경으로 물의 안정 영역을 그립니다. (a) E=1.229−0.0591pH, (b) E=−0.0591pH. 두 점(pH0, pH14)만 계산해 직선으로 잇고, 기울기가 같은 평행선인지 확인. 이 밖의 선은 대부분 (a)~(b) 부근/아래에 놓입니다.",["a","b"],[]],
+["선 ① Al/Al³⁺ (수평)","Al=Al³⁺+3e⁻ → 환원형으로 쓰고 Nernst. pH항이 없으므로 수평선. [Al³⁺]=10⁻⁶이면 E=−1.66+(0.0591/3)(−6)=−1.78 V. 이 선 위=Al³⁺ 쪽(산화), 아래=Al 금속(환원).",["1"],[]],
+["선 ② Al/Al₂O₃ (기울기 −0.0591)","2Al+3H₂O=Al₂O₃+6H⁺+6e⁻, E°=−1.55 V(ΔG°=−nFE°로 구함). E=−1.55−0.0591pH. ①과 만나는 점: −1.78=−1.55−0.0591pH → pH≈3.9. 이 점에서 ①·②가 교차하고, 그 오른쪽부터 ②를 사용.",["2"],[]],
+["선 ③ Al³⁺/Al₂O₃ (수직)","2Al³⁺+3H₂O=Al₂O₃+6H⁺ 은 산화수 +3→+3 (전자 이동 없음)이므로 Nernst 금지! K=10^−11.4로 pH=−logK/6−log[Al³⁺]/3=3.9. 전위항이 없어 pH 3.9의 수직선, 교차점에서 위로 그립니다.",["3"],[0,1]],
+["선 ④ Al/AlO₂⁻ (기울기 −0.079)","Al+2H₂O=AlO₂⁻+4H⁺+3e⁻. E=−1.262+0.0197log[AlO₂⁻]−0.0788pH → [AlO₂⁻]=10⁻⁶이면 E=−1.380−0.0788pH. ②와 만나는 점: pH≈8.6, E≈−2.06 V. 그 오른쪽은 ④ (②보다 더 가파름 – 기울기가 다르다는 점 강조).",["4"],[]],
+["선 ⑤ Al₂O₃/AlO₂⁻ (수직)","Al₂O₃+H₂O=2AlO₂⁻+2H⁺ 도 산화수 변화 없음 → 비전기화학. K=10^−29.2, pH=14.6+log[AlO₂⁻]=14.6−6=8.6. 수직선으로 ②·④ 교차점에서 위로.",["5"],[2]],
+["영역 표기 & 읽는 법","완성! 왼쪽 위 Al³⁺ / 가운데 위 Al₂O₃ / 오른쪽 위 AlO₂⁻ / 아래 Al. 주어진 (pH, E) 점을 찍어 어느 영역인지 보면 안정상. 단, 열역학 정보일 뿐 반응 속도는 모름!",[],[0,1,2,3,4,5,6]]];
+let k=-1;const sn=document.getElementById('sn'),stx=document.getElementById('stx');
+function draw(){L.forEach(l=>document.getElementById('l'+l[0]).classList.remove('show'));document.querySelectorAll('.rg').forEach(e=>e.style.opacity=0);
+for(let i=0;i<=k;i++){P[i][2].forEach(id=>document.getElementById('l'+id).classList.add('show'));P[i][3].forEach(j=>document.getElementById('r'+j).style.opacity=1)}
+if(k<0){sn.textContent='';stx.innerHTML='<b>시작</b>: [다음]을 눌러 작도를 시작하세요.';return}
+if(k==6){['a','b','1','2','3','4','5'].forEach(i=>document.getElementById('l'+i).classList.add('show'))}
+sn.textContent=`  단계 ${k+1}/7`;stx.innerHTML=`<h3>${k+1}. ${P[k][0]}</h3><p>${P[k][1]}</p>`}
+function go(d){k=Math.max(-1,Math.min(6,k+d));draw()}function rs(){k=-1;draw()}draw();
+/* Q&A */
+const Q=[["Nernst 식을 적용할 때 가장 먼저 해야 할 일과 이유는?","반응식을 <b>환원형</b>(산화형+ne⁻→환원형)으로 쓰는 것. 환원형 왼쪽이 반응물이므로 분모, 오른쪽 생성물이 분자. 산화형으로 두면 부호·분모/분자가 뒤바뀝니다. (슬라이드 3, 녹음 09:30·21:32)"],
+["O₂ + 4H⁺ + 4e⁻ = 2H₂O 와 O₂ + 2H₂O + 4e⁻ = 4OH⁻ 는 다른 반응인가? 증명하라.","같은 반응. 첫 식 양변에 4OH⁻를 더하면 H⁺+OH⁻→H₂O가 되어 양변 정리 후 O₂+2H₂O+4e⁻=4OH⁻. Nernst를 각각 적용해도 pOH=14−pH로 바꾸면 모두 E=1.229−0.0591pH. (슬라이드 1)"],
+["pH 7, pH 14에서 산소 환원의 평형전위를 계산하라.","E=1.229−0.0591pH → pH7: 0.815≈0.82 V, pH14: 0.402≈0.401 V. (녹음의 '2.401'은 0.401의 인식 오류)"],
+["물의 Pourbaix 도에서 (a), (b) 선의 의미와 선 위/아래 안정상은?","(a): O₂/H₂O 평형선, (b): H₂O/H₂ 평형선. (a) 위 O₂, 사이 H₂O, (b) 아래 H₂. 두 선은 기울기 −0.0591로 평행. (슬라이드 2)"],
+["Al Pourbaix에서 ③, ⑤번 경계선을 Nernst로 못 그리는 이유와 대신 쓰는 방법은?","Al의 산화수가 +3 → +3 으로 변하지 않아 전자 이동이 없는 단순 화학평형(비전기화학). 평형상수 K에서 pH만의 식을 얻어 수직선으로 그림 (pH 3.9, 8.6). (슬라이드 4,5)"],
+["식 ②의 표준전위가 표에 없는데 어떻게 구하나?","열역학 데이터로 ΔG°를 구한 뒤 ΔG°=−nFE°에서 E° 산출(−1.55 V). (녹음 29:02)"],
+["Pourbaix 도의 한계 3가지 이상과, 그래도 쓰는 이유는?","① 열역학적 안정성만, 실제 발생 여부 아님 ② 반응속도 정보 없음 ③ 도달 시간 모름 ④ 단일 원소(합금 아님). 부식상이어도 속도가 매우 느리면(100년) 수명 20~30년 설비엔 사용 가능. 재료 선정의 첫 스크리닝. (슬라이드 6)"],
+["대부분의 전기화학 실험을 정지 용액 + 지지전해질에서 하는 이유는?","Nernst–Planck 플럭스의 구동력 = 확산+이동+대류. 교반 안 하면 대류 제거, 지지전해질로 migration 제거 → 확산만 남아 플럭스, 곧 전류 계산이 쉬움. (슬라이드 8)"],
+["2전극계의 문제점과 3전극계의 역할 분담은?","고전류에서 기준전극에 전류가 흘러 전위가 변함. 3전극: Reference는 working 전위만 측정, Counter가 전류를 흘림 → 정확. (슬라이드 8)"],
+["SCE(+0.242 V) 기준으로 pH 7에서 −0.2 V를 측정했다. RHE 기준 값은?","E_RHE=−0.2+0.242+0.059×7=+0.455 V. (슬라이드 9 공식)"],
+["Potential step에서 왜 전류가 시간에 따라 감소하는가?","δ=2√(Dt)로 확산층이 두꺼워지고 표면농도는 고정, 벌크농도 고정 → 구배 감소 → 전류(플럭스) 감소. (슬라이드 10)"],
+["계단 전위 1~5의 전류 응답을 설명하라. 4와 5가 같은 이유?","1: onset 이하 → i=0. 2·3: 전위↑ → 표면농도 더 감소 → 구배↑ → 전류↑. 4: 표면농도=0. 5: 이미 0이라 더 낮출 수 없고 δ는 시간만의 함수 → 구배 동일 → 전류 동일(물질전달 한계). (슬라이드 11)"],
+["erf(3)≈1 이 갖는 의미와 확산층 두께는? D=1×10⁻⁵ cm²/s, t=1 s.","x/(2√(Dt))=3 에서 C=C*에 도달 → x=δ=6√(Dt)=6√(1×10⁻⁵)=1.9×10⁻² cm ≈180 µm(교수님 값). 선형가정 2√(Dt)보다 큰 이유는 실제 농도구배가 곡선이기 때문. (슬라이드 12)"],
+["Cottrell 식으로 무엇을 알 수 있나? 실험 절차는?","① 농도를 아는 용액으로 i–t 측정 → 미지수는 D뿐 → D 결정 ② 그 D로 미지 농도 용액에서 i–t 측정 → C* 결정. (녹음 1:23:38~1:24:22)"],
+["Potentiometry와 Voltammetry의 차이?","Potentiometry: i=0, 평형전위를 Nernst로 → 농도 정보. Voltammetry: i≠0, 전위 인가·전류 측정, 산화환원전위(정성)·전류∝농도(정량). (슬라이드 7)"],
+["(슬라이드 13~23 미리 대비) 마이크로전극을 쓰는 이유? LSV에서 비패러데이 전류를 줄이는 법?","τ=R<sub>s</sub>C<sub>dl</sub>이고 C<sub>dl</sub>∝면적 → 면적↓로 τ↓, 충전시간 단축. LSV는 i<sub>nf</sub>/i<sub>pc</sub>∝v¹ᐟ²/C* 이므로 주사속도↓, 농도↑."]];
+const qa=document.getElementById('qa');Q.forEach((q,i)=>qa.insertAdjacentHTML('beforeend',`<details><summary>Q${i+1}. ${q[0]}</summary><div>${q[1]}</div></details>`));
+const F=[["castic protection","cathodic protection (음극보호)"],["horn / coson potential","corrosion potential (부식전위)"],["nervous / urnity / nification / nurse equation","Nernst equation"],["commercial log","common log (상용로그)"],["Pobia / Probier / probiodag","Pourbaix diagram"],["aminum / amin / aen","aluminum"],["potential heat diag F","potential–pH diagram"],["fobia diagram","Pourbaix diagram"],["2.401 voltage / 0.245 PH","0.401 V / 0.0591 pH"],["1.202262","−1.262 (슬라이드 ④식 E°)"],["ekluum / equialent / eklo","equilibrium"],["dutch line","dashed line"],["nurse flank / nons plant equation","Nernst–Planck equation"],["fixed second law / fixed lobe","Fick's second law / Fick's law"],["-tra / current equation","Cottrell equation"],["prot step / putin step","potential step"],["gynstatic / votometry / voltime","galvanostatic / voltammetry"],["Chrono amper matrix / coolometric","chronoamperometry / chronocoulometry"],["R&D / RNDE","RDE / RRDE (회전 원판/링-디스크 전극)"],["DME / polargrapy","dropping mercury electrode / polarography"],["quiescent → QUI ascent / 'finite solution'","quiescent solution (정지 용액)"],["Urian / nourishing / nourishment","Nernstian (가역, 전자전달 빠름)"],["RHG / Reg / rag / RT","RHE (reversible hydrogen electrode)"],["SC","SCE (saturated calomel electrode)"],["lamps / Twitter / lang","reference / 2-electrode / ..."],["effusually / efficient layer sickness","diffusion layer thickness"],["constant gradient / constantuation","concentration gradient / surface concentration"],["bird / burb concentration","bulk concentration"],["oxident / oxidant or / co","oxidant O / C<sub>O</sub>"],["FT s / Fatday reaction","step / Faradaic reaction"]];
+const ft=document.getElementById('fix');F.forEach(f=>ft.insertAdjacentHTML('beforeend',`<tr><td class="bad">${f[0]}</td><td class="ok">${f[1]}</td></tr>`));
+</script></body></html>
