@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>11월 4일 수업 정리 – Anson plot · 마이크로전극 · LSV</title>
+<style>
+:root{--bg:#f7f8fa;--card:#fff;--tx:#1c2430;--mu:#5b6675;--ac:#1f6feb;--bd:#dde2ea;--hi:#fff4d6;--wa:#fde8e8;--rd:#c62828;--gr:#1b7f3b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#10151c;--card:#18202b;--tx:#e6ebf2;--mu:#98a4b5;--ac:#5aa2ff;--bd:#2a3545;--hi:#3a3216;--wa:#3d1f22;--rd:#ff7b72;--gr:#56d364}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.8 -apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+header{max-width:900px;margin:auto;padding:22px 16px 6px}h1{margin:0;font-size:1.5rem}.m{color:var(--mu);font-size:.88rem}
+nav{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5;border-bottom:1px solid var(--bd);display:flex;gap:6px;overflow-x:auto;padding:8px 14px}
+nav button,.bt{border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:7px 14px;border-radius:18px;cursor:pointer;white-space:nowrap;font:inherit;font-size:.9rem}nav button.on,.bt.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+main{max-width:900px;margin:auto;padding:12px 14px 60px}section{display:none}section.on{display:block}h2{font-size:1.2rem;margin:20px 0 6px}h3{font-size:1rem;margin:14px 0 4px}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px 18px;margin:12px 0}
+.s{display:inline-block;background:var(--ac);color:#fff;border-radius:6px;padding:0 8px;font-size:.78rem;font-weight:700;margin-right:6px}
+.r{background:var(--hi);border-left:4px solid #e5a100;padding:8px 12px;margin:10px 0;border-radius:6px;font-size:.93rem}.w{background:var(--wa);border-left:4px solid var(--rd);padding:8px 12px;margin:10px 0;border-radius:6px;font-size:.93rem}
+.f{display:block;font-family:ui-monospace,Menlo,monospace;background:rgba(127,127,127,.15);padding:8px 12px;margin:8px 0;border-radius:8px;overflow-x:auto;font-size:.92rem}code{font-family:ui-monospace,Menlo,monospace;background:rgba(127,127,127,.15);padding:1px 6px;border-radius:4px;font-size:.9em}
+table{border-collapse:collapse;width:100%;font-size:.9rem}td,th{border:1px solid var(--bd);padding:6px 8px;text-align:left;vertical-align:top}th{background:rgba(127,127,127,.12)}.tw{overflow-x:auto}
+details{border:1px solid var(--bd);border-radius:10px;margin:8px 0;background:var(--card)}summary{padding:10px 14px;cursor:pointer;font-weight:600}details>div{padding:0 14px 12px}
+.pn{display:flex;gap:10px;flex-wrap:wrap}.pn>div{flex:1 1 300px;overflow-x:auto}svg{display:block;width:100%;min-width:300px;background:var(--card);border:1px solid var(--bd);border-radius:10px}svg text{fill:var(--tx);font-size:11px}
+.ctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}.ctl button{background:var(--ac);color:#fff;border:0;border-radius:8px;padding:8px 14px;cursor:pointer;font:inherit}input[type=range]{flex:1;min-width:140px}input[type=number]{width:90px;padding:6px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);font:inherit}
+.b{color:var(--rd)}.ok{color:var(--gr)}
+</style></head><body>
+<header><h1>11월 4일 수업 정리 (녹음 44분)</h1><p class="m">Cottrell 복습 퀴즈 → Anson plot·마이크로전극 → LSV. 🗣는 교수님 말씀 요약(받아쓰기 오류는 ppt-8.pdf 기준으로 교정), ⚠️는 강조·경고입니다. 슬라이드 번호는 PDF 페이지 순서(총 23장) 기준입니다.</p>
+<p class="m">녹음은 <b>슬라이드 17(LSV 비패러데이 전류 줄이기)에서 끝납니다.</b> 슬라이드 18~23(배경 제거, CV, EC/ECE)은 이번 녹음에 없습니다. 또 대본에 <b>빠진 구간</b>이 있습니다: 04:38~05:20, 09:45~11:50(학생 답변), 37:39~41:59(주사속도 효과 설명 부분).</p></header>
+<nav id="nav"></nav>
+<main>
+<section id="p0"><h2>① 먼저 이것부터 — 집중 공부 우선순위</h2>
+<div class="c"><table><tr><th>우선</th><th>주제</th><th>슬라이드</th><th>녹음</th><th>핵심</th></tr>
+<tr><td>🔥</td><td>Cottrell 식이 성립하는 <b>조건</b></td><td>11, 12</td><td>01:52~04:38</td><td>"i가 시간의 함수"만으론 부족. <b>표면농도가 0이 될 만큼 전위가 충분히 높아야</b> 함. 계단 4·5 응답이 같은 이유</td></tr>
+<tr><td>🔥</td><td>선형 구배 식 vs Cottrell 식, 2√(Dt) vs 6√(Dt)</td><td>12</td><td>05:20~07:54</td><td>차이의 원인 = 농도구배가 <b>직선이 아니라 곡선</b></td></tr>
+<tr><td>🔥</td><td>LSV 전류가 <b>증가 후 감소</b>하는 이유 (a~e 점)</td><td>15, 16</td><td>27:23~32:18</td><td>"That's what you have to remember." potential step(처음이 최대)과의 차이</td></tr>
+<tr><td>🔥</td><td>Epc, E½, ipc 정의와 Randles–Ševčík</td><td>16</td><td>32:18~37:39</td><td>ipc ∝ C*, v½. E½ ≈ E°′ (D<sub>R</sub>=D<sub>O</sub>). E°′에서 [O]=[R]</td></tr>
+<tr><td>🔥</td><td>비패러데이 전류 줄이는 법</td><td>17</td><td>41:59~43:30</td><td>i<sub>nf</sub>/i<sub>pc</sub> → 0: C*↑ 또는 <b>주사속도↓</b></td></tr>
+<tr><td>⭐</td><td>potential step으로 얻는 정보, Anson plot</td><td>12</td><td>09:45~17:30</td><td>D, 벌크농도, (Q<sub>dl</sub>). 기울기→D, 절편→Q<sub>dl</sub></td></tr>
+<tr><td>⭐</td><td>마이크로전극을 쓰는 이유 (τ=R·C<sub>dl</sub>, 자연대류, 10~20초)</td><td>13</td><td>17:30~21:16</td><td>충전시간↓, Anson 선형구간↑</td></tr>
+<tr><td>⭐</td><td>구형 확산, 정상상태 전류</td><td>14</td><td>21:16~24:31</td><td>t→∞ : i = nFADC*/r₀</td></tr>
+<tr><td>⭐</td><td>LSV 가정 4가지와 이유</td><td>15</td><td>25:22~26:38</td><td>대류 무시, 지지전해질 과량, 작은 전극, 확산만</td></tr>
+<tr><td>⭐</td><td>RHE를 쓰는 이유</td><td>9</td><td>07:54~09:45</td><td>어떤 pH에서 실험해도 RHE로 변환하면 pH 보정이 필요 없음</td></tr></table></div></section>
+
+<section id="p1"><h2>② 수업 흐름 따라가기 (녹음 + 슬라이드)</h2>
+<div class="c"><h3><span class="s">슬라이드 11~12</span>복습 퀴즈: Cottrell 식이란? <span class="m">(00:00~04:38)</span></h3>
+<p>🗣 수업은 학생들에게 던진 질문으로 시작합니다. "Cottrell 식이란 무엇인가?" 학생들이 "전류를 시간의 함수로 나타낸 식"이라고 답하자 교수님은 <b>그것만으로는 충분하지 않다</b>고 하십니다 (01:52).</p>
+<div class="w">⚠️ <b>Cottrell 식이 되려면 추가 조건이 있다:</b> 가해 준 전위가 충분히 높아서(=충분히 환원쪽으로 가서) <b>표면 농도가 0이 되어야</b> 한다. 이것이 경계조건 C<sub>O</sub>(0,t)=0 (t>0)입니다.</div>
+<ol><li>전위를 가하면 표면 농도가 계속 줄다가 <b>0에 도달</b>합니다.</li><li>그 뒤 농도구배는 확산층이 두꺼워지면서 <b>서서히 감소</b> → 이런 전류 응답이 Cottrell 식에 해당합니다.</li><li>그림의 계단 4와 5는 <b>전류 응답이 똑같습니다.</b> 이유(03:12): 계단 4에서 이미 표면농도가 0에 도달했기 때문. 표면농도가 0이 된 뒤에는 더 높은 전위를 가해도 농도구배가 같고, <b>확산층 두께는 시간 t만의 함수</b>이기 때문입니다.</li></ol>
+<div class="r"><b>🗣 03:39 핵심 정리</b><br>"Cottrell 식 아래에서는 어느 지점 이후 전위를 얼마나 가하든 전류 응답이 항상 같다. 그 지점의 전위가 표면농도가 0인 전위다."</div>
+<h3><span class="s">슬라이드 12</span>두 식의 차이: 직선 vs 곡선 <span class="m">(05:20~07:54)</span></h3>
+<p>🗣 전류 응답을 구한 식이 <b>두 가지 모양</b>입니다: ① 선형 구배를 가정한 식 <code>i_c = nFAD<sub>o</sub><sup>1/2</sup>[C*−C(0)]/(2t<sup>1/2</sup>)</code> ② 실제 Cottrell 식 <code>i = nFAD<sup>1/2</sup>C*/(π<sup>1/2</sup>t<sup>1/2</sup>)</code>. 무엇이 이 차이를 만들까요? 학생 답 "곡선(curved)" → 맞습니다 (06:09).</p>
+<ul><li>①은 농도구배가 <b>직선</b>이라고 <u>가정</u>한 근사.</li><li>②는 실제로는 구배가 <b>곡선</b>이라는 현실을 반영 → 더 정확.</li><li>확산층 두께도 마찬가지: 가정으로는 <code>2√(Dt)</code>, Cottrell에서 구하면 <code>6√(Dt)</code> (erf(3)≈1 사용). 6쪽이 훨씬 큰 이유도 <b>구배가 곡선이기 때문</b>입니다 (06:58).</li></ul>
+<h3><span class="s">슬라이드 9</span>RHE를 쓰는 이유 <span class="m">(07:54~09:45)</span></h3>
+<p>🗣 "pH 보정이 쉬워서"입니다. 실험에서 어떤 pH를 썼든 <b>모든 전위를 RHE로 변환하면</b> 사용한 용액의 pH를 다시 따질 필요가 없습니다. (E<sub>RHE</sub>=E<sub>ref</sub>+E°<sub>ref</sub>+0.059·pH)</p>
+<h3><span class="s">슬라이드 12</span>potential step으로 얻는 정보 <span class="m">(09:45~14:17)</span></h3>
+<p>🗣 "결국 potential step으로 어떤 정보를 얻나?" 답: <b>확산계수(D)</b>와 <b>벌크 농도</b>. 학생이 말한 것처럼 전해질에 녹아 있는 종의 <b>농도를 측정</b>할 수 있습니다. 또 Anson plot에서는 <b>이중층 용량(전하)</b> 정보도 얻습니다.</p>
+<h3><span class="s">슬라이드 12</span>Anson plot <span class="m">(14:17~17:30)</span></h3>
+<ol><li>전위 계단 실험에서 총 전류 = <b>패러데이 전류</b>(산화환원) + <b>비패러데이 전류</b>(이중층 충전). 비패러데이 전류는 <b>항상 패러데이 전류보다 먼저</b> 흐릅니다 (14:52).</li><li>총 전하 <code>Q = Q<sub>f</sub> + Q<sub>dl</sub></code> (dl = double layer).</li><li>패러데이 전하 = 확산전류 <code>i_d</code>의 시간적분 (질량전달 제어 전류, 확산에 의한 전류). 이중층 쪽은 <code>Q<sub>dl</sub></code>.</li><li>전류가 t의 함수이므로 대입·적분(0→t) →</li></ol>
+<span class="f">Q = [ 2nFA·D<sub>O</sub><sup>1/2</sup>·C*<sub>O</sub> / √π ] · t<sup>1/2</sup> + Q<sub>dl</sub></span>
+<ol start="5"><li><b>Q vs t<sup>1/2</sup></b>를 그리면 직선. <b>기울기 → 확산계수 D (그리고 농도)</b>, <b>y절편 → Q<sub>dl</sub>(이중층 전하)</b>. 이 그래프가 <b>Anson plot</b>.</li></ol>
+<h3><span class="s">슬라이드 13</span>왜 마이크로전극인가 <span class="m">(17:30~21:16)</span></h3>
+<p>🗣 마이크로전극 = 전해질에 노출된 전극 면적이 <b>아주 작은</b> 전극.</p>
+<ul><li><b>충전 시간 문제</b>: 전위 계단 후 비패러데이 전류가 이중층을 먼저 충전하고, 충전이 끝나야 비로소 <b>진짜 패러데이 전류</b>를 측정할 수 있음.</li><li>충전이 너무 오래 걸리면 <b>자연대류</b>가 생겨 농도구배가 왜곡됨. 자연대류 = <b>밀도 차</b>에 의한 대류(차가운 유체는 내려가고 뜨거운 것은 올라감, 시간이 지나면 발생). 구배가 왜곡되면 i<sub>f</sub> 측정이 어려워짐.</li><li>그래서 <b>실험 전체를 10~20초</b>로 제한. 충전에 10초 걸리면 패러데이 전류는 10초 후부터 → 남는 건 10초 → <b>Anson plot의 선형 구간이 너무 짧아</b> 신뢰할 만한 기울기를 얻기 어렵고 D의 신뢰도가 낮음.</li></ul>
+<div class="w">⚠️ <b>해결책 = 시간상수 τ를 줄인다.</b> <code>τ = R<sub>s</sub>·C<sub>dl</sub></code> (커패시터에서 배운 시간상수). τ가 크면 충전이 느림. C<sub>dl</sub> ∝ 전극 면적 → <b>면적을 줄이면 C<sub>dl</sub>↓, τ↓</b> → 충전이 빨리 끝나고 Anson plot의 선형 구간이 길어져 더 믿을 만한 데이터. (20:31)</div>
+<h3><span class="s">슬라이드 14</span>구형 확산 <span class="m">(21:16~24:31)</span></h3>
+<p>🗣 마이크로전극에서는 <b>직각좌표계를 쓸 수 없습니다</b>. 전극이 매우 작으면 확산이 사방으로 퍼지는 <b>구형(spherical)</b> 확산이기 때문. 그래서 좌표계만 직각 → 구좌표로 바꿔 푼 것이고 나머지는 모두 같습니다. 변환 과정은 보여주지 않으시고 결과 식만:</p>
+<span class="f">i<sub>d</sub>(t) = nFAD<sub>O</sub>C*<sub>O</sub> [ 1/(πD<sub>O</sub>t)<sup>1/2</sup> + 1/r₀ ]      t→∞ :  i<sub>d</sub> = nFAD<sub>O</sub>C*<sub>O</sub> / r₀</span>
+<p>t→∞이면 첫 항이 0 → 남는 항이 <b>정상상태(steady-state) 전류</b>. r₀는 마이크로전극의 반지름(내가 아는 값). 같은 실험을 마이크로전극으로 하고 정상상태 전류를 재면 <b>확산계수와 벌크 농도</b>를 정확히 알 수 있습니다.</p>
+<h3><span class="s">슬라이드 15</span>LSV와 가정 <span class="m">(24:31~27:23)</span></h3>
+<p>🗣 LSV는 <b>가장 자주 쓰는 전기화학 실험</b>. 전위를 초기값에서 최종값까지 <b>선형으로 쓸어(sweep)</b> 전류를 측정. <code>E = E<sub>i</sub> − νt</code>. ν = 주사속도(예: 10 mV/s, 100 mV/s 등 <b>내가 정함</b>), 초기 전위도 내가 정함.</p>
+<table><tr><th>가정</th><th>이유 (교수님 설명)</th></tr><tr><td>교반 없음(대류 무시)</td><td>대류 항 제거</td></tr><tr><td>지지전해질 과량</td><td><b>migration(이동) 기여 제거</b></td></tr><tr><td>작은 전극 → 벌크 농도 일정</td><td>큰 전극은 많은 종을 소모해 벌크 농도 자체가 변함. 그래서 면적이 비교적 작은 전극</td></tr><tr><td>확산만으로 물질전달</td><td>위 조건들의 결과</td></tr></table>
+<p>산화종 O가 전자를 받아 R이 되는 환원: 전위가 <b>더 음(−)</b>이 될수록 환원 진행. 표면(x=0) 농도 C<sub>O</sub>(0,t)는 <b>Nernst 식</b>이 정함 (Nernstian 계). 확산층은 시간에 따라 증가(선형 관계의 구배).</p>
+<h3><span class="s">슬라이드 15~16</span>LSV 전류 응답 모양 <span class="m">(27:23~32:18)</span></h3>
+<div class="w">⚠️ <b>"전류는 처음에 농도구배가 커지면서 증가하다가, 고갈(depletion) 때문에 감소한다. 이걸 꼭 기억하세요."</b> potential step은 전위를 가하는 <u>처음이 최대</u>이고 계속 감소하지만, LSV는 전위를 바꾸므로 <b>서서히 증가 → 최대 → 감소</b>. (27:49)</div>
+<p>점 a~e를 그래프 작도 탭의 애니메이션에서 직접 보세요. 설명 요약: 모든 전류는 <b>농도구배</b>로 설명됩니다. 확산층 두께는 시간만의 함수로 계속 늘어납니다.</p>
+<ul><li><b>a</b>: 초기 전위가 <b>onset 전위보다 낮아</b> 패러데이 전류 없음.</li><li><b>b</b>: 전위가 오르면 (물질전달 제어이므로) 전위가 곧 표면농도·구배를 결정 → 전류 증가.</li><li><b>c</b>: 구배 더 증가 → 전류 계속 증가 (c는 E½ 부근).</li><li><b>d</b>: 구배 최고 → <b>피크</b>.</li><li><b>e</b>: 표면농도가 0이 된 뒤 구배는 점점 감소 → 이후는 <b>Cottrell 거동</b>.</li></ul>
+<div class="r"><b>🗣 32:18 시험 포인트</b><br>"최대 농도구배는 표면농도가 0이 되는 점에서 나타나는 게 아니다. 그보다 앞(피크 부근)에서 최대 구배가 관찰된다." (피크 시점의 표면농도는 0이 아님 → 작도 애니메이션에서 확인)</div>
+<h3><span class="s">슬라이드 16</span>E<sub>pc</sub>, E½, i<sub>pc</sub> 정의 <span class="m">(32:18~37:39)</span></h3>
+<ul><li><b>i<sub>pc</sub></b>: 피크 전류, 그때의 전위 <b>E<sub>pc</sub></b>(cathodic peak potential). i<sub>pc</sub>의 <b>절반</b> 전류에 해당하는 전위가 E<sub>pc/2</sub>.</li><li>피크와 반파전위 차: <code>E<sub>pc</sub> − E<sub>1/2</sub> = −1.109RT/nF = −28.5/n mV</code> (25℃). 유도는 안 보여주심 — "이 수준에선 안 해도 됨, 결과만 알면 된다."</li><li>반파전위: <code>E<sub>1/2</sub> = E°′ + (RT/nF)·ln(D<sub>R</sub>/D<sub>O</sub>)</code>. 대부분 D<sub>R</sub>≈D<sub>O</sub> → ln항=0 → <b>E½ ≈ E°′ (formal potential)</b>.</li><li>⚠️ <b>formal potential에서 반응물과 생성물의 농도가 같다</b>. (학생에게 질문 후 정답 확인, 35:18) → 그림의 점 c가 농도의 중간 지점.</li><li>E<sub>pc</sub>와 E<sub>pc/2</sub>의 전체 차는 약 <b>56.5/n mV</b> (28/n + 28.5/n의 합).</li><li><b>Randles–Ševčík</b>: <code>i<sub>pc</sub> = 0.4463(F³/RT)<sup>1/2</sup>n³ᐟ²AD<sup>1/2</sup>C*v<sup>1/2</sup> = (2.69×10⁵)n³ᐟ²AD<sup>1/2</sup>C*v<sup>1/2</sup></code> (25℃, 상수 대입). 외울 것: <b>i<sub>pc</sub> ∝ 벌크농도 C*, 주사속도의 제곱근 v<sup>1/2</sup></b>.</li></ul>
+<h3><span class="s">슬라이드 17</span>주사속도 효과와 비패러데이 전류 <span class="m">(37:39~43:30)</span></h3>
+<p>🗣 주사속도 1→5로 높이면 전류 곡선이 커집니다. "왜 그런지 쉽게 설명할 수 있다"고 하셨는데, 해당 설명 구간(38~41분)이 대본에 빠져 있습니다. <i>(제 보충: 빠르게 쓸면 확산층이 자랄 시간이 짧아 구배가 가팔라 전류↑ → ipc ∝ v<sup>1/2</sup>)</i></p>
+<div class="w">⚠️ <b>비패러데이 전류 줄이는 법 (41:59~43:30)</b><br><code>i<sub>nf</sub>/i<sub>pc</sub> = C<sub>dl</sub>·v<sup>1/2</sup> / [ (2.69×10⁵)n³ᐟ²D<sup>1/2</sup>C* ]</code> 이 비가 <b>0에 가까우면</b> 비패러데이 기여를 무시할 수 있음. 방법: ① <b>벌크 농도↑</b> (불가능하면 ②) ② <b>주사속도↓</b>.<br>주사속도를 높이면 i<sub>nf</sub>가 커지는 이유: C<sub>dl</sub>을 전위 sweep법으로 재던 것을 떠올리세요. <b>i<sub>nf</sub> = C<sub>dl</sub>·v (v에 비례)</b>인데 i<sub>pc</sub>는 v<sup>1/2</sup>에 비례하므로 비는 v<sup>1/2</sup>에 비례. (분모에는 v<sup>1/2</sup>, 분자에는 v가 있어 약분되어 v<sup>1/2</sup>이 남는다는 설명)</div>
+<p class="m">녹음은 여기서 끝납니다 (총 44분 44초).</p></div></section>
+
+<section id="p2"><h2>③ 그래프 작도 — 애니메이션</h2>
+<div class="c"><h3>A. LSV 전류 응답(i–E)을 그리는 순서</h3>
+<p class="m">아래는 확산 방정식을 실제로 수치 계산한 시뮬레이션입니다(Nernst 경계조건, 가역계). ▶ 재생하거나 슬라이더를 움직이거나 a~e 버튼을 눌러 보세요. 왼쪽 = 전극 표면 근처 농도 분포(C/C*), 오른쪽 = 지금까지 그려진 i–E 곡선.</p>
+<div class="ctl"><button onclick="play()">▶ 재생 / ⏸</button><button onclick="setS(0)">처음</button><span id="pts"></span></div>
+<input type="range" id="sl" min="0" max="2400" step="12" value="0" style="width:100%" oninput="setS(+this.value)">
+<div class="pn"><div><svg id="s1" viewBox="0 0 330 230"></svg></div><div><svg id="s2" viewBox="0 0 330 230"></svg></div></div>
+<div class="r" id="ex"></div>
+<h3>그리는 순서 (손으로 그릴 때)</h3>
+<ol><li>x축 = 전위 E (오른쪽으로 갈수록 <b>더 음(−)</b>, 슬라이드 16 표기 E(−)), y축 = 환원전류 i<sub>c</sub>. 시작점 E<sub>i</sub>(a)에서 전류 0.</li><li>a→b→c: 천천히 <b>상승</b>. E½(≈E°′)는 c 근처, 이때 [O]=[R].</li><li>d에서 <b>피크 (E<sub>pc</sub>, i<sub>pc</sub>)</b>. E<sub>pc</sub>는 E½보다 28.5/n mV 더 음.</li><li>d→e: 표면농도가 0에 도달한 뒤 <b>Cottrell 형태(t<sup>−1/2</sup>)로 감소</b>. 점선으로 기저선 상상하면 쉬움.</li><li>표시: E<sub>pc</sub>, E<sub>1/2</sub>, i<sub>pc</sub>, 0.5 i<sub>pc</sub>와 E<sub>pc/2</sub>.</li></ol></div>
+
+<div class="c"><h3>B. Anson plot (Q vs t<sup>1/2</sup>) 그리는 순서</h3>
+<svg id="an" viewBox="0 0 330 200"></svg>
+<ol><li>x축 t<sup>1/2</sup>, y축 총전하 Q.</li><li>y절편 = Q<sub>dl</sub> (이중층 충전 전하) — <b>원점이 아님!</b> 직선이 y축을 양(+)의 값에서 자름.</li><li>직선 기울기 = 2nFAD<sup>1/2</sup>C*/√π → D 또는 C*를 구함.</li><li>⚠️ 이중층 충전이 길면(τ 큼) 초반이 휘어서 <b>직선 구간이 짧아짐</b> → 마이크로전극으로 τ를 줄임.</li></ol></div>
+
+<div class="c"><h3>C. 주사속도 효과 계산기</h3>
+<p>주사속도를 몇 배로 바꾸면? <input type="number" id="vr" value="4" min="0.01" step="0.5"> 배</p>
+<div class="r" id="vo"></div></div></section>
+
+<section id="p3"><h2>④ 랜덤 질문 대비</h2><div id="qa"></div></section>
+<section id="p4"><h2>⑤ 받아쓰기 교정표</h2><div class="tw"><table id="fx"><tr><th>녹음 표기</th><th>올바른 표현</th></tr></table></div></section>
+</main>
+<script>
+const T=["우선순위","수업 흐름","그래프 작도","예상 문제","용어 교정"],nv=document.getElementById('nav');
+T.forEach((t,i)=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>sh(i);nv.appendChild(b)});
+function sh(i){document.querySelectorAll('section').forEach((s,j)=>s.classList.toggle('on',i==j));[...nv.children].forEach((b,j)=>b.classList.toggle('on',i==j));scrollTo(0,0)}sh(0);
+/* LSV simulation */
+const N=2400,nx=220,dx=.1,dt=.004,lam=dt/(dx*dx);let C=new Float64Array(nx).fill(1);const P=[],I=[];
+for(let s=0;s<=N;s++){const xi=6-12*s/N;C[0]=1/(1+Math.exp(-xi));I.push((-3*C[0]+4*C[1]-C[2])/(2*dx));if(s%12==0)P.push(Float64Array.from(C));
+const n=new Float64Array(nx);n[0]=C[0];for(let i=1;i<nx-1;i++)n[i]=C[i]+lam*(C[i+1]-2*C[i]+C[i-1]);n[nx-1]=1;C=n}
+const M=Math.max(...I),pk=I.indexOf(M),pts={a:200,b:900,c:1200,d:pk,e:2000};
+const txt={a:"a: 초기 전위. onset 전위 이전이라 환원이 거의 시작되지 않음 → 전류 ≈ 0.",b:"b: 전위가 더 음으로 → 표면농도가 벌크보다 줄기 시작 → 구배 생김 → 전류 상승.",c:"c: E½ 부근(ξ=0). 표면에서 [O]≈[R] (표면농도 약 절반). 구배가 계속 커져 전류 상승 중.",d:"d: 피크(Epc). 구배가 최대인 지점. 이때 표면농도는 아직 0이 아닙니다(왼쪽 그림 확인).",e:"e: 표면농도가 0에 도달한 뒤. 확산층만 계속 두꺼워져 구배↓ → 전류 감소 (Cottrell 거동)."};
+let S=0,pl=false;const px=s=>20+(6-(6-12*s/N))/12*0, X2=s=>30+(s/N)*285,Y2=v=>200-v*170;
+function setS(s){S=Math.max(0,Math.min(N,s));document.getElementById('sl').value=S;draw()}
+function draw(){const f=Math.round(S/12),pr=P[f];let a='<line x1="30" y1="200" x2="320" y2="200" stroke="currentColor"/><line x1="30" y1="20" x2="30" y2="200" stroke="currentColor"/><text x="150" y="222">거리 x (전극 표면 → 용액)</text><text x="2" y="14">C/C*</text><line x1="30" y1="30" x2="320" y2="30" stroke="#8886" stroke-dasharray="4"/><text x="250" y="25">벌크 C*</text>';
+let d='M30,'+(200-pr[0]*170);for(let i=1;i<100;i++)d+=`L${30+i*2.9},${200-pr[i]*170}`;a+=`<path d="${d}" fill="none" stroke="#1f6feb" stroke-width="3"/><circle cx="30" cy="${200-pr[0]*170}" r="4" fill="#c62828"/>`;document.getElementById('s1').innerHTML=a;
+let b='<line x1="30" y1="200" x2="320" y2="200" stroke="currentColor"/><line x1="30" y1="20" x2="30" y2="200" stroke="currentColor"/><text x="130" y="222">전위 E (→ 더 음(−))</text><text x="2" y="14">i_c</text>';
+let q='M30,200';for(let s=0;s<=S;s+=12)q+=`L${X2(s)},${Y2(I[s]/M)}`;b+=`<path d="${q}" fill="none" stroke="#e07b00" stroke-width="3"/>`;
+for(const k in pts){b+=`<circle cx="${X2(pts[k])}" cy="${Y2(I[pts[k]]/M)}" r="3.5" fill="#8887"/><text x="${X2(pts[k])-3}" y="${Y2(I[pts[k]]/M)-8}">${k}</text>`}
+b+=`<circle cx="${X2(S)}" cy="${Y2(I[S]/M)}" r="5" fill="#c62828"/>`;document.getElementById('s2').innerHTML=b;
+let cur='';for(const k in pts)if(Math.abs(S-pts[k])<=12)cur=txt[k];
+document.getElementById('ex').innerHTML=`<b>표면농도 C(0)/C* = ${pr[0].toFixed(2)}</b> · 상대 전류 i/i<sub>pc</sub> = ${(I[S]/M).toFixed(2)} · ${S>=pk?'피크 통과':'피크 전'}<br>${cur||'슬라이더를 움직이거나 아래 a~e 버튼으로 이동해 보세요.'}`}
+document.getElementById('pts').innerHTML=Object.keys(pts).map(k=>`<button class="bt" onclick="setS(${pts[k]})">${k}</button>`).join(' ');
+function play(){pl=!pl;if(pl){if(S>=N)S=0;(function st(){if(!pl)return;setS(S+12);if(S>=N)pl=false;else requestAnimationFrame(st)})()}}draw();
+/* Anson */
+document.getElementById('an').innerHTML='<line x1="40" y1="170" x2="320" y2="170" stroke="currentColor"/><line x1="40" y1="20" x2="40" y2="170" stroke="currentColor"/><text x="150" y="192">t^(1/2)</text><text x="4" y="14">Q</text><path d="M40,125 Q58,112 80,106 L300,40" fill="none" stroke="#1f6feb" stroke-width="3"/><line x1="80" y1="106" x2="40" y2="123" stroke="#c62828" stroke-dasharray="4"/><circle cx="40" cy="123" r="4" fill="#c62828"/><text x="48" y="140" style="fill:#c62828">절편 = Q_dl</text><text x="180" y="82">기울기 → D, C*</text><text x="50" y="100" style="fill:#e07b00">초반: 충전으로 휨</text>';
+/* scan rate */
+function sr(){const v=+document.getElementById('vr').value||1;document.getElementById('vo').innerHTML=`i<sub>pc</sub> ∝ v<sup>1/2</sup> → <b>×${Math.sqrt(v).toFixed(2)}</b><br>i<sub>nf</sub> = C<sub>dl</sub>·v → <b>×${v.toFixed(2)}</b><br>i<sub>nf</sub>/i<sub>pc</sub> ∝ v<sup>1/2</sup> → <b>×${Math.sqrt(v).toFixed(2)}</b> ${v>1?'<span class="b">(배경전류 비중 ↑ → 주사속도를 낮추세요)</span>':'<span class="ok">(배경전류 비중 ↓)</span>'}`}
+document.getElementById('vr').oninput=sr;sr();
+/* Q&A */
+const Q=[["Cottrell 식이란? 시간의 함수라고만 답하면 부족한 이유는?","i(t)=nFAD<sup>1/2</sup>C*/(π<sup>1/2</sup>t<sup>1/2</sup>). 단, <b>표면농도가 0이 될 만큼 충분히 높은(환원쪽) 전위</b>를 가했을 때만 성립 (경계조건 C(0,t)=0). (01:52)"],
+["전위 계단 4와 5의 전류 응답이 같은 이유는?","계단 4에서 이미 표면농도가 0에 도달. 이후 전위를 더 가해도 구배가 같고, 확산층 두께는 시간만의 함수이기 때문. (03:12)"],
+["선형 구배를 가정한 식과 Cottrell 식이 다른 이유? 2√(Dt)와 6√(Dt)는?","가정은 구배가 직선, 실제는 곡선이라서. 따라서 Cottrell(곡선)이 더 정확하고 확산층 두께도 6√(Dt)로 훨씬 크다. (06:09~07:54)"],
+["RHE를 쓰는 이유는?","어떤 pH에서 실험했든 전위를 RHE로 변환하면 pH 보정 문제가 없어져 서로 다른 pH의 결과를 비교하기 쉽다. (08:51)"],
+["potential step으로 얻을 수 있는 정보는?","확산계수 D와 벌크 농도(미지 시료의 농도). Anson plot에서는 이중층 전하(용량)도. (12:27)"],
+["Anson plot이란? 기울기와 절편은 무엇을 주는가?","Q vs t<sup>1/2</sup> 그래프. Q=2nFAD<sup>1/2</sup>C*t<sup>1/2</sup>/√π+Q<sub>dl</sub>. 기울기→D(및 농도), y절편→Q<sub>dl</sub>. (16:24)"],
+["마이크로전극을 쓰는 이유를 시간상수로 설명하라","τ=R<sub>s</sub>C<sub>dl</sub>, C<sub>dl</sub>∝면적. 면적↓ → τ↓ → 충전 빨리 끝남 → 10~20초 안에서 Anson 선형 구간이 길어져 D의 신뢰도↑. 자연대류 방지에도 유리. (20:31)"],
+["실험 시간을 10~20초로 제한하는 이유는?","시간이 길어지면 밀도차에 의한 자연대류가 생겨 농도구배가 왜곡되어 패러데이 전류 정확도가 떨어진다. (18:18)"],
+["마이크로전극에서 왜 구좌표를 쓰나? 정상상태 전류는?","전극이 매우 작아 확산이 구형으로 퍼지므로. t→∞에서 i=nFADC*/r₀ (r₀는 전극 반지름). (21:16~24:00)"],
+["LSV의 네 가지 가정과 각각의 이유는?","교반 없음(대류 제거), 지지전해질 과량(migration 제거), 작은 전극(벌크 농도 일정), 확산만으로 물질전달. (25:58~26:38)"],
+["LSV 전류가 증가했다가 감소하는 이유를 점 a~e로 설명하라","a onset 이전 i≈0 / b·c 전위가 표면농도를 낮춰 구배↑ → 전류↑ / d 구배 최대 → 피크 / e 표면농도 0 이후 확산층 성장으로 구배↓ → Cottrell 감소. (27:49~32:18)"],
+["potential step과 LSV 전류 응답의 차이?","potential step은 가한 직후 최대, 이후 계속 감소. LSV는 서서히 증가해 최대 후 고갈로 감소. (27:49)"],
+["최대 농도구배가 나타나는 위치는?","표면농도가 0이 되는 점이 아니라 그보다 앞, 피크 부근. (32:18)"],
+["E½와 E°′의 관계? formal potential에서 농도는?","E½=E°′+(RT/nF)ln(D<sub>R</sub>/D<sub>O</sub>). D<sub>R</sub>≈D<sub>O</sub>면 E½≈E°′. formal potential에서는 반응물과 생성물의 농도가 같다. (33:56~35:18)"],
+["Epc−E½, Epc−Epc/2 값은? ipc는 무엇에 비례?","Epc−E½=−28.5/n mV, Epc−Epc/2≈−56.5/n mV (25℃). Randles–Ševčík: ipc∝C*, v<sup>1/2</sup> (상수 2.69×10⁵)."],
+["LSV에서 비패러데이 전류를 줄이려면?","i<sub>nf</sub>/i<sub>pc</sub>=C<sub>dl</sub>v<sup>1/2</sup>/(2.69×10⁵n<sup>3/2</sup>D<sup>1/2</sup>C*)를 작게: 벌크 농도↑, 불가능하면 주사속도↓. i<sub>nf</sub>∝v, i<sub>pc</sub>∝v<sup>1/2</sup>. (41:59~43:30)"]];
+document.getElementById('qa').innerHTML=Q.map((q,i)=>`<details><summary>Q${i+1}. ${q[0]}</summary><div>${q[1]}</div></details>`).join('');
+const F=[["cultural / ultraum / cultrium / tray / culture equation","Cottrell equation"],["constant gradient / constantration gradient","concentration gradient (농도구배)"],["fair day / fairly / fairity current","Faradaic current (패러데이 전류)"],["non-fairly / non-fair deck","non-Faradaic"],["unsoon / anzen / enzyme / unsent plot","Anson plot"],["protein step / proin step / potent step / potential SEM","potential step"],["double leader / double-air / W charge","electric double layer (이중층)"],["spiracle / spic / spray / sptical coordinate","spherical coordinate (구좌표)"],["rag / RNG / RHG / PHG / PhD","RHE / pH"],["linear sweet photometry / LS way","linear sweep voltammetry (LSV)"],["nourishing system","Nernstian system"],["random saltic equation","Randles–Ševčík equation"],["diffusion sickness / efficient limits","diffusion layer thickness"],["depillution","depletion (고갈)"],["bird concentration","bulk concentration"],["fair be constant / fair-day constant","Faraday constant (F)"],["taw / top / tau","τ (time constant)"],["Efp / Happway / Hf-way potential","E½ (half-wave potential)"],["ersion / eersion","diffusion"],["Kim JOON-HEE / Liam","수강생 이름 (내용 아님)"]];
+document.getElementById('fx').insertAdjacentHTML('beforeend',F.map(f=>`<tr><td class="b">${f[0]}</td><td class="ok">${f[1]}</td></tr>`).join(''));
+</script></body></html>
