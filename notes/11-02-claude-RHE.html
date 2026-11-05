@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RHE 완전 정복 – 처음 배우는 사람용</title>
+<style>
+:root{--bg:#f7f8fa;--card:#fff;--tx:#1c2430;--mu:#5b6675;--ac:#1f6feb;--bd:#dde2ea;--hi:#fff4d6;--rd:#c62828;--gr:#1b7f3b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#10151c;--card:#18202b;--tx:#e6ebf2;--mu:#98a4b5;--ac:#5aa2ff;--bd:#2a3545;--hi:#3a3216;--rd:#ff7b72;--gr:#56d364}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.8 -apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+main{max-width:860px;margin:auto;padding:18px 14px 60px}h1{font-size:1.6rem;margin:10px 0}h2{font-size:1.2rem;margin:0 0 8px}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px 18px;margin:16px 0}
+.n{display:inline-block;background:var(--ac);color:#fff;border-radius:50%;width:26px;height:26px;text-align:center;line-height:26px;font-size:.85rem;margin-right:8px}
+.q{background:var(--hi);border-left:4px solid #e5a100;padding:8px 12px;margin:10px 0;border-radius:6px;font-size:.93rem}.q small,.m{color:var(--mu)}.m{font-size:.88rem}
+.f{display:block;font-family:ui-monospace,Menlo,monospace;background:rgba(127,127,127,.15);padding:10px 14px;margin:8px 0;border-radius:8px;overflow-x:auto;font-size:.95rem}
+code{font-family:ui-monospace,Menlo,monospace;background:rgba(127,127,127,.15);padding:1px 6px;border-radius:4px;font-size:.9em}
+table{border-collapse:collapse;width:100%;font-size:.92rem}td,th{border:1px solid var(--bd);padding:6px 8px;text-align:left}th{background:rgba(127,127,127,.12)}.tw{overflow-x:auto}
+button{background:var(--ac);color:#fff;border:0;border-radius:8px;padding:9px 16px;cursor:pointer;font:inherit}button.g{background:var(--bd);color:var(--tx)}
+input,select{font:inherit;padding:7px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);width:100%}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:10px 0}label{font-size:.85rem;color:var(--mu)}
+.res{background:rgba(31,111,235,.1);border-radius:8px;padding:10px 14px;margin-top:10px}
+#svgw{overflow-x:auto}svg{display:block;min-width:560px;width:100%}svg text{fill:var(--tx);font-size:12px}
+details{border:1px solid var(--bd);border-radius:10px;margin:8px 0}summary{padding:10px 14px;cursor:pointer;font-weight:600}details>div{padding:0 14px 12px}
+.b{color:var(--rd)}.ok{color:var(--gr)}
+</style></head><body><main>
+<h1>RHE(가역 수소 전극) 완전 정복</h1>
+<p class="m">Ppt8 슬라이드 9 · 2026.11.02 수업 녹음(54:22~58:46)을 근거로, 전기화학을 처음 배우는 사람도 따라올 수 있게 천천히 풀었습니다. 녹음의 인식 오류(RHG, Reg, rag, 0.049 등)는 슬라이드 기준으로 고쳤습니다. 🎙 표시는 교수님 말씀입니다.</p>
+
+<div class="c"><h2><span class="n">0</span>먼저 한 줄 요약</h2>
+<p><b>RHE는 "pH가 바뀔 때 같이 움직이는 눈금자"</b>입니다. 수소 발생 반응의 전위를 <u>어떤 pH에서도 0 V</u>로 맞춰 놓은 눈금이라서, pH가 다른 실험끼리도 숫자를 바로 비교할 수 있습니다.</p>
+<p>아래 1~4단계는 "왜 그런 눈금이 필요한지 → 공식이 왜 그렇게 생겼는지"를 순서대로 설명합니다.</p></div>
+
+<div class="c"><h2><span class="n">1</span>전위는 "상대값"입니다 – 기준전극이 필요한 이유</h2>
+<p>전위(V)는 높이와 비슷합니다. "해발 100 m"처럼 <b>어디를 0으로 두느냐</b>에 따라 숫자가 달라지죠. 전기화학에서는 그 0점 역할을 하는 것이 <b>기준(reference) 전극</b>입니다. 같은 전극 반응이라도 SHE로 재면 A, SCE로 재면 B처럼 숫자가 달라집니다.</p>
+<p>SCE(포화 칼로멜 전극)는 SHE보다 <b>0.242 V 높습니다</b>. 슬라이드의 <code>E°<sub>ref</sub></code>가 바로 이 값이고, 녹음에서 "0.2.2"로 적힌 곳이 0.242입니다.</p>
+<div class="q"><small>🎙 56:40</small><br>"E reference는 사용한 기준전극으로 측정한 전위이고, E°reference는 그 기준전극이 표준수소전극(SHE)에 대해 갖는 전위입니다. SCE는 SHE보다 0.242 V 높습니다."</div>
+<p><b>정리:</b> 기준전극으로 잰 값(E<sub>ref</sub>)에 E°<sub>ref</sub>를 더하면 "SHE를 0으로 한 값"이 됩니다. 이것이 공식의 앞부분 <code>E_ref + E°_ref</code>입니다.</p></div>
+
+<div class="c"><h2><span class="n">2</span>진짜 문제: 수소 반응의 전위가 pH에 따라 움직입니다</h2>
+<p>수소 반응 <code>2H⁺ + 2e⁻ → H₂</code>에 Nernst 식을 쓰면 (환원형이므로 H⁺가 반응물 → 분모, P<sub>H2</sub>=1 atm):</p>
+<span class="f">E = E° − (0.059/2)·log(1 / [H⁺]²) = 0 + 0.059·log[H⁺] = −0.059·pH</span>
+<p>pH = −log[H⁺]이므로 마지막 등호가 성립합니다. 즉 <b>pH가 1 올라갈 때마다 수소 반응 전위가 0.059 V씩 내려갑니다.</b></p>
+<div class="tw"><table><tr><th>pH</th><th>0 (강산)</th><th>7 (중성)</th><th>14 (강염기)</th></tr><tr><td>수소 반응 전위 (SHE 기준)</td><td>0 V</td><td>−0.413 V</td><td>−0.828 V</td></tr></table></div>
+<p class="m">(7에서 −0.413이 아니라 −0.059×7=−0.413 ✔. 슬라이드 2의 손글씨 표와 같습니다.)</p>
+<p><b>이게 왜 문제일까요?</b> 산성 용액에서 수소가 나오는 전위는 0 V인데, 알칼리 용액에서는 −0.828 V입니다. 똑같이 "수소 발생"인데 전위 숫자가 달라서, 두 실험을 한 그래프에 그리면 어디가 더 잘 되는 촉매인지 비교가 안 됩니다.</p>
+<div class="q"><small>🎙 56:03</small><br>"알칼리 용액에서 실험하는 것과 산성 용액에서 하는 것은, Nernst 식에 따라 표준전위가 pH로 인해 달라집니다. 이 둘을 직접 비교하려면 pH 효과를 보정해서 전위를 맞춰줘야 하고, 그게 RHE입니다."</div></div>
+
+<div class="c"><h2><span class="n">3</span>해결책: 눈금 자체를 pH만큼 같이 움직이자 (RHE)</h2>
+<p>아이디어는 간단합니다. 수소 반응 전위가 −0.059·pH로 내려간다면, <b>측정값에 +0.059·pH를 더해서 되돌려 놓으면</b> 어떤 pH에서도 수소 반응이 0 V가 됩니다. 이렇게 만든 눈금이 RHE 눈금입니다.</p>
+<div class="q"><small>🎙 57:15</small><br>"수소 반응에 Nernst를 적용하면 −0.059pH가 나오죠. 이 음의 pH 의존성을 상쇄(offset)하고, RHE를 어떤 pH에서도 0 V로 정의하려고 0.059pH를 더합니다. 0으로 만들려고 되돌리는 거라서 양(+)의 부호를 붙입니다."</div>
+<p><b>직접 눈으로 확인해 보세요.</b> 아래 버튼을 누르면 SHE 눈금(기울어진 선들)이 RHE 눈금(수평선)으로 바뀌는 과정을 볼 수 있습니다.</p>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button onclick="anim(1)">SHE → RHE 눈금으로 변환</button><button class="g" onclick="anim(0)">SHE 눈금으로 되돌리기</button><span id="lab" class="m" style="align-self:center"></span></div>
+<div id="svgw"><svg id="ch" viewBox="0 0 640 330"></svg></div>
+<p class="m">파란 선: 산소 반응 O₂/H₂O (SHE 기준 1.229−0.059pH). 주황 선: 수소 반응 H₂ (SHE 기준 −0.059pH). RHE 눈금에서는 둘 다 <b>수평선</b>이 됩니다 → 산소 1.229 V, 수소 0 V가 pH와 상관없이 고정.</p></div>
+
+<div class="c"><h2><span class="n">4</span>공식을 두 칸으로 나눠 읽기</h2>
+<span class="f">E_RHE = [ E_ref + E°_ref ] + [ 0.059 · pH ]
+          └ ① SHE 기준으로 바꾸기 ┘   └ ② pH 보정 ┘</span>
+<table><tr><th>기호</th><th>뜻</th><th>예</th></tr>
+<tr><td>E<sub>ref</sub></td><td>내가 실제로 기준전극으로 잰 전위</td><td>SCE로 잰 −0.30 V</td></tr>
+<tr><td>E°<sub>ref</sub></td><td>그 기준전극이 SHE보다 얼마 높은가</td><td>SCE = +0.242 V</td></tr>
+<tr><td>pH</td><td>전해질 용액의 pH (pH 미터로 측정)</td><td>7</td></tr></table>
+<p><b>예제 (슬라이드 9, 58:03):</b> SCE, pH 7 버퍼</p>
+<span class="f">E_RHE = E_vs.SCE + 0.242 + 0.059×7 = E_vs.SCE + 0.242 + 0.413 = E_vs.SCE + 0.655 V</span>
+<p>그래서 pH 7에서 SCE로 재면 <b>잰 값에 0.655 V만 더하면</b> 곧바로 RHE 값입니다. pH가 바뀌면 "0.059×pH" 부분만 바뀝니다.</p>
+<h3 style="margin-bottom:4px">🧮 직접 계산해 보기</h3>
+<div class="row"><div><label>기준전극</label><select id="rf"><option value="0.242">SCE (+0.242 V)</option><option value="0.197">Ag/AgCl, 포화 KCl (+0.197 V, 수업 외 보충값)</option><option value="0">SHE (0 V)</option></select></div>
+<div><label>측정한 전위 E_ref (V)</label><input id="em" type="number" step="0.01" value="-0.30"></div>
+<div><label>용액 pH</label><input id="ph" type="number" step="0.1" value="14"></div></div>
+<div class="res" id="out"></div></div>
+
+<div class="c"><h2><span class="n">5</span>"알칼리 pH 14에서 왜 이렇게 높은 + 전위가 나와요?" 풀이</h2>
+<p>앞에서 pH가 커지면 산소·수소 반응 전위가 <b>내려간다</b>고 배웠습니다(슬라이드 1·2). 그런데 논문의 pH 14 실험 그래프를 보면 x축이 1 V 이상으로 표시되어 있어서 "뭔가 잘못된 거 아닌가?" 싶습니다.</p>
+<div class="q"><small>🎙 58:46</small><br>"알칼리 pH에서 실험하면 산소·수소 반응이 더 음의 전위로 가야 하는데, 그래프에는 양의 전위로 표시되어 있어서 이상해 보일 수 있습니다. 그럴 때는 x축 전위가 RHE인지 확인하세요. RHE라면 이미 pH에 대해 보정된 값이니까 맞는 겁니다."</div>
+<p><b>숫자로 확인</b> (제가 슬라이드 값으로 계산한 것):</p>
+<span class="f">산소 반응, pH 14, SHE 기준 = 0.401 V
+RHE 기준 = 0.401 + 0.059×14 = 0.401 + 0.826 ≈ 1.23 V  (= pH 0의 값 1.229 V)</span>
+<p>즉 SHE 눈금에서는 pH 14에서 0.40 V였던 같은 반응이, RHE 눈금에서는 1.23 V에 놓입니다. 반응이 바뀐 것이 아니라 <b>자(눈금)가 바뀐 것</b>입니다. 그래프 축 이름이 <code>V vs. RHE</code>인지 먼저 확인하는 습관을 들이세요.</p></div>
+
+<div class="c"><h2><span class="n">6</span>헷갈리기 쉬운 점</h2>
+<ul><li><b>SHE/NHE와 RHE는 다릅니다.</b> SHE는 [H⁺]=1(pH 0)에서 정의된 고정 눈금이고, RHE는 같은 수소 전극이지만 pH 보정이 들어간 눈금입니다. 🎙 "사실상 수소 전극과 같지만 다른 점은 pH 보정입니다" (55:17)</li>
+<li><b>부호:</b> 더하는 값은 +0.059·pH (−가 아님). 이유는 수소 반응이 −0.059pH만큼 내려가 있기 때문. (녹음에서 "0.049"로 적힌 곳은 0.059의 오인식입니다.)</li>
+<li><b>0.059는 25 ℃ 값</b>입니다 (슬라이드 및 수업은 0.0591/0.059 혼용).</li>
+<li>산성(pH 0)에서는 0.059·pH=0이라 RHE와 SHE 값이 같습니다.</li></ul></div>
+
+<div class="c"><h2><span class="n">7</span>연습문제</h2>
+<details><summary>Q1. SCE 기준으로 pH 7 용액에서 −0.20 V를 측정했습니다. RHE 기준 값은?</summary><div>E_RHE = −0.20 + 0.242 + 0.059×7 = −0.20 + 0.655 = <b>+0.455 V</b></div></details>
+<details><summary>Q2. 같은 SCE로 pH 13 KOH에서 −0.40 V를 측정했습니다. RHE 기준은?</summary><div>0.059×13 = 0.767. E_RHE = −0.40 + 0.242 + 0.767 = <b>+0.609 V</b>. pH가 클수록 더해지는 값이 커집니다.</div></details>
+<details><summary>Q3. 왜 RHE 눈금에서는 수소 발생 반응이 항상 0 V입니까?</summary><div>SHE 기준 수소 반응 전위는 −0.059pH로 pH에 따라 내려갑니다. RHE는 여기에 +0.059pH를 더해 그 의존성을 상쇄하도록 정의한 눈금이므로 어떤 pH에서도 0 V가 됩니다.</div></details>
+<details><summary>Q4. pH 14 논문 그래프에서 +1.5 V라는 값이 나왔습니다. 이상한 값입니까?</summary><div>먼저 x축이 vs. RHE인지 확인합니다. RHE라면 pH 보정이 이미 된 값이므로 이상하지 않습니다(예: 산소 발생 반응은 RHE 기준 약 1.23 V에서 시작). SHE 기준이라면 O₂ 평형이 0.40 V 부근이어야 하므로 그때는 과전압을 생각해야 합니다.</div></details>
+<details><summary>Q5. (서술) 산성과 알칼리 용액에서 얻은 두 촉매 데이터를 비교할 때 RHE를 쓰는 이유를 쓰시오.</summary><div>수소·산소 반응의 평형전위가 Nernst 식에 따라 pH마다 −0.059 V/pH로 이동하므로, 기준을 그대로 두면 pH가 다른 결과를 직접 비교할 수 없다. RHE는 수소 반응을 모든 pH에서 0 V로 고정한 범용 기준이라 산성·중성·알칼리 결과를 같은 눈금에서 비교할 수 있다.</div></details></div>
+
+<script>
+const X=p=>50+p*(560/14),t0=1.5,Y=e=>20+(t0-e)*(260/3.5);let T=0;
+const ch=document.getElementById('ch');
+function draw(){let h='';for(let p=0;p<=14;p+=2)h+=`<line x1="${X(p)}" y1="20" x2="${X(p)}" y2="280" stroke="#8883"/><text x="${X(p)-4}" y="298">${p}</text>`;
+for(let e=-2;e<=1;e++)h+=`<line x1="50" y1="${Y(e)}" x2="610" y2="${Y(e)}" stroke="#8883"/><text x="10" y="${Y(e)+4}">${e}</text>`;
+h+=`<text x="580" y="318">pH</text><text x="8" y="14">E (V)</text>`;
+const o=p=>1.229-.059*p+T*.059*p,hh=p=>-.059*p+T*.059*p;
+h+=`<line x1="${X(0)}" y1="${Y(o(0))}" x2="${X(14)}" y2="${Y(o(14))}" stroke="#1f6feb" stroke-width="3"/><text x="${X(8)}" y="${Y(o(8))-8}" fill="#1f6feb" style="fill:#1f6feb">O₂/H₂O</text>`;
+h+=`<line x1="${X(0)}" y1="${Y(hh(0))}" x2="${X(14)}" y2="${Y(hh(14))}" stroke="#e07b00" stroke-width="3"/><text x="${X(8)}" y="${Y(hh(8))+18}" style="fill:#e07b00">H⁺/H₂</text>`;
+h+=`<circle cx="${X(14)}" cy="${Y(o(14))}" r="5" fill="#c62828"/><text x="${X(14)-95}" y="${Y(o(14))-10}" style="fill:#c62828">pH14: ${o(14).toFixed(2)} V</text>`;
+ch.innerHTML=h;document.getElementById('lab').textContent=T>.99?'현재: RHE 눈금 (수평선)':T<.01?'현재: SHE 눈금 (기울어진 선)':'변환 중…'}
+function anim(to){const s=T,st=performance.now();(function f(n){const k=Math.min(1,(n-st)/1800);T=s+(to-s)*k;draw();if(k<1)requestAnimationFrame(f)})(st)}draw();
+function calc(){const r=+document.getElementById('rf').value,e=+document.getElementById('em').value,p=+document.getElementById('ph').value,a=.059*p;
+document.getElementById('out').innerHTML=`① SHE 기준으로: ${e.toFixed(3)} + ${r.toFixed(3)} = <b>${(e+r).toFixed(3)} V</b><br>② pH 보정: 0.059 × ${p} = <b>+${a.toFixed(3)} V</b><br><b>E<sub>RHE</sub> = ${(e+r+a).toFixed(3)} V</b>`}
+['rf','em','ph'].forEach(i=>document.getElementById(i).addEventListener('input',calc));calc();
+</script></main></body></html>
