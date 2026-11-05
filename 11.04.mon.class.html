@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전기화학 기말고사 2차 완벽 대비 가이드</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" 
+            onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});">
+    </script>
+
+    <style>
+        /* Accordion Animations */
+        details > summary { list-style: none; }
+        details > summary::-webkit-details-marker { display: none; }
+        details[open] summary ~ * {
+            animation: sweep .3s ease-in-out;
+        }
+        @keyframes sweep {
+            0%    {opacity: 0; margin-top: -10px}
+            100%  {opacity: 1; margin-top: 0px}
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen">
+
+    <header class="bg-indigo-700 text-white py-8 shadow-md">
+        <div class="max-w-5xl mx-auto px-4">
+            <h1 class="text-3xl font-bold text-center">전기화학 기말고사 2차 완벽 대비 가이드</h1>
+            <p class="text-center text-indigo-200 mt-2">푸르베 선도(Pourbaix Diagram) 작도법 및 RHE 뽀개기</p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-8">
+        
+        <!-- Tab Navigation -->
+        <div class="border-b border-gray-200 mb-8 flex overflow-x-auto">
+            <button id="btn-tab1" onclick="switchTab('tab1')" class="tab-btn py-4 px-6 font-medium text-sm border-b-2 border-indigo-500 text-indigo-600 whitespace-nowrap outline-none transition-colors">
+                ASR 음성 인식 교정
+            </button>
+            <button id="btn-tab2" onclick="switchTab('tab2')" class="tab-btn py-4 px-6 font-medium text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap outline-none transition-colors">
+                랜덤 구술 질문 대비
+            </button>
+            <button id="btn-tab3" onclick="switchTab('tab3')" class="tab-btn py-4 px-6 font-medium text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap outline-none transition-colors">
+                집중 학습 영역
+            </button>
+            <button id="btn-tab4" onclick="switchTab('tab4')" class="tab-btn py-4 px-6 font-medium text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap outline-none transition-colors">
+                푸르베 선도 작도법 (인터랙티브)
+            </button>
+        </div>
+
+        <!-- Tab 1: ASR 음성 인식 교정 -->
+        <div id="tab1" class="tab-content block">
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 border-l-4 border-indigo-500 pl-3">교수님 강의 대본(STT) 오류 교정표</h2>
+                <p class="mb-4 text-gray-600">음성 인식(STT) 과정에서 유사 발음으로 뭉개진 전기화학 전공 용어들을 교정했습니다.</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-indigo-50 text-indigo-800">
+                                <th class="p-3 border border-indigo-100 font-semibold rounded-tl-lg">ASR 인식 오류</th>
+                                <th class="p-3 border border-indigo-100 font-semibold">올바른 전기화학 용어</th>
+                                <th class="p-3 border border-indigo-100 font-semibold rounded-tr-lg">의미 및 해설</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <tr>
+                                <td class="p-3 border font-mono text-red-600 bg-red-50">probiodag / Pobia / phobia drag</td>
+                                <td class="p-3 border font-bold text-green-700">Pourbaix diagram</td>
+                                <td class="p-3 border text-gray-700">푸르베 선도. 전위(E)와 pH에 따른 열역학적 상평형(Phase equilibrium) 지도 (Slide 3)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border font-mono text-red-600 bg-red-50">urnity / nonstation / nerve</td>
+                                <td class="p-3 border font-bold text-green-700">Nernst equation</td>
+                                <td class="p-3 border text-gray-700">네른스트 방정식. 농도와 pH에 따른 평형 전위의 변화를 계산하는 핵심 식</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border font-mono text-red-600 bg-red-50">RT / rag / Reg / RHG</td>
+                                <td class="p-3 border font-bold text-green-700">RHE (Reversible Hydrogen Electrode)</td>
+                                <td class="p-3 border text-gray-700">가역 수소 전극. pH에 따른 수소 발생 전위 이동분을 수식적으로 상쇄(Offset)한 기준 전극</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border font-mono text-red-600 bg-red-50">coral amper matrix / CRO</td>
+                                <td class="p-3 border font-bold text-green-700">Chronoamperometry</td>
+                                <td class="p-3 border text-gray-700">크로노암페로메트리. 전위를 제어하며 시간(Chrono)에 따른 전류(Ampero)를 측정하는 기법</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border font-mono text-red-600 bg-red-50">QUI ascent / quiet ass and</td>
+                                <td class="p-3 border font-bold text-green-700">Quiescent solution</td>
+                                <td class="p-3 border text-gray-700">정지 용액. 자연 대류나 인위적 교반이 없어 순수 확산(Diffusion) 거동만 분석 가능한 상태</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border font-mono text-red-600 bg-red-50">non-splank / nurse blank</td>
+                                <td class="p-3 border font-bold text-green-700">Nernst-Planck equation</td>
+                                <td class="p-3 border text-gray-700">네른스트-플랑크 식. 확산, 전기영동, 대류의 세 가지 물질 전달 구동력을 합친 방정식</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: 랜덤 구술 질문 대비 -->
+        <div id="tab2" class="tab-content hidden">
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <h2 class="text-xl font-bold text-gray-800 mb-6 border-l-4 border-indigo-500 pl-3">교수님 불시 구술 질문 4제 (11월 4일 본수업 복습용)</h2>
+                <div class="space-y-4">
+                    
+                    <!-- Q1 -->
+                    <details class="group bg-gray-50 rounded-lg border border-gray-200 cursor-pointer">
+                        <summary class="p-4 font-semibold text-gray-800 group-hover:text-indigo-600 flex justify-between items-center">
+                            1. 전위 계단법(CA)에서 실험을 10~20초 이내로 끝내야 하는 이유와, 이를 위해 반드시 마이크로 전극(Microelectrode)을 도입해야 하는 이유는 무엇인가?
+                            <span class="text-xl text-gray-400 group-open:rotate-45 transition-transform duration-200">+</span>
+                        </summary>
+                        <div class="p-4 pt-0 text-gray-600 border-t border-gray-200 mt-2">
+                            <strong>답변:</strong> 20초가 넘어가면 밀도차에 의한 <strong>자연 대류(Natural convection)</strong>가 발생해 코트렐 식의 전제인 '순수 확산 농도 구배'가 파괴되기 때문입니다. 그러나 일반 대면적 전극은 전기 이중층 충전 시상수($\tau = R_s C_{dl}$)가 길어 10~20초 안에 패러데이 전류를 제대로 분리해 측정할 수 없습니다. 마이크로 전극을 쓰면 전극 면적이 극히 작아 정전용량($C_{dl}$)이 급감하므로, 충전 시간($\tau$)이 획기적으로 짧아져 <strong>대류 발생 전의 짧은 시간 안에 순수 확산(Faradaic) 데이터를 완벽히 얻어낼 수 있습니다.</strong> (대본 17:30 ~ 21:16)
+                        </div>
+                    </details>
+
+                    <!-- Q2 -->
+                    <details class="group bg-gray-50 rounded-lg border border-gray-200 cursor-pointer">
+                        <summary class="p-4 font-semibold text-gray-800 group-hover:text-indigo-600 flex justify-between items-center">
+                            2. 전위 계단법에서는 전압을 걸자마자 전류가 최대치에서 감소하기만 하는데, 선형 주사 전위법(LSV)에서는 왜 전류가 서서히 증가하다가 피크(ipc)를 찍고 하강하는가?
+                            <span class="text-xl text-gray-400 group-open:rotate-45 transition-transform duration-200">+</span>
+                        </summary>
+                        <div class="p-4 pt-0 text-gray-600 border-t border-gray-200 mt-2">
+                            <strong>답변:</strong> 전위 계단법은 시작부터 표면 농도를 $0$으로 만들어 '최대 농도 구배'에서 시작하지만, LSV는 전위가 서서히 증가합니다. 전위가 증가함에 따라 네른스트 식에 의해 <strong>표면 농도가 $0$을 향해 점차 떨어지면서 농도 구배가 가팔라져 전류가 상승</strong>합니다. 마침내 <strong>표면 농도가 $0$에 도달하면 구배가 물리적 극댓값(피크)</strong>을 찍습니다. 이후에는 전위를 더 걸어도 표면 농도는 $0$ 미만으로 내려갈 수 없고 확산층($\delta$)만 두꺼워지므로, 물질 전달 저항이 커져 코트렐 감쇠 규칙($t^{-1/2}$)에 따라 전류가 하강하게 됩니다. (대본 27:49 ~ 32:18)
+                        </div>
+                    </details>
+
+                    <!-- Q3 -->
+                    <details class="group bg-gray-50 rounded-lg border border-gray-200 cursor-pointer">
+                        <summary class="p-4 font-semibold text-gray-800 group-hover:text-indigo-600 flex justify-between items-center">
+                            3. LSV에서 주사 속도(Scan rate, v)를 높이면 패러데이 피크 전류(ipc)가 커진다. 그런데 왜 비패러데이 전류(inf) 노이즈를 억제하기 위해서는 주사 속도를 오히려 '낮춰야' 하는가?
+                            <span class="text-xl text-gray-400 group-open:rotate-45 transition-transform duration-200">+</span>
+                        </summary>
+                        <div class="p-4 pt-0 text-gray-600 border-t border-gray-200 mt-2">
+                            <strong>답변:</strong> 비패러데이 충전 전류는 주사 속도에 <strong>1차 비례</strong>($i_{nf} \propto v$)하지만, 랜드레스-셉칙 식에 따른 패러데이 피크 전류는 주사 속도의 <strong>제곱근에 비례</strong>($i_{pc} \propto v^{1/2}$)하기 때문입니다. 신호 대비 노이즈 비율인 $i_{nf}/i_{pc}$ 를 계산하면 <strong>$v^{1/2}$ 에 비례</strong>하게 되므로, 주사 속도를 높일수록 패러데이 신호보다 비패러데이 노이즈가 기하급수적으로 빠르게 증폭됩니다. 따라서 순수한 전기화학 반응 전류 신호를 얻으려면 주사 속도를 낮춰야 합니다. (대본 41:59 ~ 43:40)
+                        </div>
+                    </details>
+
+                    <!-- Q4 -->
+                    <details class="group bg-gray-50 rounded-lg border border-gray-200 cursor-pointer">
+                        <summary class="p-4 font-semibold text-gray-800 group-hover:text-indigo-600 flex justify-between items-center">
+                            4. 마이크로 전극을 사용하여 전위 계단법을 수행하면 시간이 무한대(t→∞)로 흘러도 전류가 0으로 떨어지지 않고 '정상 상태 전류(Steady-state current)'에 도달한다. 이유는?
+                            <span class="text-xl text-gray-400 group-open:rotate-45 transition-transform duration-200">+</span>
+                        </summary>
+                        <div class="p-4 pt-0 text-gray-600 border-t border-gray-200 mt-2">
+                            <strong>답변:</strong> 일반 대면적 전극은 직교 좌표계(Rectangular coordinate)에 따른 1차원 평면 확산을 따르므로 확산층이 한없이 두꺼워지며 전류가 $0$에 수렴합니다. 반면, 마이크로 전극은 전극 가장자리에서 3차원 방사형으로 반응물이 몰려드는 <strong>구형 확산(Spherical diffusion) 거동</strong>을 보입니다. 구형 확산 코트렐 방정식에는 시간에 무관한 기하학적 항($1/r_0$)이 존재하여, 시간이 지나 평면 확산 항($1/\sqrt{t}$)이 소멸하더라도 일정한 정상 상태(Steady-state) 전류값이 유지됩니다. (대본 21:16 ~ 24:00)
+                        </div>
+                    </details>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: 집중 학습 영역 -->
+        <div id="tab3" class="tab-content hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Area 1 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <h3 class="text-lg font-bold text-indigo-700 mb-3 border-b pb-2">1. 푸르베 선도 3대 작도 방정식 암기 (필수)</h3>
+                    <ul class="space-y-4 text-gray-700">
+                        <li>
+                            <span class="inline-block px-2 py-1 bg-blue-100 text-blue-800 rounded font-bold text-sm mb-1">전자($e^-$)만 관여: 수평선</span>
+                            <p>식에 $H^+$나 $OH^-$가 없으므로 pH에 무관합니다. 오직 네른스트 식의 농도 항에만 의존하여 가로축 평행선이 됩니다.<br>
+                            $\rightarrow E = E^\circ - \frac{0.0591}{n} \log(\dots)$</p>
+                        </li>
+                        <li>
+                            <span class="inline-block px-2 py-1 bg-red-100 text-red-800 rounded font-bold text-sm mb-1">전자($e^-$)와 $H^+$ 동시 관여: 경사선</span>
+                            <p>가장 일반적인 부식 반응입니다. 네른스트 식에 $[H^+]$가 포함되어 $\mathrm{pH}$가 커질수록 기울기가 음수인 사선이 됩니다.<br>
+                            $\rightarrow E = E^\circ - 0.0591 \left(\frac{m}{n}\right) \mathrm{pH}$</p>
+                        </li>
+                        <li>
+                            <span class="inline-block px-2 py-1 bg-green-100 text-green-800 rounded font-bold text-sm mb-1">$H^+$만 관여(전자 없음): 수직선</span>
+                            <p>교수님이 가장 강조하신 <strong>함정 포인트</strong>입니다! 산화수 변화가 없는 순수 침전/용해 반응이므로 네른스트 식이 아닌 <strong>화학 평형 상수($K$) 식</strong>을 써야 하며 세로축 평행선(수직선)이 됩니다.</p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Area 2 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <h3 class="text-lg font-bold text-indigo-700 mb-3 border-b pb-2">2. 반응식 작성 4단계 템플릿</h3>
+                    <ul class="space-y-4 text-gray-700">
+                        <p class="text-sm bg-gray-100 p-2 rounded">시험에서 화학종(예: $\mathrm{Al}$, $\mathrm{Al_2O_3}$)만 주어질 때 반응식을 스스로 조립하는 방법입니다.</p>
+                        <li>
+                            <span class="font-bold text-indigo-600">1단계:</span> 주원소(금속)의 개수를 양변에 맞춥니다.
+                        </li>
+                        <li>
+                            <span class="font-bold text-indigo-600">2단계:</span> 산소($\mathrm{O}$) 원자가 부족한 쪽에 부족한 만큼 $\mathrm{H_2O}$를 더합니다.
+                        </li>
+                        <li>
+                            <span class="font-bold text-indigo-600">3단계:</span> 수소($\mathrm{H}$) 원자가 부족한 쪽에 부족한 만큼 $\mathrm{H^+}$를 더합니다.
+                        </li>
+                        <li>
+                            <span class="font-bold text-indigo-600">4단계:</span> 양변의 총 전하량을 계산하고, 높은 쪽에 전자($e^-$)를 더해 전하 균형을 맞춥니다. 전자가 $0$개가 나오면 그것은 수직선(평형 상수) 반응입니다!
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 4: 푸르베 선도 작도법 (인터랙티브) -->
+        <div id="tab4" class="tab-content hidden">
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 border-l-4 border-indigo-500 pl-3">알루미늄 푸르베 선도(Pourbaix Diagram) 작도 애니메이션</h2>
+                <p class="text-gray-600 mb-6">수업 대본 20:03 ~ 36:39에서 교수님이 칠판에 하나씩 선을 그어가며 설명하신 $\mathrm{Al}$의 상평형도 작도 과정을 완벽하게 재현했습니다. '다음 단계' 버튼을 클릭하세요.</p>
+                
+                <!-- Interactive SVG -->
+                <div class="relative bg-gray-50 rounded-lg p-6 flex flex-col items-center">
+                    <svg viewBox="0 0 500 400" class="w-full max-w-lg bg-white border border-gray-200 shadow-sm rounded-lg" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Axes -->
+                        <g stroke="#1f2937" stroke-width="2">
+                            <!-- Y axis (Potential V) -->
+                            <line x1="50" y1="20" x2="50" y2="350"/>
+                            <polygon points="45,30 55,30 50,20" fill="#1f2937"/>
+                            <text x="20" y="40" font-size="16" stroke-width="0" fill="#1f2937" font-weight="bold">V</text>
+                            
+                            <!-- X axis (pH 0 to 14) -->
+                            <line x1="50" y1="350" x2="480" y2="350"/>
+                            <polygon points="470,345 470,355 480,350" fill="#1f2937"/>
+                            <text x="430" y="375" font-size="16" stroke-width="0" fill="#1f2937" font-weight="bold">pH</text>
+                            <text x="50" y="375" font-size="14" stroke-width="0" fill="#4b5563">0</text>
+                            <text x="400" y="375" font-size="14" stroke-width="0" fill="#4b5563">14</text>
+                        </g>
+
+                        <!-- Step 1: Horizontal Line (Al / Al3+) -->
+                        <g id="step1-group" class="opacity-0 transition-opacity duration-700">
+                            <line x1="50" y1="200" x2="180" y2="200" stroke="#3b82f6" stroke-width="4" stroke-linecap="round"/>
+                            <text x="80" y="190" font-size="14" fill="#3b82f6" font-weight="bold">(1) 수평선</text>
+                            <text x="100" y="130" font-size="20" fill="#4b5563" font-weight="bold">Al³⁺</text>
+                            <text x="120" y="300" font-size="24" fill="#4b5563" font-weight="bold">Al (Metal)</text>
+                        </g>
+
+                        <!-- Step 2: Slanted Line (Al / Al2O3) -->
+                        <g id="step2-group" class="opacity-0 transition-opacity duration-700">
+                            <line x1="180" y1="200" x2="320" y2="250" stroke="#ef4444" stroke-width="4" stroke-linecap="round"/>
+                            <text x="220" y="245" font-size="14" fill="#ef4444" font-weight="bold">(2) 경사선</text>
+                        </g>
+                        
+                        <!-- Step 3: Vertical Line (Al3+ / Al2O3) -->
+                        <g id="step3-group" class="opacity-0 transition-opacity duration-700">
+                            <line x1="180" y1="50" x2="180" y2="200" stroke="#10b981" stroke-width="4" stroke-linecap="round"/>
+                            <text x="120" y="80" font-size="14" fill="#10b981" font-weight="bold">(3) 수직선</text>
+                            <text x="230" y="130" font-size="20" fill="#4b5563" font-weight="bold">Al₂O₃ (Passivation)</text>
+                        </g>
+                        
+                        <!-- Step 4: Slanted Line (Al / AlO2-) -->
+                        <g id="step4-group" class="opacity-0 transition-opacity duration-700">
+                            <line x1="320" y1="250" x2="420" y2="330" stroke="#f59e0b" stroke-width="4" stroke-linecap="round"/>
+                            <text x="350" y="315" font-size="14" fill="#f59e0b" font-weight="bold">(4) 경사선</text>
+                        </g>
+
+                        <!-- Step 5: Vertical Line (Al2O3 / AlO2-) -->
+                        <g id="step5-group" class="opacity-0 transition-opacity duration-700">
+                            <line x1="320" y1="50" x2="320" y2="250" stroke="#8b5cf6" stroke-width="4" stroke-linecap="round"/>
+                            <text x="330" y="80" font-size="14" fill="#8b5cf6" font-weight="bold">(5) 수직선</text>
+                            <text x="360" y="170" font-size="20" fill="#4b5563" font-weight="bold">AlO₂⁻</text>
+                        </g>
+                    </svg>
+
+                    <!-- Interaction Controls -->
+                    <div class="mt-6 w-full max-w-lg">
+                        <div id="svg-desc" class="h-28 text-center text-gray-700 font-medium px-4 flex items-center justify-center bg-indigo-50 rounded-lg p-2 border border-indigo-100">
+                            초기 상태: 전위(V)와 pH를 축으로 하는 열역학적 상평형도 캔버스입니다.
+                        </div>
+                        <div class="flex justify-center gap-4 mt-4">
+                            <button id="btn-svg-reset" onclick="resetSvg()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors font-medium">초기화</button>
+                            <button id="btn-svg-next" onclick="nextSvgStep()" class="px-6 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors font-bold shadow">다음 단계 작도 ➔</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- JavaScript for Interactions -->
+    <script>
+        // Tab switching logic
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
+            // Reset tab button styles
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('border-indigo-500', 'text-indigo-600');
+                el.classList.add('border-transparent', 'text-gray-500');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabId).classList.remove('hidden');
+            document.getElementById(tabId).classList.add('block');
+            
+            // Highlight selected button
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            activeBtn.classList.remove('border-transparent', 'text-gray-500');
+            activeBtn.classList.add('border-indigo-500', 'text-indigo-600');
+        }
+
+        // SVG Animation Logic
+        let currentSvgStep = 0;
+        const svgDescriptions = [
+            "초기 상태: 전위(V)와 pH를 축으로 하는 열역학적 상평형도 캔버스입니다.",
+            "선 (1): Al / Al³⁺ 경계. 전자가 3개 관여하지만 H⁺는 없으므로 pH에 무관합니다. 네른스트 식에 의해 수평선으로 작도됩니다.",
+            "선 (2): Al / Al₂O₃ 경계. 산화수 변화(전자 관여)와 산소 결합(H⁺ 관여)이 동시에 일어납니다. 네른스트 식에 pH가 포함되어 경사선이 됩니다.",
+            "선 (3): Al³⁺ / Al₂O₃ 경계 (핵심!). 양변 모두 산화수가 +3이므로 전자가 없습니다. 전기화학 반응이 아닌 순수 화학 평형 반응이므로 수직선(pH 3.9)이 됩니다.",
+            "선 (4): Al / AlO₂⁻ 경계. 고 pH 알칼리 영역에서 금속이 이온으로 녹는 반응입니다. 전자와 H⁺가 모두 관여하여 다시 경사선이 됩니다.",
+            "선 (5): Al₂O₃ / AlO₂⁻ 경계. 피막이 알칼리 용액에 녹는 순수 화학 평형 반응입니다. 전자가 없으므로 평형상수 식을 써서 수직선으로 마무리합니다."
+        ];
+
+        function nextSvgStep() {
+            if (currentSvgStep < 5) {
+                currentSvgStep++;
+                document.getElementById(`step${currentSvgStep}-group`).classList.remove('opacity-0');
+                document.getElementById('svg-desc').innerText = svgDescriptions[currentSvgStep];
+                
+                if (currentSvgStep === 5) {
+                    document.getElementById('btn-svg-next').disabled = true;
+                    document.getElementById('btn-svg-next').classList.add('opacity-50', 'cursor-not-allowed');
+                }
+            }
+        }
+
+        function resetSvg() {
+            currentSvgStep = 0;
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById(`step${i}-group`).classList.add('opacity-0');
+            }
+            document.getElementById('svg-desc').innerText = svgDescriptions[0];
+            document.getElementById('btn-svg-next').disabled = false;
+            document.getElementById('btn-svg-next').classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+    </script>
+</body>
+</html>
