@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ppt8 수업 전체 정리 (녹음 기반)</title>
+<style>
+:root{--bg:#f7f8fa;--card:#fff;--tx:#1c2430;--mu:#5b6675;--ac:#1f6feb;--bd:#dde2ea;--hi:#fff4d6;--wa:#fde8e8;--rd:#c62828;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#10151c;--card:#18202b;--tx:#e6ebf2;--mu:#98a4b5;--ac:#5aa2ff;--bd:#2a3545;--hi:#3a3216;--wa:#3d1f22;--rd:#ff7b72}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.85 -apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+main{max-width:860px;margin:auto;padding:16px 14px 70px}h1{font-size:1.55rem;margin:8px 0}h2{font-size:1.25rem;margin:34px 0 4px;padding-top:10px;border-top:3px solid var(--ac)}h3{font-size:1.02rem;margin:16px 0 4px}
+.m{color:var(--mu);font-size:.88rem}.c{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 18px;margin:12px 0}
+.s{display:inline-block;background:var(--ac);color:#fff;border-radius:6px;padding:0 8px;font-size:.8rem;font-weight:700;margin-right:6px}
+.r{background:var(--hi);border-left:4px solid #e5a100;padding:8px 12px;margin:10px 0;border-radius:6px;font-size:.93rem}.r b:first-child{color:var(--mu);font-weight:400;font-size:.8rem}
+.w{background:var(--wa);border-left:4px solid var(--rd);padding:8px 12px;margin:10px 0;border-radius:6px;font-size:.93rem}
+.f{display:block;font-family:ui-monospace,Menlo,monospace;background:rgba(127,127,127,.15);padding:8px 12px;margin:8px 0;border-radius:8px;overflow-x:auto;font-size:.92rem}code{font-family:ui-monospace,Menlo,monospace;background:rgba(127,127,127,.15);padding:1px 6px;border-radius:4px;font-size:.9em}
+table{border-collapse:collapse;width:100%;font-size:.9rem}td,th{border:1px solid var(--bd);padding:6px 8px;text-align:left;vertical-align:top}th{background:rgba(127,127,127,.12)}.tw{overflow-x:auto}
+details{border:1px solid var(--bd);border-radius:10px;margin:8px 0;background:var(--card)}summary{padding:10px 14px;cursor:pointer;font-weight:600}details>div{padding:0 14px 12px}
+nav.t{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}nav.t a{border:1px solid var(--bd);background:var(--card);padding:5px 12px;border-radius:16px;color:var(--ac);text-decoration:none;font-size:.85rem}
+</style></head><body><main>
+<h1>Ppt8 수업 전체 정리 – 녹음 순서대로 풀어쓰기</h1>
+<p class="m">2026.11.02 수업 녹음(85분) 전체를 시간 순서로 따라가며, 처음 배우는 사람도 이해하도록 단계별로 풀었습니다. 🗣 표시는 교수님 말씀 요약(받아쓰기 오류는 슬라이드 기준으로 교정), ⚠️는 교수님이 강조·경고하신 부분입니다. 슬라이드 번호는 PDF 페이지 순서(총 23장) 기준입니다.</p>
+<nav class="t"><a href="#a0">0 복습</a><a href="#a1">1 물 E–pH</a><a href="#a2">2 Pourbaix</a><a href="#a3">3 측정법</a><a href="#a4">4 RHE</a><a href="#a5">5 Potential step</a><a href="#a6">6 못 다룬 부분</a><a href="#a7">7 예상문제</a></nav>
+<div class="w"><b>📌 이 수업에서 교수님이 가장 힘줘서 말씀하신 5가지</b><br>① Nernst 식은 <u>항상 환원형</u>으로 (반응물=분모) ② 식 ①②③은 <u>같은 반응</u> ③ 산화수가 안 변하는 반응(③, ⑤)은 <u>Nernst 금지 → K로 수직선</u> ④ Pourbaix는 <u>열역학일 뿐 속도 정보 없음</u> ⑤ 전위 계단 실험에서 <u>농도구배 = 전류</u>, 4번과 5번 응답이 같은 이유</div>
+
+<h2 id="a0">0. 지난 시간 복습: 외부전류식 음극보호 <span class="m">(00:04~07:11 · 수업 시작 질문)</span></h2>
+<div class="c"><p>수업은 "impressed current cathodic protection의 메커니즘이 무엇인가?"라는 질문으로 시작합니다. 그 설명은 이렇습니다.</p>
+<ol><li>금속의 부식전위가 처음에 어떤 값에 있습니다.</li><li>전원장치로 추가 전류를 흘려주면 부식전위가 <b>금속의 평형전위</b>까지 내려가고, 그 점에서 금속이 완전히 보호됩니다.</li><li>그 이유: 이 점이 <b>전하 보존</b>이 만족되는 점이기 때문입니다. 전원이 공급한 전류는 금속 표면의 산화전류인데, 이 전류는 반드시 <b>환원전류(수소 환원)</b>가 소모해야 합니다. 둘이 같아지는 점이 바로 전하 보존이 성립하는 점입니다.</li></ol>
+<p class="m">쉽게 말해: 전자를 외부에서 계속 밀어 넣어 금속이 전자를 잃지(녹지) 않게 만드는 방법입니다.</p></div>
+
+<h2 id="a1">1. 물의 전위–pH 도 <span class="m">(슬라이드 1~2 · 07:11~20:03)</span></h2>
+<div class="c"><h3>1-1. 산소 반응의 표준전위</h3><p>🗣 물은 산소와 수소로 분해될 수 있습니다. 먼저 산소: <code>O₂ + 4H⁺ + 4e⁻ = 2H₂O</code>, 표준전위 <b>1.229 V</b>. 이 값은 <b>pH 0</b>(활동도 1)에서만 유효합니다. pH를 바꾸면 전위가 어떻게 달라지는지를 알려면 <b>Nernst 식</b>이 필요합니다.</p>
+<h3>1-2. Nernst 식 세우기 (단계별)</h3>
+<p>🗣 Nernst 식은 표준전위에서 벗어난 새 평형전위를 농도에 따라 계산하는 식입니다.</p>
+<span class="f">E = E° − (0.0591/n)·log( [생성물] / [반응물] )     ← n=4</span>
+<div class="w">⚠️ <b>"Nernst 식을 쓸 때는 반응을 항상 환원형으로 쓰고, 그다음에 어느 쪽이 반응물이고 생성물인지 정하세요."</b> 환원형 = 전자(e⁻)가 왼쪽에 있는 형태. 그래서 왼쪽이 반응물(분모), 오른쪽이 생성물(분자)입니다. (09:30)</div>
+<p>대입: 반응물 = O₂(압력 P<sub>O₂</sub>=1 atm), H⁺(4제곱). 생성물 = H₂O(활동도 1)이므로</p>
+<span class="f">E = 1.229 − (0.0591/4)·log[ 1 / (P<sub>O₂</sub>·[H⁺]⁴) ]
+  = 1.229 + (0.0591/4)·log[H⁺]⁴ = 1.229 + 0.0591·log[H⁺]</span>
+<p>🗣 pH 정의 pH = −log[H⁺]를 쓰면 4와 4가 약분되고 부호가 바뀝니다 (10:07~10:54):</p>
+<span class="f">E = 1.229 − 0.0591·pH</span>
+<table><tr><th>pH</th><th>계산</th><th>E (V)</th></tr><tr><td>0</td><td>pH항 소멸</td><td>1.229</td></tr><tr><td>7</td><td>1.229 − 0.0591×7</td><td>0.82 (약 0.815)</td></tr><tr><td>14</td><td>1.229 − 0.0591×14</td><td>0.401</td></tr></table>
+<p class="m">녹음의 "2.401 voltage"는 0.401 V의 받아쓰기 오류입니다.</p>
+<h3>1-3. ①②③은 정말 같은 반응인가? (11:42~15:30)</h3>
+<p>🗣 pH 7, 14의 식은 <code>O₂ + 2H₂O + 4e⁻ = 4OH⁻</code>로 생겼습니다. 식이 달라 보이니 많은 학생들이 다른 반응이라고 착각합니다. 하지만 수학적으로 같습니다.</p>
+<ol><li>식 ①: O₂ + 4H⁺ + 4e⁻ = 2H₂O</li><li>양변에 4OH⁻를 더합니다 (양변에 같은 걸 더하면 등식은 유지). pH가 알칼리로 가는 방향입니다.</li><li>왼쪽 4H⁺ + 4OH⁻ → 4H₂O</li><li>정리: 왼쪽 4H₂O, 오른쪽 2H₂O + 4OH⁻ → 양변에서 2H₂O를 빼면 <code>O₂ + 2H₂O + 4e⁻ = 4OH⁻</code> (= 식 ②③)</li></ol>
+<p>🗣 식 ③에도 Nernst를 적용해 보면 <code>E = E° − (0.0591/4)·log[OH⁻]⁴ = E° + 0.0591·pOH</code>, 그리고 <code>pOH = 14 − pH</code>, 이때 E°는 <b>pH 14의 값 0.401</b>입니다. 따라서 <code>E = 0.401 + 0.0591(14 − pH) = 1.229 − 0.0591pH</code>. 식 ①과 똑같은 결과입니다.</p>
+<div class="w">⚠️ "어느 식을 써도 Nernst를 적용하면 같은 결과가 나온다. 그게 이 식들이 모두 같은 반응이라는 증거." — 시험 포인트</div>
+<h3>1-4. 그래프로 그리기 (15:30~18:35)</h3>
+<ul><li>x축 pH, y축 전위. 직선 <code>E = 1.229 − 0.0591pH</code> = 선 <b>(a)</b>, 기울기 −0.0591.</li><li>🗣 <b>전위가 더 +가 되면 산화</b>를 기대합니다 → 선 위쪽: 물이 산화되어 <b>산소</b> 생성. 전위가 −쪽이면 환원 → 선 아래쪽은 <b>물</b>.</li><li>선 자체 = 물과 산소의 <b>평형 상태</b>.</li></ul>
+<p>수소 반응 <code>2H⁺ + 2e⁻ = H₂</code>도 같은 방식: pH0 0 V, pH7 −0.413, pH14 −0.828, <code>E = −0.0591pH</code> = 선 <b>(b)</b>. 기울기가 같으므로 (a)(b)는 <b>평행</b>입니다. (b) 아래(더 −): 환원 → <b>수소 가스 안정</b>. (b) 위: 물.</p>
+<div class="r"><b>🗣 18:35~19:21</b><br>두 선 사이에서는 물이 안정, (a) 위는 산소가 안정, (b) 아래는 수소가 안정합니다. pH와 전위가 주어지면 그 점을 찍어 어느 영역인지 보고 안정상을 말할 수 있습니다. 이것이 pH–전위 상(phase) 다이어그램입니다.</div></div>
+
+<h2 id="a2">2. Pourbaix 도 (Al 예제) <span class="m">(슬라이드 3~6 · 20:03~39:48)</span></h2>
+<div class="c"><p>🗣 물에 접한 어떤 성분에 같은 개념을 적용하면 <b>Pourbaix 도</b> = 전위와 pH에 따른 그 성분의 평형 상 다이어그램. x=pH, y=전위. 예: 물속의 알루미늄. 아래 선 번호(① ~ ⑤)는 슬라이드 번호와 같습니다. 선이 그려지는 모습은 앞서 만든 작도 애니메이션 페이지(Al Pourbaix 탭)에서 확인하세요.</p>
+<h3>선 ① Al = Al³⁺ + 3e⁻ (슬라이드 3 · 20:43~24:04)</h3>
+<ol><li>반응이 산화형으로 쓰여 있으니 <b>환원형으로 뒤집기</b>: Al³⁺ + 3e⁻ → Al. 따라서 Al³⁺가 반응물(분모), 순수 Al 금속(활동도 1)이 생성물(분자).</li><li><code>E = −1.66 − (0.0591/3)·log(1/[Al³⁺]) = −1.66 + (0.0591/3)log[Al³⁺]</code> (표준전위 −1.66 V는 표준전위표에서 찾음)</li><li>[Al³⁺]=1이면 로그항=0 → −1.66 V. [Al³⁺]=10⁻⁶이면 −1.66 − 0.118 ≈ <b>−1.78 V</b>.</li><li><b>pH 항이 없다</b> → 수평선. 농도가 낮을수록 선이 아래로 이동(보통 10⁻⁶ 사용).</li></ol>
+<p>선 위(+, 산화) = Al³⁺ 안정, 선 아래(환원) = Al 금속 안정.</p>
+<div class="w">⚠️ "이 선은 Nernst 식 = 평형전위에서 나왔다 = <b>열역학 데이터</b>. 그래서 속도(kinetics)에 대한 정보는 없다. 열역학과 동역학은 완전히 별개다." (24:51)</div>
+<h3>선 ② 2Al + 3H₂O = Al₂O₃ + 6H⁺ + 6e⁻ (슬라이드 4 · 25:25~30:19)</h3>
+<p>🗣 알루미늄이 물과 반응해 <b>산화막(Al₂O₃, passive)</b>을 만들고 H⁺와 전자를 내놓는 반응도 있으므로 ①만으로는 부족합니다. 같은 절차(환원형 → Nernst)를 적용하되:</p>
+<ol><li>H⁺ 농도는 pH로 바꿉니다: <code>E = E° − (0.0591/6)·log(1/[H⁺]⁶) = E° − 0.0591pH</code></li><li>이 반응의 표준전위는 표에 없다 → <b>ΔG° = −nFE°</b>로 계산 (열역학 데이터로 ΔG° 구함). 결과 E° = <b>−1.55 V</b>.</li><li>선 ②: <code>E = −1.55 − 0.0591pH</code> (기울기 −0.0591)</li></ol>
+<p>선 ② 위: 산화형(Al³⁺, Al₂O₃), 아래: Al 금속. 그런데 ①과 ②를 그리면 <b>Al³⁺ 영역과 Al₂O₃ 영역이 겹칩니다</b> → 둘을 구분할 경계선이 필요.</p>
+<h3>선 ③ 2Al³⁺ + 3H₂O = Al₂O₃ + 6H⁺ (슬라이드 4 · 31:07~34:16)</h3>
+<div class="w">⚠️ <b>"여기서 식 ③에 Nernst를 적용하면 틀린다(not correct)."</b> 겉보기엔 전기화학 반응 같지만 아니다. 전기화학 반응 = 산화 또는 환원이 있는 반응. Al의 산화수를 세어 보면: Al³⁺ → +3. Al₂O₃ → 산소 −2×3 = −6 이므로 Al 2개가 +6, <b>Al 하나는 +3</b>. 산화수가 같다 = 전자를 주고받지 않는다 = 산화·환원 없음 = <b>단순 평형</b>. (31:52~32:42)</div>
+<ol><li>평형상수 <code>K = [H⁺]⁶/[Al³⁺]² = 10^−11.4</code> (문제에서 주어짐)</li><li>양변 log: <code>log K = 6log[H⁺] − 2log[Al³⁺] = −6pH − 2log[Al³⁺]</code></li><li>pH에 대해 정리: <code>pH = −logK/6 − log[Al³⁺]/3</code></li><li>[Al³⁺]=10⁻⁶ 대입: 11.4/6 + 6/3 = 1.9 + 2 = <b>pH 3.9</b></li></ol>
+<p>전위(E) 항이 없으므로 <b>pH 3.9의 수직선</b>. 왼쪽 Al³⁺, 오른쪽 Al₂O₃, 아래 Al 금속.</p>
+<h3>선 ④ Al + 2H₂O = AlO₂⁻ + 4H⁺ + 3e⁻ (슬라이드 5 · 34:16~35:49)</h3>
+<p>🗣 또 다른 가능성: 알루미늄이 물과 반응해 알루민산 이온(AlO₂⁻)이 되는 반응. Nernst 적용: <code>E = −1.262 + 0.02log[AlO₂⁻] − 0.079pH</code>. 표준전위는 ΔG° = −nFE°로 구함. <b>기울기가 −0.0591이 아니라 −0.079</b>로 다릅니다(H⁺ 4개, 전자 3개이므로 0.0591×4/3). 또 [AlO₂⁻]와 pH 둘 다에 의존.</p>
+<h3>선 ⑤ Al₂O₃ + H₂O = 2AlO₂⁻ + 2H⁺ (슬라이드 5 · 35:49~36:39)</h3>
+<p>Al₂O₃와 AlO₂⁻ 영역이 겹치므로 경계선 필요. 산화수 +3 → +3이라 <b>③과 똑같이 비전기화학</b>. <code>K = [AlO₂⁻]²[H⁺]² / [Al₂O₃] = 10^−29.2</code>, <code>pH = −logK/2 + log[AlO₂⁻] = 14.6 + log[AlO₂⁻]</code>. [AlO₂⁻]=10⁻⁶이면 <b>pH 8.6의 수직선</b>.</p>
+<h3>완성 도표 읽기 (슬라이드 6 · 36:39~39:48)</h3>
+<p>🗣 pH와 전위가 주어지면 도표에서 가장 안정한 상을 읽습니다. <b>Pourbaix 도는 주어진 pH와 작동 전위에서 안정한 재료를 고를 때 가장 먼저 참고하는 자료</b>입니다. 부식이 일어나는 상이면 피하고 안정한 재료를 선택합니다.</p>
+<div class="w">⚠️ <b>한계</b>: ① 열역학적으로 유리한 것이지 실제로 일어날지는 모름 ② 반응속도 정보 없음 ③ 어느 상이 가장 안정한지만 알려주고 도달 시간은 모름 ④ 단일 원소를 다룸(합금 아님).<br>예시: 부식상 영역이어도 속도가 매우 느려 도달에 <b>100년</b> 걸린다면, 반응기 수명이 20~30년이므로 그 재료를 써도 된다. 그래도 첫 스크리닝으로는 유효하다. (38:28~39:48)</div></div>
+
+<h2 id="a3">3. 전기화학 측정법 분류 <span class="m">(슬라이드 7~8 · 41:13~54:22)</span></h2>
+<div class="c"><p>🗣 부식은 응용 예시였고, 이제 전기화학 <b>실험</b>으로 정보를 얻는 방법. 지금까지 배운 지식을 적용합니다. 전위와 전류는 독립이 아니고 서로 연결되어 있습니다.</p>
+<table><tr><th>방법</th><th>제어 / 측정</th></tr><tr><td>Potentiostatic</td><td>전위 제어 → 전류 측정</td></tr><tr><td>Galvanostatic</td><td>전류 제어 → 전위 측정</td></tr><tr><td>Chronoamperometry</td><td>전위 제어, 전류를 시간에 따라 측정</td></tr><tr><td>Chronopotentiometry</td><td>전류 제어, 전위를 시간에 따라 측정</td></tr><tr><td>Chronocoulometry</td><td>전하량 vs 시간</td></tr></table>
+<h3>전류 유무에 따른 분류 (43:20~47:08)</h3>
+<ul><li><b>Potentiometry (i=0)</b>: 전류가 0 = 평형. 🗣 "전류가 0이면 바로 떠올라야 할 식은?" → <b>Nernst 식</b>. 평형전위를 재면 농도비를 알 수 있고, 전위의 시간 변화는 전해질 농도 변화를 직접 반영.</li><li><b>Voltammetry (i≠0)</b>: 대부분의 방법. 작업전극에 전위를 가하고 전류 측정, 전류–전위 그래프 = <b>voltammogram</b>. <u>정성분석</u>: 각 반응은 고유한 산화환원전위가 있으므로 전위로 어떤 성분(예: 구리)이 반응하는지 안다. <u>정량분석</u>: 전류는 농도에 비례(전류 = 반응의 생성물, 반응물이 많을수록 큰 전류).</li></ul>
+<h3>대류 여부 분류 (47:22~48:41)</h3>
+<p><b>교반(대류) 있음</b> = hydrodynamic voltammetry: RDE(회전 원판 전극), RRDE(회전 링-디스크 전극) — 나중에 자세히. <b>정지 용액(quiescent)</b>: 펄스법, stripping, LSV, CV, DME(Polarography, 개발자는 노벨상 수상).</p>
+<div class="w">⚠️ <b>교수님이 학생들에게 직접 질문하신 부분 (49:28~51:48)</b>: "왜 대부분의 전기화학 실험은 정지 용액에서 하나?"<br>답: Nernst–Planck 식의 플럭스 구동력 = <b>확산 + 이동(migration) + 대류</b>. 교반을 안 하면 대류 항 제거. <b>지지전해질(supporting electrolyte)</b>을 넣으면 이동 항도 제거. 남는 것은 <b>확산뿐</b> → 플럭스 계산이 쉬워지고, 플럭스에서 전류를 계산할 수 있기 때문.</div>
+<h3>2전극 vs 3전극 (52:31~54:22)</h3>
+<ul><li><b>2전극</b>: Working + Reference. 한 전극이 counter와 reference 역할을 동시에 해야 함. 기준전극은 안정하지만 <b>큰 전류가 흐르면 전위가 흔들려</b> 표준값에서 벗어남. 전류가 아주 작을 때만 사용.</li><li><b>3전극</b>: Working + Counter + Reference. 큰 전류는 working과 <b>counter</b> 사이로 흐르고, reference는 working의 전위만 측정 → reference가 안정 → 고전류에서도 정확. <b>선호되는 구성</b>.</li></ul></div>
+
+<h2 id="a4">4. RHE <span class="m">(슬라이드 9 · 54:22~58:46)</span></h2>
+<div class="c"><p>핵심만: 수소 반응 전위 = <code>−0.059·pH</code> (SHE 기준)이라 pH마다 달라지므로, 측정값에 <b>+0.059·pH</b>를 더해 어떤 pH에서도 수소 발생을 0 V로 만든 눈금이 RHE입니다.</p>
+<span class="f">E_RHE = E_ref + E°_ref + 0.059·pH      (SCE: E°_ref = 0.242 V)
+pH 7, SCE → E_RHE = E_vs.SCE + 0.242 + 0.413 = E_vs.SCE + 0.655 V</span>
+<div class="r"><b>🗣 58:46</b><br>알칼리 pH 14 그래프에서 높은 + 전위가 보이면 이상하다고 생각하기 쉬운데, 먼저 x축이 RHE인지 확인하세요. RHE면 이미 pH 보정이 된 값이라 맞는 것입니다.</div>
+<p class="m">처음부터 천천히 풀어 쓴 상세 설명과 계산기: 앞서 만든 "RHE 완전 정복" 페이지를 보세요.</p></div>
+
+<h2 id="a5">5. Potential step 법 · Cottrell 식 <span class="m">(슬라이드 10~12 · 1:00:53~1:25:19)</span></h2>
+<div class="c"><h3>5-1. 실험 설명 (슬라이드 10 · 1:00:53~1:03:32)</h3>
+<p>🗣 가장 간단한 전기화학 방법. 전위가 처음엔 E₁이다가 순간적으로 E₂로 <b>점프</b>하고, 그 후 시간 t 동안 그 전위가 일정 → 그래프가 계단(step) 모양이라 이름이 potential step.</p>
+<ol><li>전위를 더 −로 옮김 → <b>환원 반응</b> 시작.</li><li>표면에서 산화종(O)이 환원으로 소모 → 표면 농도 감소 (물질전달로 인해 변화).</li><li>벌크(멀리)는 그대로 → <b>농도 기울기</b> 발생 → 이 기울기 때문에 전류 흐름.</li><li>전자전달이 빠르면(Nernstian) 표면농도는 <b>Nernst 식</b>을 따르고 <b>물질전달이 율속 단계</b>.</li></ol>
+<div class="w">⚠️ <b>"농도 기울기 자체가 전류의 크기"</b> (1:03:32). Nernst–Planck에서 대류·이동을 없애면 확산만 남고, 확산 속도는 농도 기울기가 정함 → 플럭스 → 전류. <b>기울기 높음 = 전류 높음</b>, 기울기 낮음 = 전류 낮음. t₁ < t₂ < t₃로 시간이 갈수록 기울기가 완만해져 전류가 줄어듭니다.</div>
+<h3>5-2. 확산층 거동 (1:05:16~1:09:31)</h3>
+<ul><li>전위가 고정 → <b>표면농도가 고정</b>. 🗣 "왜?" 학생이 "한계전류 때문"이라 답했지만 교수님: 한계전류는 표면농도가 0인 <u>특수한 경우</u>일 뿐, 여기선 0일 필요 없음. 정답은 <b>Nernst 식</b>: 전위가 정해지면 표면농도가 정해진다(벌크 농도가 아니라 <b>표면</b> 농도).</li><li>확산층 두께 <code>δ(t) = 2√(D₀t)</code>는 시간에 따라 증가. 벌크 농도는 고정이니 시간이 지날수록 기울기 ↓ → 전류 ↓.</li></ul>
+<h3>5-3. 계단 크기와 전류 (슬라이드 11 · 1:09:31~1:15:17)</h3>
+<p>전위 계단 1~5를 차례로 가했을 때, 측정 시간 τ에서의 전류:</p>
+<table><tr><th>계단</th><th>무슨 일이?</th><th>전류</th></tr>
+<tr><td>1</td><td>전위가 <b>개시전위(onset potential)</b>보다 낮아 패러데이 반응이 안 일어남</td><td>0</td></tr>
+<tr><td>2</td><td>onset 넘어 환원 시작. 표면농도가 벌크보다 감소</td><td>작음(감소 곡선)</td></tr>
+<tr><td>3</td><td>전위가 더 −. 표면농도가 더 감소 → 같은 시간 t에서 기울기 ↑</td><td>더 큼</td></tr>
+<tr><td>4</td><td>표면농도 = 0. 기울기 더 ↑</td><td>최대</td></tr>
+<tr><td>5</td><td>이미 0이라 <b>0보다 낮출 수 없다</b> → 기울기 불변</td><td>4와 <b>똑같음</b></td></tr></table>
+<div class="w">⚠️ <b>"δ는 시간만의 함수이고, 인가한 전위와는 상관이 없다."</b> 그러므로 4와 5는 δ도 표면농도도 같아 전류 응답이 정확히 같다 = 전류가 포화(물질전달 한계). 시험에서 그림 (a)(b)(c) 해석으로 나오기 좋은 부분.</div>
+<h3>5-4. Cottrell 식 유도 흐름 (슬라이드 11~12 · 1:15:17~1:22:34)</h3>
+<ol><li>기본식: <b>Fick 제2법칙</b> <code>∂C<sub>O</sub>/∂t = D<sub>O</sub>·∂²C<sub>O</sub>/∂x²</code> (위치 x, 시간 t에 따른 농도 분포를 구함)</li><li>초기조건 1개 + 경계조건 2개: t=0일 때 C<sub>O</sub>(x,0)=C*<sub>O</sub>, C<sub>R</sub>(x,0)=0 / x→∞(벌크)에서 C<sub>O</sub>=C*<sub>O</sub>, C<sub>R</sub>=0 / 표면에서 C<sub>O</sub>(0,t)=0 (t>0)</li><li>풀면 <code>C<sub>O</sub>(x,t) = C*<sub>O</sub>·erf[ x / (2√(D<sub>O</sub>t)) ]</code> — 교수님: "복잡한 수학 과정까지 외울 필요는 없고 <b>결과만</b> 알면 된다." 오차함수 erf는 정의식이 있음.</li><li>전류는 표면에서의 <b>농도 기울기</b>(플럭스)에 비례: <code>i/(nFA) = D<sub>O</sub>(∂C<sub>O</sub>/∂x)|<sub>x=0</sub></code>. 위 식을 x로 미분해 대입.</li></ol>
+<span class="f">Cottrell 식:  i(t) = nFA·D<sub>O</sub><sup>1/2</sup>·C*<sub>O</sub> / (π<sup>1/2</sup>·t<sup>1/2</sup>)   → i ∝ t<sup>−1/2</sup></span>
+<p>기호: n 전자수, F 패러데이 상수, A 전극 면적, D<sub>O</sub> 확산계수, C*<sub>O</sub> 벌크 농도. 🗣 앞에서 선형 농도구배를 가정해 구한 식(<code>i_c = nFAD<sub>o</sub><sup>1/2</sup>[C*−C(0)]/(2t<sup>1/2</sup>)</code>)과 <b>상수만 다르고 모양은 같습니다</b>. 이유: 그때는 구배가 직선이라고 가정했지만 실제 구배는 <b>곡선</b>이기 때문(약 √π 배 차이).</p>
+<h3>5-5. erf(3)≈1 과 확산층 두께 (1:21:46~1:23:23)</h3>
+<ol><li>erf(3) ≈ 1 → <code>C<sub>O</sub>(x,t) = C*<sub>O</sub></code> (벌크 농도에 도달) → 이때의 x를 <b>확산층 두께 δ</b>로 정의.</li><li><code>x/(2√(D<sub>O</sub>t)) = 3</code> → <code>δ = 6√(D<sub>O</sub>t)</code></li><li>예: D = 1×10⁻⁵ cm²/s, t = 1 s → δ ≈ <b>180 µm</b> (슬라이드 값. 계산하면 약 190 µm)</li><li>선형 가정의 2√(D<sub>O</sub>t)보다 <b>2~3배 크다</b> — 실제 농도 구배가 곡선이라서.</li></ol>
+<h3>5-6. 이 실험으로 알 수 있는 것 (1:23:38~1:25:19)</h3>
+<ol><li><b>농도를 아는 용액</b>으로 potential step → i–t 곡선. n, A, C*은 알고 있으니 <b>미지수는 확산계수 D뿐</b> → D 결정.</li><li>그 D로 <b>농도를 모르는 용액</b>에서 같은 실험 → <b>벌크 농도</b> 결정.</li><li>다음 주제: 마이크로전극 + Anson plot (슬라이드 12 아래쪽). 여기서 수업이 끝납니다.</li></ol></div>
+
+<h2 id="a6">6. 이번 녹음에서 설명되지 않은 슬라이드</h2>
+<div class="c"><p>슬라이드 12의 Anson plot 이후(13~23)는 이번 녹음에 설명이 없습니다. 슬라이드 내용만 정리하면:</p>
+<table><tr><th>슬라이드</th><th>핵심</th></tr>
+<tr><td>12~13</td><td>총 전하 Q = Q<sub>f</sub>+Q<sub>dl</sub>. Anson plot(Q vs t<sup>1/2</sup>): 기울기→D, y절편→Q<sub>dl</sub>. 이중층 충전이 길면(τ=R<sub>s</sub>C<sub>dl</sub>) 선형 구간이 짧아져 신뢰성↓ → 면적↓ 마이크로전극으로 τ↓</td></tr>
+<tr><td>14</td><td>마이크로전극은 구형 확산. t→∞에서 정상상태 전류 i = nFADC*/r₀</td></tr>
+<tr><td>15~18</td><td>LSV: E=E_i−νt. Randles–Ševčík: i<sub>pc</sub>=2.69×10⁵n³ᐟ²AD¹ᐟ²C*v¹ᐟ². 주사속도↓로 비패러데이 전류↓. 배경 제거</td></tr>
+<tr><td>19~21</td><td>CV: 정방향+역방향 주사. 가역 조건: ΔEp=57/n mV, ipc/ipa≈1, Ep가 v에 무관, E₁/₂=(Epa+Epc)/2</td></tr>
+<tr><td>22~23</td><td>EC/ECE 메커니즘, 연속 산화환원 (여러 주사에서 피크 변화)</td></tr></table></div>
+
+<h2 id="a7">7. 랜덤 질문 대비 (교수님이 질문하신 순서 포함)</h2>
+<details><summary>Q1. "충전 보존 규칙"으로 외부전류식 음극보호를 설명하라</summary><div>외부 전원이 공급하는 전류 = 금속의 산화전류. 이 전류는 환원전류(수소 환원)가 소모해야 하며, 둘이 같은 점에서 전하 보존이 성립하고 전위는 금속의 평형전위까지 내려가 완전히 보호된다. (슬라이드 외, 04:55)</div></details>
+<details><summary>Q2. Nernst 식을 쓰기 전에 반드시 해야 할 일은?</summary><div>반응식을 환원형으로 쓰고 반응물(분모)/생성물(분자)을 정한다. 산화형이면 뒤집는다. 순수 고체·물·1 atm 기체는 활동도 1.</div></details>
+<details><summary>Q3. 산소 반응의 pH 0, 7, 14 전위와 유도 과정은?</summary><div>E=1.229−0.0591pH. pH0 1.229 / pH7 0.82 / pH14 0.401 V. 유도: n=4, log[H⁺]⁴ → 4 약분, pH=−log[H⁺].</div></details>
+<details><summary>Q4. 식 ①(O₂+4H⁺+4e⁻=2H₂O)과 ③(O₂+2H₂O+4e⁻=4OH⁻)이 같은 반응임을 보이라</summary><div>①의 양변에 4OH⁻ → 4H⁺+4OH⁻=4H₂O → 양변 H₂O 정리 → ③. Nernst(③): E=0.401+0.0591(14−pH)=1.229−0.0591pH.</div></details>
+<details><summary>Q5. 물의 전위–pH 도에서 영역을 설명하라</summary><div>(a) 1.229−0.0591pH 위 = O₂, (a)~(b) 사이 = H₂O, (b) −0.0591pH 아래 = H₂. 두 선은 평행. 선 위는 산화, 아래는 환원.</div></details>
+<details><summary>Q6. Al Pourbaix에서 선 ①이 수평인 이유와 농도 의존성은?</summary><div>반응 Al³⁺+3e⁻→Al에 H⁺가 없어 pH항이 없다. [Al³⁺]=1 → −1.66, 10⁻⁶ → −1.78 V. 농도가 낮으면 아래로 이동.</div></details>
+<details><summary>Q7. 왜 ③, ⑤에는 Nernst를 쓰면 안 되고, 어떻게 선을 그리나? pH 값을 구하라</summary><div>Al 산화수가 +3→+3으로 변화 없어 산화·환원이 아닌 평형. K로 pH 계산. ③: pH=−logK/6−log[Al³⁺]/3=3.9 / ⑤: pH=14.6+log[AlO₂⁻]=8.6. 수직선.</div></details>
+<details><summary>Q8. 반응 ②의 표준전위를 표에서 찾을 수 없다. 어떻게 구하나?</summary><div>열역학 자료로 ΔG°를 구한 뒤 ΔG°=−nFE°로 E°=−1.55 V를 얻는다.</div></details>
+<details><summary>Q9. Pourbaix 도의 한계와 사용 예시는?</summary><div>열역학만, 속도 정보 없음, 도달 시간 모름, 단일 원소. 부식이 열역학적으로 가능해도 100년 걸리면 수명 20~30년 설비에 사용 가능. 첫 스크리닝 도구.</div></details>
+<details><summary>Q10. 정지 용액에서 지지전해질을 쓰는 이유는?</summary><div>Nernst–Planck의 대류(교반 안 함)와 이동(지지전해질)을 제거해 확산만 남기면 플럭스·전류 계산이 쉽다.</div></details>
+<details><summary>Q11. 2전극의 문제와 3전극 역할 분담은?</summary><div>2전극은 고전류에서 기준전극 전위가 변한다. 3전극은 counter가 전류를 흘리고 reference는 전위만 측정해 정확하다.</div></details>
+<details><summary>Q12. Potential step에서 전위를 고정하면 왜 표면농도가 고정되나? (학생 질문 1:06:42)</summary><div>한계전류 때문이 아니다(한계전류는 표면농도가 0인 특수한 경우). Nernstian 계에서는 Nernst 식으로 전위가 표면농도를 결정하므로 전위가 고정되면 표면농도도 고정된다.</div></details>
+<details><summary>Q13. 계단 크기 1~5에서 전류가 왜 달라지고 4, 5는 왜 같은가?</summary><div>1: onset 미만 → 0. 2·3: 전위↑ → 표면농도↓ → 구배↑ → 전류↑. 4: 표면농도 0. 5: 더 낮출 수 없음 + δ는 시간만의 함수 → 구배 같음 → 전류 같음.</div></details>
+<details><summary>Q14. Cottrell 식을 쓰고, erf(3)≈1로 확산층 두께를 구하라</summary><div>i=nFAD<sup>1/2</sup>C*/(π<sup>1/2</sup>t<sup>1/2</sup>). x/(2√(Dt))=3 → δ=6√(Dt). D=1×10⁻⁵ cm²/s, t=1 s → 약 180 µm. 선형가정 2√(Dt)보다 큰 이유: 구배가 곡선.</div></details>
+<details><summary>Q15. potential step으로 미지 농도를 어떻게 알아내나?</summary><div>농도를 아는 용액으로 D 결정 → 그 D를 Cottrell 식에 넣어 미지 용액의 C* 결정.</div></details>
+<details><summary>Q16. pH 14 논문 그래프에서 +1.5 V가 나왔다. 이상한가?</summary><div>x축이 RHE인지 확인. RHE는 pH 보정이 끝난 값이므로 이상하지 않다.</div></details>
+</main></body></html>
