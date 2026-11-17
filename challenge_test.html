@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>조정부 운동인증 챌린지</title>
+    <title>[TEST] 조정부 운동인증 챌린지</title>
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚣‍♀️</text></svg>">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
@@ -26,6 +26,7 @@
         .divider { height: 1px; background-color: var(--border); margin: 20px 0; }
         
         .info-box { background-color: #e8f4fd; color: #004280; padding: 15px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 20px; }
+        .info-box.test { background-color: #fff3cd; color: #7a5b00; }
         select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; margin-bottom: 15px; background-color: var(--bg); }
 
         .tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 25px; }
@@ -88,7 +89,7 @@
         .race-fill.blue-grad { background: linear-gradient(90deg, #1a365d, #2b6cb0); height: 100%; border-radius: 20px; position: relative; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); min-width: 5%; }
         .race-boat { position: absolute; right: -16px; top: -3px; font-size: 22px; line-height: 26px; filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.3)); }
 
-        /* 🔥 [아이디어 1,2,3 적용] 11월 2차(시즌4) 전용 PM5 스타일 레이싱 트랙 */
+        /* 🔥 11월 2차(시즌4) 전용 PM5 스타일 레이싱 트랙 */
         .pm5-track { 
             display: grid; 
             grid-template-columns: repeat(14, 1fr); 
@@ -174,7 +175,7 @@
 <body>
 
 <div class="container">
-    <h1>🚣‍♀️ 운동인증 챌린지</h1>
+    <h1>🚣‍♀️ 운동인증 챌린지 <span style="font-size:0.9rem; color:#c0392b;">[TEST]</span></h1>
     <div class="caption">One team, one spirit.</div>
     <div class="divider"></div>
 
@@ -299,6 +300,27 @@
     let ticketStats = [];
     let currentMonth = 12;
 
+    // 🧪 테스트 전용 페이지
+    // 이 파일은 항상 테스트 모드: 시즌3 기록을 시즌4 기간으로 옮겨서 표시
+    function isTestMode() { return true; }
+
+    // 시즌3(11/4~11/17) 기록을 +14일 이동 → 11/18~12/1 (시즌4 기간)
+    function getSeason3AsSeason4() {
+        return allData
+            .filter(r => r.month === 11 && r.dateObj.getDate() >= 4 && r.dateObj.getDate() <= 17)
+            .map(r => {
+                let d = new Date(r.dateObj);
+                d.setDate(d.getDate() + 14);
+                return {
+                    ...r,
+                    dateObj: d,
+                    month: d.getMonth() + 1,
+                    dateStr: formatDateTime(d),
+                    dateOnly: `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`
+                };
+            });
+    }
+
     function openModal(src) { document.getElementById('image-modal').style.display = "block"; document.getElementById('expanded-img').src = src; }
     function closeModal() { document.getElementById('image-modal').style.display = "none"; }
     function extractDriveUrl(text) {
@@ -380,6 +402,7 @@
         
         let infoBox = document.getElementById('season-info');
         let ruleBox = document.getElementById('rule-caption');
+        infoBox.classList.remove('test');
         
         if (currentMonth === 9) {
             infoBox.innerHTML = "ℹ️ <b>9월 챌린지는 종료되었습니다.</b> (기존 부원 전용 / 러닝 미포함)";
@@ -395,11 +418,19 @@
             ruleBox.innerHTML = "💡 규칙: 기간 내 최대 14회 (하루 1회만 인정) | 4명 이상 동점 시 에르고 횟수로 순위 결정";
             curData = allData.filter(r => r.month === 11 && r.dateObj.getDate() >= 4 && r.dateObj.getDate() <= 17); 
         } else if (currentMonth === 12) {
-            infoBox.innerHTML = "ℹ️ <b>11월 2차 챌린지 진행 중! (2학기 마지막)</b> (에르고만 인정 / 1등 5만 원 / 10회 달성 전원 3만 원)";
+            const isTest = isTestMode();
+
+            if (isTest) {
+                infoBox.classList.add('test');
+                infoBox.innerHTML = "🧪 <b>테스트 모드</b> - 시즌3 기록을 시즌4 기간(11/18~12/1)으로 옮겨 보여주는 미리보기입니다.";
+            } else {
+                infoBox.innerHTML = "ℹ️ <b>11월 2차 챌린지 진행 중! (2학기 마지막)</b> (에르고만 인정 / 1등 5만 원 / 10회 달성 전원 3만 원)";
+            }
             ruleBox.innerHTML = "💡 규칙: 11월 18일 ~ 12월 1일 | 하루 최대 2회 인정 | 에르고(로잉머신)만 인정";
             
-            // 실제 기간 적용
-            curData = allData.filter(r => {
+            // 실제 기간 적용 (테스트 모드에서는 시즌3 데이터를 +14일 이동한 데이터 사용)
+            const source = isTest ? getSeason3AsSeason4() : allData;
+            curData = source.filter(r => {
                 let month = r.dateObj.getMonth() + 1;
                 let day = r.dateObj.getDate();
                 return (month === 11 && day >= 18 && day <= 30) || (month === 12 && day === 1);
@@ -568,7 +599,7 @@
             raceData.forEach((row, i) => {
                 let total = Math.min(row.total, 14); // 최대 14회 (UI 표현 기준)
                 
-                // 🔥 아이디어 2 & 3: 14개의 칸으로 나뉜 블록 게이지 기반 렌더링
+                // 14개의 칸으로 나뉜 블록 게이지 기반 렌더링
                 let blocksHtml = '';
                 for(let j=1; j<=14; j++) {
                     let colorClass = '';
@@ -578,7 +609,7 @@
                     blocksHtml += `<div class="pm5-block ${colorClass}"></div>`;
                 }
 
-                // 🔥 아이디어 3: 10회를 초과하여 달성 시 보트 이모지도 불꽃 버전으로 변경
+                // 10회를 초과하여 달성 시 보트 이모지도 불꽃 버전으로 변경
                 let boatEmoji = total > 10 ? '🚣‍♀️🔥' : '🚣‍♀️';
 
                 raceHtml += `
