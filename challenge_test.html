@@ -1,0 +1,370 @@
+<!-- ... existing code ... -->
+    <div id="loading">데이터를 불러오는 중입니다... 🚣</div>
+
+    <div id="app" style="display: none;">
+        <select id="season-select" onchange="loadSeason()">
+            <option value="12">🏆 11월 2차 (시즌4 - 진행중)</option>
+            <option value="11">🏆 11월 1차 (시즌3 - 종료)</option>
+            <option value="10">🏆 10월 (시즌2 - 종료)</option>
+            <option value="9">🏆 9월 (시즌1 - 종료)</option>
+        </select>
+        
+        <div id="season-info" class="info-box"></div>
+<!-- ... existing code ... -->
+            <div id="rank-standard" style="display: none;">
+                <h4 style="margin-bottom: 10px;">🎟️ 추첨권 획득 순위</h4>
+                <div id="rank-tickets" class="rank-board"></div>
+                <h4 style="margin-bottom: 10px;">🚣 에르고 누적 거리 순위 (Top 5)</h4>
+                <div id="rank-distance"></div>
+            </div>
+
+            <div id="rank-november" style="display: none;">
+                <h4 id="nov-podium-title" style="margin-bottom: 0px; text-align: center; color: var(--text-main);">🏆 명예의 시상대 (Top 3)</h4>
+                <p id="nov-podium-subtitle" style="text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">상금 5만 / 3만 / 1만</p>
+                <div id="nov-podium" class="podium-wrap"></div>
+                
+                <h4 id="nov-race-title" style="margin-bottom: 15px; margin-top: 30px;">🏁 11월 레이싱 트랙 (Top 10)</h4>
+                <div id="nov-race"></div>
+            </div>
+        </div>
+
+        <div id="tab-mypage" class="tab-content">
+<!-- ... existing code ... -->
+                <div id="progress-section" style="display: none;">
+                    <h4 style="margin-bottom: 10px;" id="lbl-progress">🎯 50,000m 보너스(3장) 진행도</h4>
+                    <div class="progress-wrapper">
+                        <div class="progress-header">
+                            <span id="my-progress-msg"></span>
+                            <span id="my-progress-remain" style="color: var(--text-muted);"></span>
+                        </div>
+                        <div class="progress-bg">
+                            <div class="progress-fill" id="my-progress-bar" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="stamp-section" style="display: none;">
+                    <h4 id="stamp-section-title" style="margin-bottom: 10px;">🗓️ 14일 출석부 스탬프</h4>
+                    <div class="stamp-grid" id="stamp-grid-container"></div>
+                </div>
+
+                <h4 style="margin-top: 30px; margin-bottom: 10px;">📝 최근 인증 내역</h4>
+<!-- ... existing code ... -->
+<script>
+    const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQKSCkdKmmNi07nmmO5RN6vDmt_dobOqdCpluVAoP-91dyu36nyuMjuXJXMXrzQDquOq9seEpHtN5_6/pub?gid=995447885&single=true&output=csv";
+    const TARGET_METERS = 50000;
+    
+    let allData = [];
+    let curData = [];
+    let ticketStats = [];
+    let currentMonth = 12;
+
+    function openModal(src) { document.getElementById('image-modal').style.display = "block"; document.getElementById('expanded-img').src = src; }
+<!-- ... existing code ... -->
+    function loadSeason() {
+        currentMonth = parseInt(document.getElementById('season-select').value);
+        document.querySelectorAll('.month-txt').forEach(el => el.innerText = currentMonth);
+        
+        let infoBox = document.getElementById('season-info');
+        let ruleBox = document.getElementById('rule-caption');
+        
+        if (currentMonth === 9) {
+            infoBox.innerHTML = "ℹ️ <b>9월 챌린지는 종료되었습니다.</b> (기존 부원 전용 / 러닝 미포함)";
+            ruleBox.innerHTML = "💡 규칙: 인증 1회당 <b>1장</b> | 5만m 달성 <b>+3장</b>";
+            curData = allData.filter(r => r.month === 9);
+            curData.forEach(r => r.ergoDist = r.dist);
+        } else if (currentMonth === 10) {
+            infoBox.innerHTML = "ℹ️ <b>10월 챌린지는 종료되었습니다.</b> (에르고 거리 랭킹)";
+            ruleBox.innerHTML = "💡 규칙: 인증 1회당 <b>1장</b> | 에르고 5만m 달성 <b>+3장</b> | 에르고 랭킹 1~3위 <b>+3, +2, +1장</b>";
+            curData = allData.filter(r => r.month === 10);
+        } else if (currentMonth === 11) {
+            infoBox.innerHTML = "ℹ️ <b>11월 1차 챌린지 종료!</b> (1일 1회 누적 / 1~3위 상금 지급 / 동점 시 에르고 횟수 우선)";
+            ruleBox.innerHTML = "💡 규칙: 기간 내 최대 14회 (하루 1회만 인정) | 4명 이상 동점 시 에르고 횟수로 순위 결정";
+            curData = allData.filter(r => r.month === 11 && r.dateObj.getDate() >= 4 && r.dateObj.getDate() <= 17); 
+        } else if (currentMonth === 12) {
+            // 💡 [테스트 모드 변경점] 시즌3 데이터를 끌어와서 시즌4 UI에 맞게 날짜를 변환합니다.
+            infoBox.innerHTML = "ℹ️ <b>[테스트 모드] 11월 2차 UI 미리보기</b> (11월 1차 데이터를 가상으로 변환하여 보여줍니다.)";
+            ruleBox.innerHTML = "💡 규칙: 11월 18일 ~ 12월 1일 | 하루 최대 2회 인정 | 에르고(로잉머신)만 인정";
+            
+            let testData = allData.filter(r => r.month === 11 && r.dateObj.getDate() >= 4 && r.dateObj.getDate() <= 17); 
+            // 11월 1차 날짜(4~17일)에 +14일을 더해 11월 2차 날짜(18~1일)로 완벽히 매핑합니다.
+            curData = testData.map(r => {
+                let newDate = new Date(r.dateObj);
+                newDate.setDate(newDate.getDate() + 14);
+                return {
+                    ...r,
+                    dateObj: newDate,
+                    month: newDate.getMonth() + 1,
+                    dateOnly: `${newDate.getFullYear()}-${newDate.getMonth()+1}-${newDate.getDate()}`,
+                    dateStr: formatDateTime(newDate)
+                };
+            });
+        }
+
+        calcStats();
+        renderRank();
+// ... existing code ...
+    function calcStats() {
+        if (currentMonth === 12) {
+            let userMap = {};
+            curData.forEach(r => {
+                if(!userMap[r.name]) userMap[r.name] = {};
+                // 에르고만 인정
+                if(r.isErgo) {
+                    userMap[r.name][r.dateOnly] = (userMap[r.name][r.dateOnly] || 0) + 1;
+                }
+            });
+            
+            ticketStats = Object.keys(userMap)
+                .map(name => {
+                    let days = userMap[name];
+                    let totalErgoSessions = 0;
+                    for (let date in days) {
+                        totalErgoSessions += Math.min(days[date], 2); // 일 최대 2회까지 인정
+                    }
+                    return { name: name, total: totalErgoSessions, ergo: totalErgoSessions };
+                });
+            ticketStats.sort((a,b) => b.total - a.total);
+
+        } else if (currentMonth === 11) {
+            let userMap = {};
+            curData.forEach(r => {
+// ... existing code ...
+            });
+            ticketStats.sort((a,b) => b.total - a.total || b.ergo - a.ergo);
+
+        } else {
+            let map = {};
+// ... existing code ...
+            ticketStats.forEach(s => s.total = s.base + s.b50k + s.bRank);
+        }
+    }
+
+    function renderRank() {
+        if (currentMonth === 11 || currentMonth === 12) {
+            document.getElementById('rank-standard').style.display = 'none';
+            document.getElementById('rank-november').style.display = 'block';
+            
+            document.getElementById('nov-podium-title').innerText = currentMonth === 12 ? "🏆 11월 2차 명예의 시상대 (Top 3)" : "🏆 명예의 시상대 (Top 3)";
+            document.getElementById('nov-podium-subtitle').innerText = currentMonth === 12 ? "1등 5만원 / 달성자 전원 3만원" : "상금 5만 / 3만 / 1만";
+            document.getElementById('nov-race-title').innerText = currentMonth === 12 ? "🏁 11월 2차 레이싱 트랙 (Top 10)" : "🏁 11월 레이싱 트랙 (Top 10)";
+
+            let excluded = ['김경일', '강예은', '박천주', '정환훈', '유현진']; 
+            let validStats = ticketStats.filter(s => !excluded.includes(s.name));
+
+            let podiumHtml = '';
+            let pData = validStats.slice(0, 3);
+            if(pData.length === 0) {
+                podiumHtml = "<div style='color:gray; font-size:0.9rem; text-align:center; width:100%; margin-top:20px;'>아직 등록된 기록이 없습니다.</div>";
+            } else {
+                let pClasses = ["podium-1", "podium-2", "podium-3"];
+                let pMedals = ["🥇", "🥈", "🥉"];
+                let displayOrder = [1, 0, 2]; 
+                
+                displayOrder.forEach(idx => {
+                    if(pData[idx]) {
+                        let prizeStr = "";
+                        if (currentMonth === 12) {
+                            if (idx === 0) prizeStr = "5만원";
+                            else prizeStr = pData[idx].total >= 10 ? "3만원" : "미달성";
+                        } else {
+                            prizeStr = ["5만원", "3만원", "1만원"][idx];
+                        }
+                        
+                        podiumHtml += `
+                        <div class="podium-box ${pClasses[idx]}">
+                            <div class="podium-medal">${pMedals[idx]}</div>
+                            <div class="podium-prize">${prizeStr}</div>
+                            <div class="podium-name">${pData[idx].name}</div>
+                            <div class="podium-score">${pData[idx].total}회</div>
+                        </div>`;
+                    }
+                });
+            }
+            document.getElementById('nov-podium').innerHTML = podiumHtml;
+
+            let raceHtml = '';
+            let raceData = validStats.slice(0, 10);
+            raceData.forEach((row, i) => {
+                let targetSessions = currentMonth === 12 ? 10 : 14;
+                let pct = Math.min((row.total / targetSessions) * 100, 100);
+                let scoreText = currentMonth === 12 ? `<b>${row.total}회</b> <br>(목표 10회)` : `<b>${row.total}회</b> <br>(에르고 ${row.ergo})`;
+                
+                raceHtml += `
+                <div class="race-row">
+                    <div class="race-name">${i+1}위. ${row.name}</div>
+                    <div class="race-track-wrapper">
+                        <div class="race-fill" style="width: 0%;" data-width="${pct}%">
+                            <div class="race-boat">🚣‍♀️</div>
+                        </div>
+                    </div>
+                    <div class="race-score">${scoreText}</div>
+                </div>`;
+            });
+            document.getElementById('nov-race').innerHTML = raceHtml || "<div style='color:gray; font-size:0.9rem; text-align:center;'>기록이 없습니다.</div>";
+            
+            setTimeout(() => {
+                document.querySelectorAll('.race-fill').forEach(el => { el.style.width = el.getAttribute('data-width'); });
+            }, 100);
+
+        } else {
+            document.getElementById('rank-standard').style.display = 'block';
+            document.getElementById('rank-november').style.display = 'none';
+            
+            let excluded = currentMonth === 10 ? ['김경일', '강예은', '박천주', '정환훈', '유현진'] : [];
+            let tkts = ticketStats.filter(s => !excluded.includes(s.name));
+            tkts.sort((a,b) => b.total - a.total || b.ergo - a.ergo);
+            
+            let html = ''; let medals = ["🥇", "🥈", "🥉"];
+            for(let i=0; i < Math.min(tkts.length, 3); i++) {
+                html += `<div class="rank-card"><div class="medal">${medals[i]}</div><div class="name">${tkts[i].name}</div><div class="ticket">${tkts[i].total}장</div></div>`;
+            }
+            document.getElementById('rank-tickets').innerHTML = html || "<div style='color:gray; font-size:0.9rem;'>데이터가 없습니다.</div>";
+
+            let dists = ticketStats.filter(s => !excluded.includes(s.name) && s.ergo > 0);
+            dists.sort((a,b) => b.ergo - a.ergo);
+            let dHtml = '';
+            for(let i=0; i < Math.min(dists.length, 5); i++) {
+                let row = dists[i]; let pct = Math.min((row.ergo / TARGET_METERS) * 100, 100);
+                let bStr = (currentMonth === 10 && i < 3) ? ` <span style="color:var(--primary); font-size:0.8rem;">${medals[i]}(+${3-i}장)</span>` : "";
+                dHtml += `<div class="progress-wrapper"><div class="progress-header"><span><b>${i+1}위. ${row.name}</b>${bStr}</span><span>${row.ergo.toLocaleString()}m</span></div><div class="progress-bg"><div class="progress-fill" style="width: ${pct}%"></div></div></div>`;
+            }
+            document.getElementById('rank-distance').innerHTML = dHtml || "<div style='color:gray; font-size:0.9rem;'>데이터가 없습니다.</div>";
+        }
+    }
+
+    function renderMyPage() {
+        let name = document.getElementById('member-select').value;
+        let box = document.getElementById('mypage-content');
+        if(!name) { box.style.display = 'none'; return; }
+        box.style.display = 'block';
+
+        let s = ticketStats.find(x => x.name === name) || {total:0, base:0, b50k:0, bRank:0, ergo:0, count:0};
+        
+        if (currentMonth === 11 || currentMonth === 12) {
+            if (currentMonth === 12) {
+                document.getElementById('lbl-ticket').innerText = "내 에르고 인증 횟수";
+                document.getElementById('my-ticket').innerText = `${s.total} 회`;
+                document.getElementById('my-ticket-detail').innerText = "목표: 10회 (일 최대 2회)";
+                
+                document.getElementById('lbl-ergo').innerText = "내 달성 상태";
+                document.getElementById('my-ergo').innerText = s.total >= 10 ? "달성 완료" : "진행 중";
+                document.getElementById('my-ergo-detail').innerText = s.total >= 10 ? "상금 3만원 확정" : "10회까지 파이팅";
+                
+                document.getElementById('stamp-section-title').innerText = "🗓️ 11월 2차 스탬프 보드 (11.18 ~ 12.01)";
+            } else {
+                document.getElementById('lbl-ticket').innerText = "내 인증 횟수 (출석)";
+                document.getElementById('my-ticket').innerText = `${s.total} 회`;
+                document.getElementById('my-ticket-detail').innerText = "최대 14회 인정";
+                
+                document.getElementById('lbl-ergo').innerText = "내 에르고 횟수";
+                document.getElementById('my-ergo').innerText = `${s.ergo} 회`;
+                document.getElementById('my-ergo-detail').innerText = "동점 시 우선순 부여";
+
+                document.getElementById('stamp-section-title').innerText = "🗓️ 14일 출석부 스탬프";
+            }
+
+            document.getElementById('progress-section').style.display = 'none';
+            document.getElementById('stamp-section').style.display = 'block';
+
+            let stampHtml = '';
+            
+            if (currentMonth === 12) {
+                let myD = curData.filter(r => r.name === name && r.isErgo);
+                let myDateCounts = {};
+                myD.forEach(r => {
+                    let d = r.dateObj;
+                    let m = d.getMonth() + 1;
+                    let day = d.getDate();
+                    let key = `${m}/${day}`;
+                    myDateCounts[key] = (myDateCounts[key] || 0) + 1;
+                });
+                
+                let targetDates = ["11/18","11/19","11/20","11/21","11/22","11/23","11/24","11/25","11/26","11/27","11/28","11/29","11/30","12/1"];
+                targetDates.forEach(dStr => {
+                    let c = myDateCounts[dStr] || 0;
+                    if (c >= 2) {
+                        stampHtml += `<div class="stamp-box stamped" title="${dStr} 인증 2회">🚣‍♀️x2</div>`;
+                    } else if (c === 1) {
+                        stampHtml += `<div class="stamp-box stamped" title="${dStr} 인증 1회">🚣‍♀️</div>`;
+                    } else {
+                        stampHtml += `<div class="stamp-box" style="font-size:0.9rem; color: #b0b0b0;">${dStr}</div>`;
+                    }
+                });
+            } else {
+                let myD = curData.filter(r => r.name === name);
+                let myDates = myD.map(r => r.dateObj.getDate()); 
+
+                for(let d=4; d<=17; d++) {
+                    if (myDates.includes(d)) {
+                        stampHtml += `<div class="stamp-box stamped" title="11월 ${d}일 인증 완료">🚣‍♀️</div>`;
+                    } else {
+                        stampHtml += `<div class="stamp-box">${d}일</div>`;
+                    }
+                }
+            }
+            document.getElementById('stamp-grid-container').innerHTML = stampHtml;
+
+        } else {
+            document.getElementById('lbl-ticket').innerText = "내 추첨권";
+            document.getElementById('my-ticket').innerText = `${s.total} 장`;
+            document.getElementById('my-ticket-detail').innerText = currentMonth === 10 ? `기본 ${s.base} + 5만m ${s.b50k} + 랭킹 ${s.bRank}` : `기본 ${s.base} + 보너스 ${s.b50k}`;
+            
+            document.getElementById('lbl-ergo').innerText = "내 에르고 누적";
+            document.getElementById('my-ergo').innerText = `${s.ergo.toLocaleString()} m`;
+            document.getElementById('my-ergo-detail').innerText = `총 인증(러닝 포함): ${s.count}회`;
+
+            document.getElementById('progress-section').style.display = 'block';
+            document.getElementById('stamp-section').style.display = 'none';
+
+            let pBar = document.getElementById('my-progress-bar');
+            pBar.style.width = '0%';
+            let rem = Math.max(0, TARGET_METERS - s.ergo);
+            let pct = Math.min((s.ergo / TARGET_METERS)*100, 100);
+            setTimeout(() => { pBar.style.width = pct + '%'; }, 50);
+            
+            if(rem > 0) {
+                document.getElementById('my-progress-msg').innerHTML = "보너스 달성 진행도";
+                document.getElementById('my-progress-remain').innerHTML = `보너스까지 <b style="color:var(--primary)">${rem.toLocaleString()}m</b> 남음`;
+            } else {
+                document.getElementById('my-progress-msg').innerHTML = "🎉 <b>50,000m 달성!</b>";
+                document.getElementById('my-progress-remain').innerText = "보너스 3장 획득 완료";
+            }
+        }
+
+        let myD = curData.filter(r => r.name === name).sort((a,b) => b.dateObj - a.dateObj || b.idx - a.idx);
+        let tb = '';
+        myD.forEach(r => {
+            let cap = ((currentMonth === 11 || currentMonth === 12) && r.dist > 0) ? `${r.dist.toLocaleString()}m` : (r.dist > 0 ? `${r.dist.toLocaleString()}m` : r.type);
+            tb += `<tr><td>${r.dateStr.split(' ')[0]}</td><td>${r.type}</td><td>${cap}</td><td>${r.memo}</td></tr>`;
+        });
+        document.querySelector('#my-table tbody').innerHTML = tb;
+
+        let myP = myD.filter(r => r.photo);
+        let phtml = myP.length ? '' : '<div style="color:var(--text-muted); font-size:0.9rem;">등록된 사진이 없습니다.</div>';
+        myP.forEach(r => {
+            let cap = r.dist > 0 ? `${r.dist.toLocaleString()}m` : r.type;
+            phtml += `<div class="photo-grid-item"><img src="${r.photo}" onclick="openModal(this.src)"><div class="photo-grid-caption">${r.dateStr.split(' ')[0]} (${cap})</div></div>`;
+        });
+        document.getElementById('my-gallery').innerHTML = phtml;
+    }
+
+    function renderGallery() {
+        let pData = curData.filter(r => r.photo).sort((a,b) => b.dateObj - a.dateObj || b.idx - a.idx);
+        let html = pData.length ? '' : '<div style="color:var(--text-muted); font-size:0.9rem;">아직 사진이 없습니다.</div>';
+        pData.slice(0, 10).forEach(r => {
+            let mHtml = r.memo ? `<div class="gallery-memo">💬 ${r.memo}</div>` : '';
+            html += `<div class="gallery-item"><div class="gallery-header">${r.name} 님의 인증 🏃‍♂️ <span class="gallery-date">(${r.dateStr})</span></div>${mHtml}<img src="${r.photo}" onclick="openModal(this.src)"></div><div class="divider"></div>`;
+        });
+        document.getElementById('global-gallery').innerHTML = html;
+    }
+
+    function openTab(id, btn) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active'); document.getElementById(id).classList.add('active');
+    }
+</script>
+
+</body>
+</html>
