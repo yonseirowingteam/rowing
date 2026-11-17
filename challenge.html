@@ -66,7 +66,7 @@
         .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .photo-grid-caption { font-size: 0.8rem; text-align: center; color: var(--text-muted); margin-top: 5px; }
 
-        /* 💡 11월/12월 전용 랭킹 UI CSS (시상대 및 레이싱) */
+        /* 💡 11/12월 시상대 CSS */
         .podium-wrap { display: flex; align-items: flex-end; justify-content: center; height: 190px; margin: 20px 0 40px 0; gap: 8px; }
         .podium-box { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; border-radius: 12px 12px 0 0; color: white; padding-top: 10px; font-weight: bold; position: relative; box-shadow: 0 -4px 10px rgba(0,0,0,0.1); }
         .podium-1 { width: 34%; height: 100%; background: linear-gradient(135deg, #fbc2eb, #a6c1ee); z-index: 3; }
@@ -77,15 +77,72 @@
         .podium-name { margin-top: 8px; font-size: 1.1rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.4); }
         .podium-score { font-size: 0.85rem; margin-top: 5px; font-weight: normal; }
 
+        /* 💡 공통 레이싱 래퍼 CSS */
         .race-row { display: flex; align-items: center; margin-bottom: 15px; }
         .race-name { width: 75px; font-size: 0.9rem; font-weight: 600; text-align: right; margin-right: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main); }
-        .race-track-wrapper { flex: 1; background: var(--border); border-radius: 20px; height: 26px; position: relative; }
-        .race-fill { background: linear-gradient(90deg, #1a365d, #2b6cb0); height: 100%; border-radius: 20px; position: relative; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); min-width: 5%; }
-        .race-boat { position: absolute; right: -16px; top: -3px; font-size: 22px; line-height: 26px; filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.3)); }
         .race-score { width: 100px; font-size: 0.8rem; text-align: left; margin-left: 20px; color: var(--text-muted); line-height: 1.2; }
         .race-score b { color: var(--text-main); font-size: 0.9rem; }
+        
+        /* 💡 11월 1차 전용 레이싱 CSS (기존) */
+        .race-track-wrapper { flex: 1; background: var(--border); border-radius: 20px; height: 26px; position: relative; }
+        .race-fill.blue-grad { background: linear-gradient(90deg, #1a365d, #2b6cb0); height: 100%; border-radius: 20px; position: relative; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); min-width: 5%; }
+        .race-boat { position: absolute; right: -16px; top: -3px; font-size: 22px; line-height: 26px; filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.3)); }
 
-        /* 💡 11월/12월 전용 내 기록실 출석부(스탬프) UI CSS */
+        /* 🔥 [아이디어 1,2,3 적용] 11월 2차(시즌4) 전용 PM5 스타일 레이싱 트랙 */
+        .pm5-track { 
+            display: grid; 
+            grid-template-columns: repeat(14, 1fr); 
+            gap: 2px; 
+            flex: 1; 
+            position: relative; 
+            height: 24px; 
+            background: #e6e6e9; 
+            border-radius: 4px; 
+            box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1);
+        }
+        .pm5-block { 
+            height: 100%; 
+            background: transparent; 
+            border-radius: 2px; 
+            transition: background-color 0.5s ease;
+        }
+        /* 기본 블록 (1~10) - 딥 오션 블루 */
+        .pm5-block.blue { background: linear-gradient(180deg, #2b6cb0, #1a365d); box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+        /* 오버드라이브 블록 (11~14) - 황금/불꽃 */
+        .pm5-block.fire { background: linear-gradient(180deg, #f6d365, #ff5858); box-shadow: 0 0 6px rgba(255,88,88,0.8); }
+        
+        .pm5-finish {
+            position: absolute;
+            left: calc((100% / 14) * 10);
+            top: -16px;
+            font-size: 1.4rem;
+            transform: translateX(-50%);
+            z-index: 5;
+            filter: drop-shadow(1px 2px 2px rgba(0,0,0,0.3));
+        }
+        .pm5-finish-line {
+            position: absolute;
+            left: calc((100% / 14) * 10);
+            top: -3px;
+            bottom: -3px;
+            width: 3px;
+            background: rgba(255, 215, 0, 0.9);
+            box-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
+            z-index: 4;
+            border-radius: 2px;
+        }
+
+        .pm5-boat {
+            position: absolute;
+            top: -6px;
+            font-size: 20px;
+            z-index: 10;
+            transition: left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform: translateX(-50%);
+            filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.4));
+        }
+
+        /* 💡 11/12월 전용 내 기록실 출석부(스탬프) UI CSS */
         .stamp-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-bottom: 20px; }
         .stamp-box { 
             aspect-ratio: 1; border: 2px dashed var(--border); border-radius: 10px; 
@@ -161,10 +218,10 @@
 
             <div id="rank-december" style="display: none;">
                 <h4 style="margin-bottom: 0px; text-align: center; color: var(--text-main);">🏆 명예의 시상대 (Top 3)</h4>
-                <p style="text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">1등 5만원 / 달성자 전원 3만원</p>
+                <p style="text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">1등 5만원 / 10회 달성자 전원 3만원</p>
                 <div id="dec-podium" class="podium-wrap"></div>
                 
-                <h4 style="margin-bottom: 15px; margin-top: 30px;">🏁 11월 2차 레이싱 트랙 (Top 10)</h4>
+                <h4 style="margin-bottom: 15px; margin-top: 30px;">🏁 11월 2차 에르고 트랙 (Top 10)</h4>
                 <div id="dec-race"></div>
             </div>
         </div>
@@ -341,7 +398,7 @@
             infoBox.innerHTML = "ℹ️ <b>11월 2차 챌린지 진행 중! (2학기 마지막)</b> (에르고만 인정 / 1등 5만 원 / 10회 달성 전원 3만 원)";
             ruleBox.innerHTML = "💡 규칙: 11월 18일 ~ 12월 1일 | 하루 최대 2회 인정 | 에르고(로잉머신)만 인정";
             
-            // 💡 테스트 모드 해제: 실제 기간 데이터 필터링
+            // 실제 기간 적용
             curData = allData.filter(r => {
                 let month = r.dateObj.getMonth() + 1;
                 let day = r.dateObj.getDate();
@@ -461,7 +518,7 @@
                 <div class="race-row">
                     <div class="race-name">${i+1}위. ${row.name}</div>
                     <div class="race-track-wrapper">
-                        <div class="race-fill" style="width: 0%;" data-width="${pct}%">
+                        <div class="race-fill blue-grad" style="width: 0%;" data-width="${pct}%">
                             <div class="race-boat">🚣‍♀️</div>
                         </div>
                     </div>
@@ -509,22 +566,38 @@
             let raceHtml = '';
             let raceData = validStats.slice(0, 10);
             raceData.forEach((row, i) => {
-                let pct = Math.min((row.total / 10) * 100, 100); // 10회 기준
+                let total = Math.min(row.total, 14); // 최대 14회 (UI 표현 기준)
+                
+                // 🔥 아이디어 2 & 3: 14개의 칸으로 나뉜 블록 게이지 기반 렌더링
+                let blocksHtml = '';
+                for(let j=1; j<=14; j++) {
+                    let colorClass = '';
+                    if (j <= total) {
+                        colorClass = (j <= 10) ? 'blue' : 'fire'; // 10회까지는 파란색, 11~14회는 불꽃 오버드라이브
+                    }
+                    blocksHtml += `<div class="pm5-block ${colorClass}"></div>`;
+                }
+
+                // 🔥 아이디어 3: 10회를 초과하여 달성 시 보트 이모지도 불꽃 버전으로 변경
+                let boatEmoji = total > 10 ? '🚣‍♀️🔥' : '🚣‍♀️';
+
                 raceHtml += `
                 <div class="race-row">
                     <div class="race-name">${i+1}위. ${row.name}</div>
-                    <div class="race-track-wrapper">
-                        <div class="race-fill" style="width: 0%;" data-width="${pct}%">
-                            <div class="race-boat">🚣‍♀️</div>
-                        </div>
+                    <div class="pm5-track">
+                        <div class="pm5-finish-line"></div>
+                        <div class="pm5-finish" title="상금 3만원 달성!">💰</div>
+                        ${blocksHtml}
+                        <div class="pm5-boat" style="left: calc((100% / 14) * ${total});">${boatEmoji}</div>
                     </div>
                     <div class="race-score"><b>${row.total}회</b> <br>(목표 10회)</div>
                 </div>`;
             });
             document.getElementById('dec-race').innerHTML = raceHtml || "<div style='color:gray; font-size:0.9rem; text-align:center;'>기록이 없습니다.</div>";
             
+            // 블록 애니메이션 트리거 효과를 위해 약간의 딜레이만 줍니다 (CSS transition)
             setTimeout(() => {
-                document.querySelectorAll('#dec-race .race-fill').forEach(el => { el.style.width = el.getAttribute('data-width'); });
+                document.querySelectorAll('#dec-race .pm5-block').forEach(el => { el.style.opacity = '1'; });
             }, 100);
 
         } else {
@@ -573,7 +646,7 @@
 
             document.getElementById('progress-section').style.display = 'none';
             document.getElementById('stamp-section').style.display = 'block';
-            document.getElementById('lbl-stamp').innerText = "🗓️ 11월 1차 스탬프 보드 (11.04 ~ 11.17)";
+            document.getElementById('stamp-section-title').innerText = "🗓️ 11월 1차 스탬프 보드 (11.04 ~ 11.17)";
 
             let myD = curData.filter(r => r.name === name);
             let myDates = myD.map(r => r.dateObj.getDate()); 
@@ -599,7 +672,7 @@
 
             document.getElementById('progress-section').style.display = 'none';
             document.getElementById('stamp-section').style.display = 'block';
-            document.getElementById('lbl-stamp').innerText = "🗓️ 11월 2차 스탬프 보드 (11.18 ~ 12.01)";
+            document.getElementById('stamp-section-title').innerText = "🗓️ 11월 2차 스탬프 보드 (11.18 ~ 12.01)";
 
             let myD = curData.filter(r => r.name === name);
             
