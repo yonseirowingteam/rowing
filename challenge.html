@@ -354,6 +354,7 @@
         download: true, header: false, skipEmptyLines: true,
         complete: function(results) {
             allData = [];
+            let submissionMap = {};
             for (let i = 1; i < results.data.length; i++) {
                 let row = results.data[i];
                 let rawDate = row[0] || ''; let rawName = row[1] || ''; let rawDist = row[2] || '0';
@@ -361,6 +362,7 @@
                 let rawMemo = row.length > 6 ? (row[6] || '') : (row.length === 6 ? row[5] || '' : '');
 
                 if (rawName.trim() !== '' && rawDate.trim() !== '') {
+                    let cleanName = rawName.replace(/\s/g, '');
                     let dObj = parseDate(rawDate);
                     let dist = parseInt(String(rawDist).replace(/,/g, '')) || 0;
                     
@@ -375,12 +377,25 @@
                         });
                     }
 
+                    // 💡 구글폼 제출 1개당 훈련 1회만 인정 (동일 타임스탬프·동일 이름의 중복 행은 1건으로 병합하고 사진만 합침)
+                    let submissionKey = `${cleanName}__${rawDate.trim()}`;
+                    if (submissionMap[submissionKey]) {
+                        let existing = submissionMap[submissionKey];
+                        photos.forEach(u => {
+                            if (!existing.photos.includes(u)) existing.photos.push(u);
+                        });
+                        if (!existing.photo && existing.photos.length > 0) existing.photo = existing.photos[0];
+                        if (!existing.memo && rawMemo) existing.memo = rawMemo;
+                        continue;
+                    }
+
                     let dataObj = {
                         idx: i, dateObj: dObj, month: (dObj && !isNaN(dObj.getTime())) ? dObj.getMonth() + 1 : 0,
                         dateStr: formatDateTime(dObj), dateOnly: dObj ? `${dObj.getFullYear()}-${dObj.getMonth()+1}-${dObj.getDate()}` : '0-0-0',
-                        name: rawName.replace(/\s/g, ''), type: rawType, dist: dist, ergoDist: ergoDist,
+                        name: cleanName, type: rawType, dist: dist, ergoDist: ergoDist,
                         isErgo: isErgoStr, photos: photos, photo: photos[0] || null, memo: rawMemo
                     };
+                    submissionMap[submissionKey] = dataObj;
                     allData.push(dataObj);
                 }
             }
@@ -693,7 +708,7 @@
             document.getElementById('stamp-section').style.display = 'block';
             document.getElementById('stamp-section-title').innerText = "🗓️ 11월 2차 스탬프 보드 (11.18 ~ 12.01)";
 
-            let myD = curData.filter(r => r.name === name);
+            let myD = curData.filter(r => r.name === name && r.isErgo);
             
             let stampHtml = '';
             let dateArray = [
