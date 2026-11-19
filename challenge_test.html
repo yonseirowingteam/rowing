@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>[TEST] 조정부 운동인증 챌린지</title>
+    <title>조정부 운동인증 챌린지</title>
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚣‍♀️</text></svg>">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
@@ -26,7 +26,6 @@
         .divider { height: 1px; background-color: var(--border); margin: 20px 0; }
         
         .info-box { background-color: #e8f4fd; color: #004280; padding: 15px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 20px; }
-        .info-box.test { background-color: #fff3cd; color: #7a5b00; }
         select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; margin-bottom: 15px; background-color: var(--bg); }
 
         .tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 25px; }
@@ -64,6 +63,10 @@
         .gallery-item img, .photo-grid-item img { width: 100%; border-radius: 8px; display: block; margin-top: 10px; cursor: pointer; transition: 0.3s; }
         .gallery-item img:hover, .photo-grid-item img:hover { opacity: 0.8; }
         
+        /* 💡 다중 사진(2장 이상) 갤러리 그리드 */
+        .gallery-multi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .gallery-multi-grid img { margin-top: 0; }
+        
         .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .photo-grid-caption { font-size: 0.8rem; text-align: center; color: var(--text-muted); margin-top: 5px; }
 
@@ -89,7 +92,7 @@
         .race-fill.blue-grad { background: linear-gradient(90deg, #1a365d, #2b6cb0); height: 100%; border-radius: 20px; position: relative; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); min-width: 5%; }
         .race-boat { position: absolute; right: -16px; top: -3px; font-size: 22px; line-height: 26px; filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.3)); }
 
-        /* 🔥 11월 2차(시즌4) 전용 PM5 스타일 레이싱 트랙 */
+        /* 🔥 [아이디어 1,2,3 적용] 11월 2차(시즌4) 전용 PM5 스타일 레이싱 트랙 */
         .pm5-track { 
             display: grid; 
             grid-template-columns: repeat(14, 1fr); 
@@ -175,7 +178,7 @@
 <body>
 
 <div class="container">
-    <h1>🚣‍♀️ 운동인증 챌린지 <span style="font-size:0.9rem; color:#c0392b;">[TEST]</span></h1>
+    <h1>🚣‍♀️ 운동인증 챌린지</h1>
     <div class="caption">One team, one spirit.</div>
     <div class="divider"></div>
 
@@ -300,33 +303,22 @@
     let ticketStats = [];
     let currentMonth = 12;
 
-    // 🧪 테스트 전용 페이지
-    // 이 파일은 항상 테스트 모드: 시즌3 기록을 시즌4 기간으로 옮겨서 표시
-    function isTestMode() { return true; }
-
-    // 시즌3(11/4~11/17) 기록을 +14일 이동 → 11/18~12/1 (시즌4 기간)
-    function getSeason3AsSeason4() {
-        return allData
-            .filter(r => r.month === 11 && r.dateObj.getDate() >= 4 && r.dateObj.getDate() <= 17)
-            .map(r => {
-                let d = new Date(r.dateObj);
-                d.setDate(d.getDate() + 14);
-                return {
-                    ...r,
-                    dateObj: d,
-                    month: d.getMonth() + 1,
-                    dateStr: formatDateTime(d),
-                    dateOnly: `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`
-                };
-            });
-    }
-
     function openModal(src) { document.getElementById('image-modal').style.display = "block"; document.getElementById('expanded-img').src = src; }
     function closeModal() { document.getElementById('image-modal').style.display = "none"; }
-    function extractDriveUrl(text) {
-        if (!text) return null;
-        let match = text.match(/id=([a-zA-Z0-9_-]+)/) || text.match(/\/d\/([a-zA-Z0-9_-]+)/);
-        return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : null;
+
+    // 💡 한 셀에 쉼표/공백으로 여러 장의 구글 드라이브 링크가 들어와도 모두 배열로 추출
+    function extractDriveUrls(text) {
+        if (!text) return [];
+        let urls = [];
+        let parts = String(text).split(/[\s,]+/);
+        parts.forEach(part => {
+            let match = part.match(/id=([a-zA-Z0-9_-]+)/) || part.match(/\/d\/([a-zA-Z0-9_-]+)/);
+            if (match) {
+                let url = `https://lh3.googleusercontent.com/d/${match[1]}`;
+                if (!urls.includes(url)) urls.push(url);
+            }
+        });
+        return urls;
     }
 
     function parseDate(str) {
@@ -375,11 +367,19 @@
                     let isErgoStr = (rawType.includes('러닝') || rawType.includes('달리기') || rawType.includes('자전거') || rawType.includes('사이클') || rawType.includes('헬스')) ? false : true;
                     let ergoDist = isErgoStr ? dist : 0;
 
+                    // 💡 사진 링크 모두 추출 (row[4]의 다중 링크 + 혹시 row[5]에 추가 사진 열이 있는 경우까지 모두 지원)
+                    let photos = extractDriveUrls(rawPhoto);
+                    if (row.length > 6 && row[5] && String(row[5]).includes('drive.google.com')) {
+                        extractDriveUrls(row[5]).forEach(u => {
+                            if (!photos.includes(u)) photos.push(u);
+                        });
+                    }
+
                     let dataObj = {
                         idx: i, dateObj: dObj, month: (dObj && !isNaN(dObj.getTime())) ? dObj.getMonth() + 1 : 0,
                         dateStr: formatDateTime(dObj), dateOnly: dObj ? `${dObj.getFullYear()}-${dObj.getMonth()+1}-${dObj.getDate()}` : '0-0-0',
                         name: rawName.replace(/\s/g, ''), type: rawType, dist: dist, ergoDist: ergoDist,
-                        isErgo: isErgoStr, photo: extractDriveUrl(rawPhoto), memo: rawMemo
+                        isErgo: isErgoStr, photos: photos, photo: photos[0] || null, memo: rawMemo
                     };
                     allData.push(dataObj);
                 }
@@ -402,7 +402,6 @@
         
         let infoBox = document.getElementById('season-info');
         let ruleBox = document.getElementById('rule-caption');
-        infoBox.classList.remove('test');
         
         if (currentMonth === 9) {
             infoBox.innerHTML = "ℹ️ <b>9월 챌린지는 종료되었습니다.</b> (기존 부원 전용 / 러닝 미포함)";
@@ -418,19 +417,11 @@
             ruleBox.innerHTML = "💡 규칙: 기간 내 최대 14회 (하루 1회만 인정) | 4명 이상 동점 시 에르고 횟수로 순위 결정";
             curData = allData.filter(r => r.month === 11 && r.dateObj.getDate() >= 4 && r.dateObj.getDate() <= 17); 
         } else if (currentMonth === 12) {
-            const isTest = isTestMode();
-
-            if (isTest) {
-                infoBox.classList.add('test');
-                infoBox.innerHTML = "🧪 <b>테스트 모드</b> - 시즌3 기록을 시즌4 기간(11/18~12/1)으로 옮겨 보여주는 미리보기입니다.";
-            } else {
-                infoBox.innerHTML = "ℹ️ <b>11월 2차 챌린지 진행 중! (2학기 마지막)</b> (에르고만 인정 / 1등 5만 원 / 10회 달성 전원 3만 원)";
-            }
+            infoBox.innerHTML = "ℹ️ <b>11월 2차 챌린지 진행 중! (2학기 마지막)</b> (에르고만 인정 / 1등 5만 원 / 10회 달성 전원 3만 원)";
             ruleBox.innerHTML = "💡 규칙: 11월 18일 ~ 12월 1일 | 하루 최대 2회 인정 | 에르고(로잉머신)만 인정";
             
-            // 실제 기간 적용 (테스트 모드에서는 시즌3 데이터를 +14일 이동한 데이터 사용)
-            const source = isTest ? getSeason3AsSeason4() : allData;
-            curData = source.filter(r => {
+            // 실제 기간 적용
+            curData = allData.filter(r => {
                 let month = r.dateObj.getMonth() + 1;
                 let day = r.dateObj.getDate();
                 return (month === 11 && day >= 18 && day <= 30) || (month === 12 && day === 1);
@@ -597,19 +588,17 @@
             let raceHtml = '';
             let raceData = validStats.slice(0, 10);
             raceData.forEach((row, i) => {
-                let total = Math.min(row.total, 14); // 최대 14회 (UI 표현 기준)
+                let total = Math.min(row.total, 14);
                 
-                // 14개의 칸으로 나뉜 블록 게이지 기반 렌더링
                 let blocksHtml = '';
                 for(let j=1; j<=14; j++) {
                     let colorClass = '';
                     if (j <= total) {
-                        colorClass = (j <= 10) ? 'blue' : 'fire'; // 10회까지는 파란색, 11~14회는 불꽃 오버드라이브
+                        colorClass = (j <= 10) ? 'blue' : 'fire';
                     }
                     blocksHtml += `<div class="pm5-block ${colorClass}"></div>`;
                 }
 
-                // 10회를 초과하여 달성 시 보트 이모지도 불꽃 버전으로 변경
                 let boatEmoji = total > 10 ? '🚣‍♀️🔥' : '🚣‍♀️';
 
                 raceHtml += `
@@ -626,7 +615,6 @@
             });
             document.getElementById('dec-race').innerHTML = raceHtml || "<div style='color:gray; font-size:0.9rem; text-align:center;'>기록이 없습니다.</div>";
             
-            // 블록 애니메이션 트리거 효과를 위해 약간의 딜레이만 줍니다 (CSS transition)
             setTimeout(() => {
                 document.querySelectorAll('#dec-race .pm5-block').forEach(el => { el.style.opacity = '1'; });
             }, 100);
@@ -761,21 +749,32 @@
         });
         document.querySelector('#my-table tbody').innerHTML = tb;
 
-        let myP = myD.filter(r => r.photo);
+        // 💡 내 인증 사진 모아보기: 2장 이상 올라온 경우 모두 표시
+        let myP = myD.filter(r => r.photos && r.photos.length > 0);
         let phtml = myP.length ? '' : '<div style="color:var(--text-muted); font-size:0.9rem;">등록된 사진이 없습니다.</div>';
         myP.forEach(r => {
             let cap = r.dist > 0 ? `${r.dist.toLocaleString()}m` : r.type;
-            phtml += `<div class="photo-grid-item"><img src="${r.photo}" onclick="openModal(this.src)"><div class="photo-grid-caption">${r.dateStr.split(' ')[0]} (${cap})</div></div>`;
+            r.photos.forEach((photoUrl, pIdx) => {
+                let numTag = r.photos.length > 1 ? ` (${pIdx + 1}/${r.photos.length})` : '';
+                phtml += `<div class="photo-grid-item"><img src="${photoUrl}" onclick="openModal(this.src)"><div class="photo-grid-caption">${r.dateStr.split(' ')[0]} (${cap})${numTag}</div></div>`;
+            });
         });
         document.getElementById('my-gallery').innerHTML = phtml;
     }
 
     function renderGallery() {
-        let pData = curData.filter(r => r.photo).sort((a,b) => b.dateObj - a.dateObj || b.idx - a.idx);
+        // 💡 전체 훈련 갤러리: 2장 이상인 경우 나란히(2열) 표시
+        let pData = curData.filter(r => r.photos && r.photos.length > 0).sort((a,b) => b.dateObj - a.dateObj || b.idx - a.idx);
         let html = pData.length ? '' : '<div style="color:var(--text-muted); font-size:0.9rem;">아직 사진이 없습니다.</div>';
         pData.slice(0, 10).forEach(r => {
             let mHtml = r.memo ? `<div class="gallery-memo">💬 ${r.memo}</div>` : '';
-            html += `<div class="gallery-item"><div class="gallery-header">${r.name} 님의 인증 🏃‍♂️ <span class="gallery-date">(${r.dateStr})</span></div>${mHtml}<img src="${r.photo}" onclick="openModal(this.src)"></div><div class="divider"></div>`;
+            let imgsHtml = '';
+            if (r.photos.length > 1) {
+                imgsHtml = `<div class="gallery-multi-grid">` + r.photos.map(url => `<img src="${url}" onclick="openModal(this.src)">`).join('') + `</div>`;
+            } else {
+                imgsHtml = `<img src="${r.photos[0]}" onclick="openModal(this.src)">`;
+            }
+            html += `<div class="gallery-item"><div class="gallery-header">${r.name} 님의 인증 🏃‍♂️ <span class="gallery-date">(${r.dateStr})</span></div>${mHtml}${imgsHtml}</div><div class="divider"></div>`;
         });
         document.getElementById('global-gallery').innerHTML = html;
     }
