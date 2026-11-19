@@ -558,8 +558,8 @@
             document.getElementById('rank-november').style.display = 'none';
             document.getElementById('rank-december').style.display = 'block';
 
-            let excluded = ['김경일', '강예은', '박천주', '정환훈', '유현진']; 
-            let validStats = ticketStats.filter(s => !excluded.includes(s.name));
+            // 시즌4는 제외 명단 없이 전원 랭킹 포함
+            let validStats = ticketStats;
 
             let podiumHtml = '';
             let pData = validStats.slice(0, 3);
