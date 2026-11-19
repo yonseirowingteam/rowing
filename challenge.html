@@ -63,6 +63,10 @@
         .gallery-item img, .photo-grid-item img { width: 100%; border-radius: 8px; display: block; margin-top: 10px; cursor: pointer; transition: 0.3s; }
         .gallery-item img:hover, .photo-grid-item img:hover { opacity: 0.8; }
         
+        /* 💡 다중 사진(2장 이상) 갤러리 그리드 */
+        .gallery-multi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .gallery-multi-grid img { margin-top: 0; }
+        
         .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .photo-grid-caption { font-size: 0.8rem; text-align: center; color: var(--text-muted); margin-top: 5px; }
 
@@ -301,10 +305,20 @@
 
     function openModal(src) { document.getElementById('image-modal').style.display = "block"; document.getElementById('expanded-img').src = src; }
     function closeModal() { document.getElementById('image-modal').style.display = "none"; }
-    function extractDriveUrl(text) {
-        if (!text) return null;
-        let match = text.match(/id=([a-zA-Z0-9_-]+)/) || text.match(/\/d\/([a-zA-Z0-9_-]+)/);
-        return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : null;
+
+    // 💡 한 셀에 쉼표/공백으로 여러 장의 구글 드라이브 링크가 들어와도 모두 배열로 추출
+    function extractDriveUrls(text) {
+        if (!text) return [];
+        let urls = [];
+        let parts = String(text).split(/[\s,]+/);
+        parts.forEach(part => {
+            let match = part.match(/id=([a-zA-Z0-9_-]+)/) || part.match(/\/d\/([a-zA-Z0-9_-]+)/);
+            if (match) {
+                let url = `https://lh3.googleusercontent.com/d/${match[1]}`;
+                if (!urls.includes(url)) urls.push(url);
+            }
+        });
+        return urls;
     }
 
     function parseDate(str) {
@@ -353,11 +367,19 @@
                     let isErgoStr = (rawType.includes('러닝') || rawType.includes('달리기') || rawType.includes('자전거') || rawType.includes('사이클') || rawType.includes('헬스')) ? false : true;
                     let ergoDist = isErgoStr ? dist : 0;
 
+                    // 💡 사진 링크 모두 추출 (row[4]의 다중 링크 + 혹시 row[5]에 추가 사진 열이 있는 경우까지 모두 지원)
+                    let photos = extractDriveUrls(rawPhoto);
+                    if (row.length > 6 && row[5] && String(row[5]).includes('drive.google.com')) {
+                        extractDriveUrls(row[5]).forEach(u => {
+                            if (!photos.includes(u)) photos.push(u);
+                        });
+                    }
+
                     let dataObj = {
                         idx: i, dateObj: dObj, month: (dObj && !isNaN(dObj.getTime())) ? dObj.getMonth() + 1 : 0,
                         dateStr: formatDateTime(dObj), dateOnly: dObj ? `${dObj.getFullYear()}-${dObj.getMonth()+1}-${dObj.getDate()}` : '0-0-0',
                         name: rawName.replace(/\s/g, ''), type: rawType, dist: dist, ergoDist: ergoDist,
-                        isErgo: isErgoStr, photo: extractDriveUrl(rawPhoto), memo: rawMemo
+                        isErgo: isErgoStr, photos: photos, photo: photos[0] || null, memo: rawMemo
                     };
                     allData.push(dataObj);
                 }
@@ -566,19 +588,17 @@
             let raceHtml = '';
             let raceData = validStats.slice(0, 10);
             raceData.forEach((row, i) => {
-                let total = Math.min(row.total, 14); // 최대 14회 (UI 표현 기준)
+                let total = Math.min(row.total, 14);
                 
-                // 🔥 아이디어 2 & 3: 14개의 칸으로 나뉜 블록 게이지 기반 렌더링
                 let blocksHtml = '';
                 for(let j=1; j<=14; j++) {
                     let colorClass = '';
                     if (j <= total) {
-                        colorClass = (j <= 10) ? 'blue' : 'fire'; // 10회까지는 파란색, 11~14회는 불꽃 오버드라이브
+                        colorClass = (j <= 10) ? 'blue' : 'fire';
                     }
                     blocksHtml += `<div class="pm5-block ${colorClass}"></div>`;
                 }
 
-                // 🔥 아이디어 3: 10회를 초과하여 달성 시 보트 이모지도 불꽃 버전으로 변경
                 let boatEmoji = total > 10 ? '🚣‍♀️🔥' : '🚣‍♀️';
 
                 raceHtml += `
@@ -595,7 +615,6 @@
             });
             document.getElementById('dec-race').innerHTML = raceHtml || "<div style='color:gray; font-size:0.9rem; text-align:center;'>기록이 없습니다.</div>";
             
-            // 블록 애니메이션 트리거 효과를 위해 약간의 딜레이만 줍니다 (CSS transition)
             setTimeout(() => {
                 document.querySelectorAll('#dec-race .pm5-block').forEach(el => { el.style.opacity = '1'; });
             }, 100);
@@ -730,21 +749,32 @@
         });
         document.querySelector('#my-table tbody').innerHTML = tb;
 
-        let myP = myD.filter(r => r.photo);
+        // 💡 내 인증 사진 모아보기: 2장 이상 올라온 경우 모두 표시
+        let myP = myD.filter(r => r.photos && r.photos.length > 0);
         let phtml = myP.length ? '' : '<div style="color:var(--text-muted); font-size:0.9rem;">등록된 사진이 없습니다.</div>';
         myP.forEach(r => {
             let cap = r.dist > 0 ? `${r.dist.toLocaleString()}m` : r.type;
-            phtml += `<div class="photo-grid-item"><img src="${r.photo}" onclick="openModal(this.src)"><div class="photo-grid-caption">${r.dateStr.split(' ')[0]} (${cap})</div></div>`;
+            r.photos.forEach((photoUrl, pIdx) => {
+                let numTag = r.photos.length > 1 ? ` (${pIdx + 1}/${r.photos.length})` : '';
+                phtml += `<div class="photo-grid-item"><img src="${photoUrl}" onclick="openModal(this.src)"><div class="photo-grid-caption">${r.dateStr.split(' ')[0]} (${cap})${numTag}</div></div>`;
+            });
         });
         document.getElementById('my-gallery').innerHTML = phtml;
     }
 
     function renderGallery() {
-        let pData = curData.filter(r => r.photo).sort((a,b) => b.dateObj - a.dateObj || b.idx - a.idx);
+        // 💡 전체 훈련 갤러리: 2장 이상인 경우 나란히(2열) 표시
+        let pData = curData.filter(r => r.photos && r.photos.length > 0).sort((a,b) => b.dateObj - a.dateObj || b.idx - a.idx);
         let html = pData.length ? '' : '<div style="color:var(--text-muted); font-size:0.9rem;">아직 사진이 없습니다.</div>';
         pData.slice(0, 10).forEach(r => {
             let mHtml = r.memo ? `<div class="gallery-memo">💬 ${r.memo}</div>` : '';
-            html += `<div class="gallery-item"><div class="gallery-header">${r.name} 님의 인증 🏃‍♂️ <span class="gallery-date">(${r.dateStr})</span></div>${mHtml}<img src="${r.photo}" onclick="openModal(this.src)"></div><div class="divider"></div>`;
+            let imgsHtml = '';
+            if (r.photos.length > 1) {
+                imgsHtml = `<div class="gallery-multi-grid">` + r.photos.map(url => `<img src="${url}" onclick="openModal(this.src)">`).join('') + `</div>`;
+            } else {
+                imgsHtml = `<img src="${r.photos[0]}" onclick="openModal(this.src)">`;
+            }
+            html += `<div class="gallery-item"><div class="gallery-header">${r.name} 님의 인증 🏃‍♂️ <span class="gallery-date">(${r.dateStr})</span></div>${mHtml}${imgsHtml}</div><div class="divider"></div>`;
         });
         document.getElementById('global-gallery').innerHTML = html;
     }
